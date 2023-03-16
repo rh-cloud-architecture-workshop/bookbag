@@ -1,7 +1,13 @@
 ---
 modules:
-  overview:
-    name: Overview
+  workshop-goals:
+    name: "Cloud Architecture Workshop: Overview and Goals"
     exit_sign: Continue
-  review:
-    name: Review
+  workshop-introduction:
+    name: Introduction to the Workshop
+    exit_sign: Continue
+  cdc-module:
+    name: Build new functionality with Change Data Capture
+    exit_sign: Continue
+  whats-next:
+    name: What's next?

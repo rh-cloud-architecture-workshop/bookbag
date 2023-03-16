@@ -1,0 +1,1 @@
+In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.

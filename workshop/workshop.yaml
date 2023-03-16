@@ -1,6 +1,8 @@
 ---
-name: Bookbag Template
+name: Cloud Architecture Workshop
 modules:
   activate:
-    - overview
-    - review
+    - workshop-goals
+    - workshop-introduction
+    - cdc-module
+    - whats-next
