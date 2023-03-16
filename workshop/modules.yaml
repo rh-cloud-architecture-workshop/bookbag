@@ -1,0 +1,7 @@
+---
+modules:
+  overview:
+    name: Overview
+    exit_sign: Continue
+  review:
+    name: Review

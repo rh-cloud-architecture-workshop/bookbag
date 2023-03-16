@@ -1,0 +1,6 @@
+---
+name: Bookbag Template
+modules:
+  activate:
+    - overview
+    - review
