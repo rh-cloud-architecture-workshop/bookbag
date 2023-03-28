@@ -1,3 +1,5 @@
+:icons: font 
+
 == Deploy the Cashback service
 
 TODO: deploy the solution through BackStage
