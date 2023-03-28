@@ -5,4 +5,5 @@ modules:
     - workshop-goals
     - workshop-introduction
     - cdc-module
+    - cdc-module-instructions
     - whats-next
