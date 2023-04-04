@@ -14,13 +14,13 @@ Let's start with deploying the Debezium Connector. With AMQ Streams, a Kafka Con
 
 To deploy the connector, you are going to use OpenShift Dev Spaces. OpenShift Dev Spaces uses Kubernetes and containers to provide a consistent, secure, and zero-configuration development environment, accessible from a browser window.
 
-* In a browser window, navigate to the browser tab pointing to the Developer perspective of the OpenShift cluster. If you don't have a browser tab open on the console, open a new tab and navigate %openshift_cluster_console%. If needed login with your username and password (%user_name%/%user_password%).
+* In a browser window, navigate to the browser tab pointing to the Developer perspective of the OpenShift cluster. If you don't have a browser tab open on the console, open a new tab and navigate to %openshift_cluster_console%. If needed login with your username and password (%user_name%/%user_password%).
 
 * On the top menu of the console, click on the image:images/openshift-application-menu.png[] icon, and in the drop-down box, select *Red Hat OpenShift Dev Spaces*.
 +
 image::images/openshift-application-menu-2.png[]
 
-* Login in with your OpenShift credentials (%user_name%/%user_password%). If this is the first time you access Dev Spaces, you have to authorize Dev Spaces access your account. In the _Authorize Access_ window click on *Allow selected permissions*.
+* Login in with your OpenShift credentials (%user_name%/%user_password%). If this is the first time you access Dev Spaces, you have to authorize Dev Spaces to access your account. In the _Authorize Access_ window click on *Allow selected permissions*.
 
 * You are directed to the Dev Spaces overview page, which shows the workspaces you have access to. You should see a single workspace, called *cloud-architecture-workshop*. The workspace needs a couple of seconds to start up.
 +
@@ -34,12 +34,12 @@ image::images/devspaces-workspace-started-1.png[]
 +
 image::images/devspaces-trust-contents.png[]
 
-* The workspace contains all the resources you are going to use during the workshop, including the Debezium connector. In the project explorer on the left of the workspaces, navigate to the *workshop/module-cdc* folder and open the *debezium-connector.yaml* file.
+* The workspace contains all the resources you are going to use during the workshop, including the Debezium connector. In the project explorer on the left of the workspace, navigate to the *workshop/module-cdc* folder and open the *debezium-connector.yaml* file.
 +
 image::images/devspaces-workspace-debezium-connector.png[]
 
 * The *debezium-connector.yaml* file describes the Debezium Connector. It contains all the details the connector needs to know in order to start capturing changes in the target database tables. Some important configuration details:
-** *class*: the Debezium connector implementation class. We're using PostgreSQL as source database, so we use *io.debezium.connector.postgresql.PostgresConnector*.
+** *class*: the Debezium connector implementation class. We're using PostgreSQL as source database, so the approriate connector is *io.debezium.connector.postgresql.PostgresConnector*.
 ** *plugin.name*: The Debezium connector supports different mechanisms to read from the PostgreSQL transaction logs.  *pgoutput* is the standard logical decoding output plug-in since PostgreSQL 10.
 ** *+database.*+*: the connection details for the database. Note that PostgreSQL is setup with a specific user (*debezium*) which has the required privileges to read from the transaction logs.
 ** *topic.prefix*: the prefix of the Kafka topics which will receive the Debezium change events. The full name of the topics is *<prefix>.<schema>.<table>*.
@@ -59,7 +59,11 @@ image::images/devspaces-menu-terminal.png[]
 * The OpenShift Dev Spaces environment has access to a plethora of command line tools, including *oc*, the OpenShift  command line interface. Through OpenShift Dev Spaces you are automatically logged in into the OpenShift cluster. You can verify this with the command *oc whoami*.
 +
 ----
-workshop-devspaces (main) $ oc whoami
+oc whoami
+----
++
+.Output
+----
 %user_name%
 ----
 +
@@ -68,8 +72,8 @@ workshop-devspaces (main) $ oc whoami
 If the the output of the `oc whoami` command does not correspond to your username (%user_name%), you need to logout and login again with the correct username.
 
 ----
-workshop-devspaces (main) $ oc logout
-workshop-devspaces (main) $ oc login -u %user_name% -p %user_password% 
+oc logout
+oc login -u %user_name% -p %user_password% 
 ----
 ====
 
@@ -86,9 +90,9 @@ kafkaconnector.kafka.strimzi.io/globex created
 
 * After a few seconds, the Debezium connector will start monitoring the PostgreSQL database for changes in the *customer*, *orders* and *line_item* tables, and will produce a change event to the corresponding Kafka topic for each change detected.
 
-* One way to verify that the connector is working as expected is to check the kafka topics that receive the change events. 
+* One way to verify that the connector is working as expected is to check the Kafka topics that receive the change events. 
 If you still have a browser tab pointing to Kafdrop, open the tab. If not, open a new browser tab and navigate to %kafdrop_url%. +
-At the bottom of the topic list in the kafdrop overview page, you will see the three topics that will receive the change events.
+At the bottom of the topic list in the Kafdrop overview page, you will see the three topics that will receive the change events.
 +
 image::images/kafdrop-debezium-topics.png[]
 
@@ -100,11 +104,11 @@ image::images/kafdrop-debezium-topic-customers.png[]
 +
 image::images/kafdrop-debezium-topic-customers-partition.png[]
 +
-This opens a view to the individual events in the topic. You can expand every event to inspect its content. In this case, the body of each message consists of a Debezium change event in JSON format.
+This opens a view to the individual messages in the topic. You can expand every message to inspect its content. In this case, the body of each message consists of a Debezium change event in JSON format.
 +
 image::images/kafdrop-debezium-topic-customers-1.png[]
 
-* A Debezium change event has a particular structure. Take particular note of the following elements:
+* A Debezium change event has a well-defined structure. Take particular note of the following elements:
 ** *before*: the state of the record before the transaction. As the change events correspond to newly read records, there is no previous state. 
 ** *after*: the state of the record after the transaction. This is a JSON representation of the current state of the record in the database, in JSON format (every column in the table becomes a JSON field).
 ** *op*: The operation that lead to the change event. Possible values are '*c*' for _create_, '*u*' for _update_, '*d*' for _delete_ and '*r*' for _read_. As the records in the *customer* already existed when the Debezium connector was deployed, the operation is '*r*'.
@@ -155,11 +159,11 @@ image::images/kafdrop-debezium-topic-orders.png[]
 +
 Drill down into the partition and expand the contents of the message. You should see a change event structure very similar to the ones for customers. Notice however that the operation is '*c*', for _create_. This is expected as the change event corresponds to a new record in the *order* table.
 +
-Go back to the Kafdrop homepage by clicking on the *Kafdrop* link on the top of the page, and this time open the *globex.updates.public.liner_item* topic. You should see one message per item in the order you created previously.
+Go back to the Kafdrop homepage by clicking on the *Kafdrop* link on the top of the page, and this time open the *globex.updates.public.line_item* topic. You should see one message per item in the order you created previously.
 +
 image::images/kafdrop-debezium-topic-orders-2.png[]
 
-* If you want to simulate a larger number of orders, you can use the _Order simulator_ application deployed in the globex-%user_name% OpenShift namespace.
+* If you want to simulate a larger number of orders, you can use the _Order simulator_ application deployed in the _globex-%user_name%_ namespace on OpenShift.
 ** In the browser window, open the tab pointing to the OpenShift console. If you don't have a tab open to the console, open a new tab and navigate to %openshift_cluster_console%. If needed login with your username and password (%user_name%/%user_password%).
 ** Select the *Topology* view in the Developer perspective. If needed, switch to the *globex-%user_name%* namespace by selecting the namespace from the namespace selection drop-down menu in the top left.
 +
@@ -196,12 +200,12 @@ image::images/devspaces-workspace-order-connector.png[]
 
 * Take note of the following elements:
 ** *route*: Camel integrations are defined as _routes_,  a set of processing steps that are applied to a message as it travels from a source to a destination. An integration contains 1 or more routes.
-** *from.uri*: the source of the route, typically expressed as a URI. The scheme (*kafka*) defines which connector to use. The *{{ }}* placeholders reefer to properties defined in a properties file.
+** *from.uri*: the source of the route, typically expressed as a URI. The scheme (*kafka*) defines which connector to use. The *{{ }}* placeholders refer to properties defined in a properties file.
 ** *steps*: the different steps in the integration. In this simple integration, the body contents of the incoming message is logged, and a couple of headers are set on the message.
 ** *to*: the destination of the integration. In this case a HTTP endpoint on the _Cashback_ service is called. The headers set previously determine how to handle the HTTP call (POST with JSON payload)
 ** *traits*: the comment lines at the top of the file provide additional configuration settings for the integration. Here we define a property file (*cashback-order-connector.properties*) which contain the properties for the integration, as well as a secret which contains the connection details for the Kafka broker. 
 
-* The connector YAML file can be deployed as such to the OpenShift cluster using the *kamel* CLI. Under the hood the CLI will transform the YAML file into an *Integration* Custom Resource. When deployed to OpenShift, the Camel K operator processes the Integration Custom Resource which transforms the Integration into a running application.
+* The connector YAML file can be deployed as such to the OpenShift cluster using the *kamel* CLI. Under the hood the CLI will transform the YAML file into an *Integration* Custom Resource. When deployed to OpenShift, the Camel K operator processes the Integration Custom Resource and transforms the Integration into a running application.
 ** Go into the terminal of the Dev Spaces workspace. If you don't have an open terminal, you can open a new one by selecting the image:images/devspaces-menu.png[] icon on the top of the left menu, and selecting *Terminal/New Terminal* from the drop-down menu.
 ** In the terminal, issue the following command:
 +
@@ -217,8 +221,8 @@ Full command: kamel run -n globex-cdc-user1 workshop/module-cdc/order-connector/
 Unable to verify existence of operator id [camel-k] due to lack of user privileges
 Integration "cashback-order-connector" created
 ----
-** The Camel K operator starts to build the integration and packages it in a container image. The first time this can take quite a while during which nothing seems to happen. +
-One way to check that the integration is actually being build is by checking its status with the `oc` command line tool. +
+** The Camel K operator starts building the integration and packages it in a container image. The first time this can take quite a while during which nothing seems to happen. +
+One way to check that the integration is actually being built is by checking its status with the `oc` command line tool. +
 In the terminal in Dev Spaces, you can issue the following command:
 +
 ----
@@ -265,7 +269,7 @@ image::images/openshift-console-topology-integration-logs.png[]
 2023-04-04 08:48:22,530 INFO [cam.yaml:4] (Camel (camel-1) thread #1 - KafkaConsumer[globex.order-aggregated]) Order event received: {"orderId":101,"customer":"mmitchell","date":"2023-04-04T08:37:11.722+0000","total":140.8}
 ----
 
-The second integration we need is slightly more complex: we need to consume the change events from the *customer* table from the kafka topic, determine whether the change event corresponds to a *create/read* or *update* change event, transform the data and finally call a REST endpoint (POST for create, PUT for update) on the _Cashback_ service. +
+The second integration we need is slightly more complex: we need to consume the change events from the *customer* table from the Kafka topic, determine whether the change event corresponds to a *create/read* or *update* change, transform the data and finally call a REST endpoint (POST for create, PUT for update) on the _Cashback_ service. +
 This time the integration logic is expressed in Groovy, a dynamic language for the Java virtual machine.
 
 * In a browser window, navigate to the browser tab pointing to the Dev Spaces workspace you opened earlier. If you don't have a browser tab open on the Dev Spaces workspace, refer to the instructions in the <<_deploy_the_debezium_connector>> section.
@@ -305,7 +309,7 @@ NAME                          PHASE          KIT                        REPLICAS
 cashback-customer-connector   Building Kit   kit-cgluf9om540hobmmt1rg   
 cashback-order-connector      Running        kit-cglu6cgm540hobmmt1r0   1
 ----
-** The build process should be quite a lot faster than the the first one. After a while the integration proceed to the `running` phase, and becomes visible in the Topology view of the OpenShift console:
+** The build process should be quite a lot faster than the the first one. After a while the integration proceeds to the `running` phase, and becomes visible in the Topology view of the OpenShift console:
 +
 image::images/openshift-console-topology-integration-2.png[]
 
@@ -330,9 +334,9 @@ You should see some log statements for every customer data change event processe
 
 With the Debezium connector and the two Camel K integrations deployed, you have all the pieces of the solution in place:
 
-* Data change events from the Globex web application are captured by Debezium and produced to kafka topics.
-* A Kafka streams application combines and aggregates the data change event streams for orders and line_items at real time to produce a new stream of aggregated order events.
-* Camel K integrations consume from kafka topics and call REST endpoints on the Cashback service, to build a local view of customers and orders, and calculate the cashback amounts.
+* Data change events from the Globex web application are captured by Debezium and produced to Kafka topics.
+* A Kafka Streams application combines and aggregates the data change event streams for _orders_ and _line_item_ at real time to produce a new stream of aggregated order events.
+* Camel K integrations consume from Kafka topics and call REST endpoints on the Cashback service, to build a local view of customers and orders, and calculate the cashback amounts.
 
 The cashback service has a rudimentary UI that allows to verify the generated cashbacks.
 
