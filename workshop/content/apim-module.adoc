@@ -1,0 +1,59 @@
+In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.
+
+== Business context
+With growing popularity, Globex would like to add new channels  to their existing, web-based application, e.g. a mobile app and also look for ways to partner with other large retail portals . This requires formalizing the application API and exposing the APIs through a API Management solution for consumption by the mobile app.
+
+*(a) Partner Portal*
+
+* Retail partner aggregators would like to showcase Globex' product catalogue on their website
+* To allow for this access, Globex would like to expose an API to allow access to their APIs
+
+
+*(b) Mobile App*
+
+* Globex would like to launch a mobile application as well in addition to the retail web-site. Globex does not have the necessary expertise in mobile development, so development will have to be outsourced.
+* This means that, the mobile application will also need secure access to the APIs
+
+
+== Solution overview
+
+Globex decides to adopt a *Contract First approach*: before tackling the development of new services, the API contract is formalized in a OpenAPI spec document. This API design phase is done collaboratively with all stakeholders. Once a first version of the OpenAPI spec document is ready, it is pushed and managed in a service registry, which acts a the system of truth, and also serves to help development team build mocks out of them.
+
+
+An API Management solution (Red Hat 3scale API management) to expose, secure and manage the APIs to the application backend services is introduced. This allows to introduce new channels (mobile application, B2B transactions) in a controlled way.
+
+Using a contract-first approach, the APIs are specified in a OpenAPI spec document and managed in a registry. Once implemented, they are onboarded on the API management platform.
+
+== Technical considerations
+
+=== API Design 
+
+Red Hat API Designer based on Apicurio provides web based API Designer tool which is incredibly lightweight, easy to package, deploy, and use.  In this workshop this is used to load an OpenAPI file from your local file system and visually edit it (and then save it back to your disk)!
+
+=== Service Registry
+Once the API design is complete, and we have the first version of the API, this can now be published in a schema registry.  Service Registry which is part of  Red Hat Application Foundations allows us to publish the OpenAPIs, makes it accessible, and manage the OpenAPI easily.
+
+You can upload new artifacts, new versions, view the metadata, download the specs, view documentation and view the content as well. Through Content rules one can validate new versions of the APIs against the existing specs to ensure validity and backward compatibility.
+
+
+Service Registry acts as the single source of truth for the OpenAPI Specifications. This spec can be used to share and manage tthe data types and API descriptions at runtime using a REST interface with internal teams and other external developers and partners
+
+=== 3scale API Management
+We use the  Red Hat 3scake API Management platform here to publish, manage and secure the backend APIs.
+
+Each API can be configured to be secured using a number of ways. In this case, the APIs are secured with OpenID Connect. 
+[Note]
+====
+OpenID Connect is built on top of OAuth 2.0 that complements the OAuth 2.0 Authorization framework with an authentication mechanism. When OpenID Connect authentication option is used, the API requests are authenticated using the access tokens in the JSON Web Token (JWT) format (https://tools.ietf.org/html/rfc7519[RFC 7519]).
+====
+
+3scale allows you to have various application plans for each of the APIs. Developers can subscribe to those APIs and can access APIs by using the OpenID Connect details securely. You can also monitor the APIs and track usage.
+
+
+==  Architecture
+
+TODO: 
+
+==   Implementation
+
+In the next chapter, you will be guided through the implementation and deployment of the Contract First Approach. Of course this entails way more than can be achieved during a workshop, so instead most components are already in place, and you will focus on a number of key activities to deploy and run the solution.

@@ -6,4 +6,6 @@ modules:
     - workshop-introduction
     - cdc-module
     - cdc-module-instructions
+    - apim-module
+    - apim-module-instructions
     - whats-next

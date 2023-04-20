@@ -12,5 +12,11 @@ modules:
   cdc-module-instructions:
     name: Build new functionality with Change Data Capture - Instructions
     exit_sign: Continue 
+  apim-module:
+    name: Building APIs with Contract-First Approach - Introduction
+    exit_sign: Continue
+  apim-module-instructions:
+    name: Building APIs with Contract-First Approach - Instructions
+    exit_sign: Continue
   whats-next:
     name: What's next?
