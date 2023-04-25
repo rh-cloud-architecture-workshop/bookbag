@@ -1,0 +1,25 @@
+:icons: font 
+
+In this module you discover how to build a service network to connect disparate services using a secured layer 7 service network.
+
+== Business and Technical Context
+
+TODO: expand
+
+As mentioned in the introduction module (TODO: insert link) of the workshop, Globex went through a first modernization phase for their retail web application, moving from a legacy monolith to a containerized application. The Globex retail application runs on OpenShift in the public cloud.
+However, for a number of technical and regulatory reasons, the database of the Globex retail application is still running on-premise in one of Globex' data centers.
+The challenge for Globex is now to enable the retail application to connect to the database. For obvious reasons, Globex doesn't want to expose the database ove the public internet, so a private, secure link needs to be setup between the OpenShift instance on the public cloud and the Globex data center. 
+This can be accomplished with a VPN between the public cloud and the Globex data center. However a VPN can be hard to set up, and requires deep networking expertise. A dedicated layer 7 service network such as Red Hat Service Interconnect on the other hand is a lot easier to set up.
+
+== What is Red Hat Service Interconnect?
+
+TODO
+
+== Setting up Red Hat Service Interconnect
+
+In the next chapter, you will be guided through setting up a service network between the Globex retail application, running on OpenShift in the public cloud (AWS in this case) and the Globex database, running on OpenShift on another cloud provider.
+
+[NOTE]
+====
+The concept of an on-premise deployment is challenging to simulate in a lab environment. This is why we opted to have the database running on OpenShift on another cloud provider. However, Red Hat Service Interconnect is not limited to service networks between instances of OpenShift, but can equally well be leveraged to connect deployments running on premise (deployed on OpenShift or Kubernetes, on virtual machines or on bare metal) with services running in the cloud.
+====

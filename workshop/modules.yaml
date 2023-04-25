@@ -18,5 +18,11 @@ modules:
   apim-module-instructions:
     name: Building APIs with Contract-First Approach - Instructions
     exit_sign: Continue
+  skupper-module:
+    name: Building a secure service network with Red Hat Service Interconnect - Introduction
+    exit_sign: Continue
+  skupper-instructions:
+    name: Building a secure service network with Red Hat Service Interconnect - Instructions
+    exit_sign: Continue
   whats-next:
     name: What's next?
