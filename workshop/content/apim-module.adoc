@@ -1,7 +1,7 @@
-In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.
+In this module you discover how Contract First Approach provides the right framework to help internal and external teams to build microservices and APIs based systems.
 
 == Business context
-With growing popularity, Globex would like to add new channels  to their existing, web-based application, e.g. a mobile app and also look for ways to partner with other large retail portals . This requires formalizing the application API and exposing the APIs through a API Management solution for consumption by the mobile app.
+With growing popularity, Globex would like to add new channels  to their existing, web-based application. They are working towards launching their own *Globex Mobile App* and  partnering with other large retail portals. This requires formalizing the application API definitions and exposing the APIs through a API Management solution for consumption by the Globex Mobile App and by Partner Portals.
 
 *(a) Partner Portal*
 
@@ -17,8 +17,11 @@ With growing popularity, Globex would like to add new channels  to their existin
 
 == Solution overview
 
-Globex decides to adopt a *Contract First approach*: before tackling the development of new services, the API contract is formalized in a OpenAPI spec document. This API design phase is done collaboratively with all stakeholders. Once a first version of the OpenAPI spec document is ready, it is pushed and managed in a service registry, which acts a the system of truth, and also serves to help development team build mocks out of them.
+Globex decides to adopt a *Contract First approach*: before tackling the development of new services, the API contract is formalized in a OpenAPI spec document. 
 
+With Contract-First, all the relevant parties including the service (API) providers, the various internal, and external development teams, and 3rd party systems are on the same page before writing the first line of code. This is achieved by clearly setting out the contract definition (API definitions) through which the entire gamut of systems will speak with each other through OpenAPI specifications or AsynchAPI specifications.
+
+This API design phase is done collaboratively with all stakeholders. Once a first version of the OpenAPI spec document is ready, it is pushed and managed in a service registry, which acts a the system of truth, and also serves to help development team build mocks out of them.
 
 An API Management solution (Red Hat 3scale API management) to expose, secure and manage the APIs to the application backend services is introduced. This allows to introduce new channels (mobile application, B2B transactions) in a controlled way.
 
@@ -26,33 +29,59 @@ Using a contract-first approach, the APIs are specified in a OpenAPI spec docume
 
 == Technical considerations
 
-=== API Design 
+=== Red Hat SSO
+
+Globex uses to use Red Hat SSO to provide single sign-on (SSO) capabilities to Web apps and RESTful web services. Red Hat SSO can also be used to secure the Web and Mobile applications by providing Web single sign-on (SSO) capabilities based on popular standards such as SAML 2.0, OpenID Connect and OAuth 2. In this case, the APIs are also secured with OpenID Connect with Red Hat SSO. 
+
+[Note]
+====
+OpenID Connect is built on top of OAuth 2.0 that complements the OAuth 2.0 Authorization framework with an authentication mechanism. When OpenID Connect authentication option is used, the API requests are authenticated using the access tokens in the JSON Web Token (JWT) format (https://tools.ietf.org/html/rfc7519[RFC 7519]).
+====
+
+
+In this case, OpenID Connect is used as the security scheme for its API management and security. OpenID Connect (OIDC)  is a simple identity layer on top of the popular OAuth framework (i.e. it verifies the user by obtaining basic profile information and using an authentication server). It is being used in two ways +
+* When an application wants to authenticate a user (Globex' Web and Mobile users)
+* When a client that wants to gain access to remote services
+
+<TBC - write about token >
+
+=== API Designer
 
 Red Hat API Designer based on Apicurio provides web based API Designer tool which is incredibly lightweight, easy to package, deploy, and use.  In this workshop this is used to load an OpenAPI file from your local file system and visually edit it (and then save it back to your disk)!
 
 === Service Registry
 Once the API design is complete, and we have the first version of the API, this can now be published in a schema registry.  Service Registry which is part of  Red Hat Application Foundations allows us to publish the OpenAPIs, makes it accessible, and manage the OpenAPI easily.
 
+Service Registry is a datastore for sharing standard event schemas and API designs across API and event-driven architectures. You can use Service Registry to decouple the structure of your data from your client applications, and to share and manage your data types and API descriptions at runtime using a REST interface.
+
 You can upload new artifacts, new versions, view the metadata, download the specs, view documentation and view the content as well. Through Content rules one can validate new versions of the APIs against the existing specs to ensure validity and backward compatibility.
 
+Service Registry acts as the single source of truth for the OpenAPI Specifications. This spec can be used to share and manage the data types and API descriptions at runtime using a REST interface with internal teams and other external developers and partners.
 
-Service Registry acts as the single source of truth for the OpenAPI Specifications. This spec can be used to share and manage tthe data types and API descriptions at runtime using a REST interface with internal teams and other external developers and partners
+In this workshop, the REST endpoint of the artifact is used as to create ActiveDocs within API Management platform.
 
 === 3scale API Management
-We use the  Red Hat 3scake API Management platform here to publish, manage and secure the backend APIs.
+We use the  Red Hat 3scake API Management platform to publish, manage and secure the backend APIs.
 
-Each API can be configured to be secured using a number of ways. In this case, the APIs are secured with OpenID Connect. 
-[Note]
-====
-OpenID Connect is built on top of OAuth 2.0 that complements the OAuth 2.0 Authorization framework with an authentication mechanism. When OpenID Connect authentication option is used, the API requests are authenticated using the access tokens in the JSON Web Token (JWT) format (https://tools.ietf.org/html/rfc7519[RFC 7519]).
-====
+Each API can be configured to be secured using a number of ways. 
 
 3scale allows you to have various application plans for each of the APIs. Developers can subscribe to those APIs and can access APIs by using the OpenID Connect details securely. You can also monitor the APIs and track usage.
 
 
-==  Architecture
+==  Architecture Overview
 
 TODO: 
+
+image::images/todo-sticky.jpg[]
+
+== Deployment Overview
+
+TODO: describe the deployment topology
+
+image::images/todo-sticky.jpg[]
+
+image::images/apim/apim_deployment.png[] 
+
 
 ==   Implementation
 
