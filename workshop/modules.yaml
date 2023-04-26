@@ -21,7 +21,7 @@ modules:
   skupper-module:
     name: Building a secure service network with Red Hat Service Interconnect - Introduction
     exit_sign: Continue
-  skupper-instructions:
+  skupper-module-instructions:
     name: Building a secure service network with Red Hat Service Interconnect - Instructions
     exit_sign: Continue
   whats-next:
