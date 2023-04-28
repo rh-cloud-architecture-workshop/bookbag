@@ -220,9 +220,8 @@ kamel run -n globex-cdc-%user_name% workshop/module-cdc/order-connector/cashback
 .Output
 ----
 Modeline options have been loaded from source files
-Full command: kamel run -n globex-cdc-user1 workshop/module-cdc/order-connector/cashback-order-connector.yaml --property=file:workshop/module-cdc/order-connector/cashback-order-connector.properties --dependency=camel:http --config=secret:kafka-client-secret 
-
-Unable to verify existence of operator id [camel-k] due to lack of user privileges
+Full command: kamel run -n globex-cdc-%user_name% workshop/module-cdc/order-connector/cashback-order-connector.yaml --property=file:workshop/module-cdc/order-connector/cashback-order-connector.properties --dependency=camel:http --config=secret:kafka-client-secret 
+No IntegrationPlatform resource in globex-cdc-%user_name% namespace
 Integration "cashback-order-connector" created
 ----
 ** The Camel K operator starts building the integration and packages it in a container image. The first time this can take quite a while during which nothing seems to happen. +
@@ -299,9 +298,8 @@ kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashb
 .Output
 ----
 Modeline options have been loaded from source files
-Full command: kamel run -n globex-cdc-user1 workshop/module-cdc/customer-connector/cashback-customer-connector.groovy --dependency=camel:http --property=file:workshop/module-cdc/customer-connector/cashback-customer-connector.properties --config=secret:kafka-client-secret
-
-Unable to verify existence of operator id [camel-k] due to lack of user privileges
+Full command: kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.groovy --dependency=camel:http --property=file:workshop/module-cdc/customer-connector/cashback-customer-connector.properties --config=secret:kafka-client-secret 
+No IntegrationPlatform resource in globex-cdc-%user_name% namespace
 Integration "cashback-customer-connector" created
 ----
 ** Follow the build process with the following command:
