@@ -46,7 +46,7 @@ image::images/devspaces-workspace-debezium-connector.png[]
 ** *schema.include.list*: the schema's to include in the change data capture process.
 ** *table.include.list*: the name of the tables to include. For our use case we are interested in the *customer*, *orders* and *line_item* tables.
 
-* Before deploying the connector, you need to substitute the placeholder with the database hostname with the actual value. On line 14, replace *<REPLACE WITH DATABASE HOSTNAME>* with *globex-db.globex-%user_name%.svc.cluster.local*, which is the internal DNS name of the Globex retail application database.
+* Before deploying the connector, you need to substitute the placeholder for the database hostname with the actual value. On line 14, replace *<REPLACE WITH DATABASE HOSTNAME>* with *globex-db.globex-%user_name%.svc.cluster.local*, which is the internal DNS name of the Globex retail application database.
 
 * You can deploy the connector to the OpenShift cluster directly from Dev Spaces. To do so, click on the image:images/devspaces-menu.png[] icon on the top of the left menu, and select *Terminal/New Terminal* from the drop-down menu.
 +
@@ -114,7 +114,7 @@ image::images/kafdrop-debezium-topic-customers-1.png[]
 * A Debezium change event has a well-defined structure. Take particular note of the following elements:
 ** *before*: the state of the record before the transaction. As the change events correspond to newly read records, there is no previous state. 
 ** *after*: the state of the record after the transaction. This is a JSON representation of the current state of the record in the database, in JSON format (every column in the table becomes a JSON field).
-** *op*: The operation that lead to the change event. Possible values are '*c*' for _create_, '*u*' for _update_, '*d*' for _delete_ and '*r*' for _read_. As the records in the *customer* already existed when the Debezium connector was deployed, the operation is '*r*'.
+** *op*: The operation that leads to the change event. Possible values are '*c*' for _create_, '*u*' for _update_, '*d*' for _delete_ and '*r*' for _read_. As the records in the *customer* already existed when the Debezium connector was deployed, the operation is '*r*'.
 
 * The Globex application database does not contain any order information at the moment, so the *globex.updates.public.orders* and *globex.updates.public.line_item* topics are empty. You can verify this through the Kafdrop UI. +
 In the next section of the workshop, you will create some orders, and verify that the corresponding change events are picked up by Debezium.  
@@ -127,8 +127,8 @@ In the next section of the workshop, you will create some orders, and verify tha
 +
 image::images/globex-login.png[]
 
-* The Globex web application uses OpenId Connect powered By Red Hat Single Sign-On to authenticate users. After clicking the *Login* link you are redirected to the login page of the SSO server, where you need to enter your credentials. +
-The SSO server is set up with a number of users corresponding to customers in the Globex application. Login with one of the following users: `asilva`,`mmiller`,`asanders`,`cjones` or `pwong`. The password for all the users is %globex_user_password%.
+* The Globex web application uses OpenId Connect powered by Red Hat Single Sign-On (SSO) to authenticate users. After clicking the *Login* link you are redirected to the login page of the SSO server, where you need to enter your credentials. +
+The SSO server is set up with a number of users corresponding to customers in the Globex application. Login with one of the following users: *asilva*,*mmiller*,*asanders*,*cjones* or *pwong*. The password for all the users is *%globex_user_password%*.
 +
 image::images/globex-login-sso.png[]
 
@@ -183,6 +183,7 @@ image::images/order-simulator-random-customer.png[]
 
 == Streaming processing of events with Kafka Streams
 
+TODO
 
 == Build and deploy integrations with Camel K
 
@@ -202,7 +203,7 @@ The first integration we need is pretty simple: we need to consume the aggregate
 image::images/devspaces-workspace-order-connector.png[]
 
 * Take note of the following elements:
-** *route*: Camel integrations are defined as _routes_,  a set of processing steps that are applied to a message as it travels from a source to a destination. An integration contains 1 or more routes.
+** *from*: Camel integrations are defined as _routes_,  a set of processing steps that are applied to a message as it travels from a source to a destination. An integration contains 1 or more routes. A route typically starts with a _from_ statement, which defines the source of the route. 
 ** *from.uri*: the source of the route, typically expressed as a URI. The scheme (*kafka*) defines which connector to use. The *{{ }}* placeholders refer to properties defined in a properties file.
 ** *steps*: the different steps in the integration. In this simple integration, the body contents of the incoming message is logged, and a couple of headers are set on the message.
 ** *to*: the destination of the integration. In this case a HTTP endpoint on the _Cashback_ service is called. The headers set previously determine how to handle the HTTP call (POST with JSON payload)
@@ -319,7 +320,7 @@ cashback-order-connector      Running        kit-cglu6cgm540hobmmt1r0   1
 +
 image::images/openshift-console-topology-integration-2.png[]
 
-** Open the logs of the pod, by clicking on the deployment in the Topology view and selecting *View logs* from the popup-window on the right. +
+** Open the logs of the pod, by clicking on the deployment in the Topology view and selecting *View logs* from the popup pane on the right. +
 You should see some log statements for every customer data change event processed by the connector.
 +
 ----
