@@ -214,7 +214,7 @@ image::images/devspaces-workspace-order-connector.png[]
 +
 [source,bash,role=copy]
 ----
-kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.yaml
+kamel run -n globex-cdc-%user_name% workshop/module-cdc/order-connector/cashback-order-connector.yaml
 ----
 +
 .Output
