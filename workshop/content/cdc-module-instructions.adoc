@@ -231,7 +231,7 @@ In the terminal in Dev Spaces, you can issue the following command:
 +
 [source,bash,role=copy]
 ----
-oc get integration -n globex-cdc-user1
+oc get integration -n globex-cdc-%user_name%
 ----
 +
 .Output
@@ -244,7 +244,7 @@ cashback-order-connector   Building Kit   kit-cglu6cgm540hobmmt1r0
 +
 [source,bash,role=copy]
 ----
-oc get integration -n globex-cdc-user1
+oc get integration -n globex-cdc-%user_name%
 ----
 +
 .Output
@@ -293,7 +293,7 @@ In a nutshell, messages are consumed from the Kafka topic and marshalled into a 
 +
 [source,bash,role=copy]
 ----
-kamel run -n globex-cdc-user1 workshop/module-cdc/customer-connector/cashback-customer-connector.groovy
+kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.groovy
 ----
 +
 .Output
@@ -308,7 +308,7 @@ Integration "cashback-customer-connector" created
 +
 [source,bash,role=copy]
 ----
-oc get integrationkit -n globex-cdc-user1
+oc get integrationkit -n globex-cdc-%user_name%
 ----
 +
 .Output
