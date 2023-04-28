@@ -8,7 +8,7 @@ Now the business would like to introduce new functionality: they want to introdu
 == Technical considerations
 
 There are a lot of ways to approach this new requirement. The most straightforward would be to build the cashback functionality directly into the Globex retail application. After all, since the modernization of the application, it should be a lot easier to add new functionality compared to the days of the legacy app, when it could easily take several months to bring new functionality into production.
-However, the technical teams want to add major new functionality to the Globex application, for fear of ending up again with a complex, hard to maintain and hard to deploy application. They very much prefer a microservices approach, where new functionality is added as a separate set of services which can be developed, deployed and maintained independently.
+However, the technical teams are reluctant to add major new functionality to the Globex application, for fear of ending up again with a complex, hard to maintain and hard to deploy application. They very much prefer a microservices approach, where new functionality is added as a separate set of services which can be developed, deployed and maintained independently.
 
 The cashback service will need access to the information of the orders made through the retail web site, which is stored in the retail app's database. A possible solution could consist in a microservice that polls the order tables at regular interval, extracts new orders and calculates and stores earned cashback.
 
