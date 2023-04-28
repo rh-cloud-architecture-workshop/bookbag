@@ -57,6 +57,7 @@ If you prefer, you can maximize the terminal in a new browser tab by clicking on
 
 * In the terminal, check that you are logged in into the OpenShift cluster.
 +
+[source,bash,role=copy]
 ----
 oc whoami
 ----
@@ -68,6 +69,7 @@ oc whoami
 
 * Check that the `skupper` CLI is available in the terminal:
 +
+[source,bash,role=copy]
 ----
 skupper version
 ----
@@ -83,6 +85,7 @@ flow-collector version         not-found
 
 * Install the Red Hat Service Interconnect resources in the *globex-skupper-%user_name%* namespace:
 +
+[source,bash,role=copy]
 ----
 skupper init --enable-console --enable-flow-collector --console-auth unsecured
 ----
@@ -110,6 +113,7 @@ Click *Start* to start and open the terminal.
 
 * In the terminal, check that you are logged in into the OpenShift cluster.
 +
+[source,bash,role=copy]
 ----
 oc whoami
 ----
@@ -121,6 +125,7 @@ oc whoami
 
 * Check that the `skupper` CLI is available in the terminal:
 +
+[source,bash,role=copy]
 ----
 skupper version
 ----
@@ -136,6 +141,7 @@ flow-collector version         not-found
 
 * Install the Red Hat Service Interconnect resources in the *globex-%user_name%* namespace:
 +
+[source,bash,role=copy]
 ----
 skupper init
 ----
@@ -152,6 +158,7 @@ You might see some warnings about PodSecurity violations in the console output. 
 
 * To see the status of the skupper network:
 +
+[source,bash,role=copy]
 ----
 skupper status
 ----
@@ -168,6 +175,7 @@ To create a link between the two clusters, you crate a token on one of the clust
 * Navigate to the browser tab pointing to the OpenShift Web terminal on the AWS cluster. +
 Issue the following command:
 +
+[source,bash,role=copy]
 ----
 skupper token create /tmp/skupper.token
 ----
@@ -179,8 +187,9 @@ Token written to /tmp/skupper.token
 
 * If you want to have a look at the token that was created:
 +
+[source,bash,role=copy]
 ----
-bash-4.4 ~ $ cat /tmp/skupper.token 
+cat /tmp/skupper.token 
 ----
 +
 .Output
@@ -209,12 +218,14 @@ This is actually an OpenShift secret which contains a certificate. This certific
 
 * On this second terminal, point to another context for the `oc` CLI:
 +
+[source,bash,role=copy]
 ----
 export KUBECONFIG=/tmp/config-azure
 ----
 
 * Login in to the Azure OpenShift cluster as user *%user_name%*:
 +
+[source,bash,role=copy]
 ----
 oc login -u %user_name% %openshift_api_azure%
 ----
@@ -237,7 +248,7 @@ WARNING: Using insecure TLS client config. Setting this option is not supported!
 
 Authentication required for %openshift_api_azure% (openshift)
 Console URL:%openshift_api_azure%/console
-Username: user1
+Username: %user_name%
 Password: 
 ----
 +
@@ -258,6 +269,7 @@ You are now logged in into the OpenShift cluster on Azure.
 
 * Still on the same terminal, create a link using the token:
 +
+[source,bash,role=copy]
 ----
 skupper link create /tmp/skupper.token
 ----
@@ -270,6 +282,7 @@ Check the status of the link using 'skupper link status'.
 
 * To check the status of the link:
 +
+[source,bash,role=copy]
 ----
 skupper link status
 ----
@@ -287,6 +300,7 @@ There are no connected links
 
 * Finally, you need to expose the database service over the link. This will allow the Globex app on the AWS cluster to connect to the database as if it was a local service, while in reality the service is a proxy for the real service running on the Azure cluster. +
 +
+[source,bash,role=copy]
 ----
 skupper expose deployment/globex-db --port 5432
 ----
@@ -304,6 +318,7 @@ There a couple of ways to verify this:
 
 * In the original terminal on the AWS cluster, use `oc` to get the services deployed in the `globex-skupper-%user_name%` namespace: 
 +
+[source,bash,role=copy]
 ----
 oc get service
 ----
