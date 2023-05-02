@@ -33,6 +33,13 @@ Using a contract-first approach, the APIs are specified in a OpenAPI spec docume
 
 Globex uses to use Red Hat SSO to provide single sign-on (SSO) capabilities to Web apps and RESTful web services. Red Hat SSO can also be used to secure the Web and Mobile applications by providing Web single sign-on (SSO) capabilities based on popular standards such as SAML 2.0, OpenID Connect and OAuth 2. In this case, the APIs are also secured with OpenID Connect with Red Hat SSO. 
 
+
+[source,bash,role=copy]
+----
+echo "copy text to buffer"
+----
+
+
 [Note]
 ====
 OpenID Connect is built on top of OAuth 2.0 that complements the OAuth 2.0 Authorization framework with an authentication mechanism. When OpenID Connect authentication option is used, the API requests are authenticated using the access tokens in the JSON Web Token (JWT) format (https://tools.ietf.org/html/rfc7519[RFC 7519]).
@@ -40,7 +47,8 @@ OpenID Connect is built on top of OAuth 2.0 that complements the OAuth 2.0 Autho
 
 
 In this case, OpenID Connect is used as the security scheme for its API management and security. OpenID Connect (OIDC)  is a simple identity layer on top of the popular OAuth framework (i.e. it verifies the user by obtaining basic profile information and using an authentication server). It is being used in two ways +
-* When an application wants to authenticate a user (Globex' Web and Mobile users)
+
+* When an application wants to authenticate a user (Globex Web and Mobile users)
 * When a client that wants to gain access to remote services
 
 <TBC - write about token >
@@ -61,12 +69,13 @@ Service Registry acts as the single source of truth for the OpenAPI Specificatio
 In this workshop, the REST endpoint of the artifact is used as to create ActiveDocs within API Management platform.
 
 === 3scale API Management
-We use the  Red Hat 3scake API Management platform to publish, manage and secure the backend APIs.
+We use the  Red Hat 3scale API Management platform to publish, manage and secure the backend APIs. API Management helps you to define, deploy, consume, or publish your APIs for use by other developers, channels and partners. You can implement proxies, security policies, rate limiting, logging, metrics, and an API developer portal for sign-up and documentation. 
 
 Each API can be configured to be secured using a number of ways. 
 
-3scale allows you to have various application plans for each of the APIs. Developers can subscribe to those APIs and can access APIs by using the OpenID Connect details securely. You can also monitor the APIs and track usage.
+3scale allows you to have various application plans for each of the APIs. Developers can subscribe to those APIs and can access APIs by using the OpenID Connect details securely. You can also monitor the APIs and track usage. +
 
+image::images/apim/3scale-architecture.png[]
 
 ==  Architecture Overview
 
