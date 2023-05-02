@@ -1,0 +1,10 @@
+:icons: font 
+
+:toc: 
+
+== Deploy the Discord integration
+
+TODO: deploy the solution through BackStage
+
+
+

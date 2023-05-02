@@ -10,4 +10,6 @@ modules:
     - apim-module-instructions
     - skupper-module
     - skupper-module-instructions
+    - camel-module
+    - camel-module-instructions
     - whats-next

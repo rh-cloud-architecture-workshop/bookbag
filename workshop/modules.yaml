@@ -24,5 +24,11 @@ modules:
   skupper-module-instructions:
     name: Building a secure service network with Red Hat Service Interconnect - Instructions
     exit_sign: Continue
+  camel-module:
+    name: Building a multi-channel support service for Globex customers - Intro
+    exit_sign: Continue
+  camel-module-instructions:
+    name: Building a multi-channel support service for Globex customers - Instructions
+    exit_sign: Continue
   whats-next:
     name: What's next?
