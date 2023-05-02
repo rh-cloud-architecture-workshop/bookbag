@@ -62,7 +62,7 @@ $ *oc start-build bookbag --follow*
 
 == Test Deploy of the Bookbag image
 
-. Define a variables file, `workshop-vars.js`, to define variables for testing  your lab content:
+. Define a variables file, `workshop-vars.json`, to define variables for testing  your lab content:
 +
 ----
 {
@@ -92,9 +92,6 @@ bookbag  bookbag-bookbag-demo.apps.ocp.example.com        bookbag   10080-tcp  e
 ----
 
 . Use the Route hostname to open the Bookbag page in your browser.
-<<<<<<< HEAD
-
-
 
 == Generate and push bookbag image
 
@@ -121,5 +118,3 @@ podman tag default-route-openshift-image-registry.apps.cluster-xx.jbp76.xx.opent
 
 podman push quay.io/globex-recommendation/summit-connect-bookbag:rhte-2023
 
-=======
->>>>>>> c39d4a9... Initial commit
