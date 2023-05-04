@@ -75,7 +75,7 @@ If the the output of the `oc whoami` command does not correspond to your usernam
 [source,bash,role=copy]
 ----
 oc logout
-oc login -u %user_name% -p %user_password% 
+oc login -u %user_name% -p %user_password% %openshift_api_internal%
 ----
 ====
 
