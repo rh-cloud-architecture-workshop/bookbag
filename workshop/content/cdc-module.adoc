@@ -31,7 +31,29 @@ image::images/debezium-architecture.png[]
 
 == Cashback Service Architecture
 
-TODO: detail the proposed architecture of the Cashback Service.
+With Debezium you can capture changes in the database for those tables you are interested in and stream them to Kafka topics. However, the change event streams in their raw form are most likely not suited to be consumed as such by other applications without transformation or processing of the data.
+
+The Cashback service needs customer and order data to build its local view of customers and orders. So we could have the service directly consume from the Kafka topics that contain the change events and do the required transformations and aggregations inside the Cashback service itself. However, that would tightly couple the service to the CDC solution, which is something we want to avoid.
+
+An alternative is for the Cashback service to have a domain specific API, and have an integration layer that bridges the CDC layer and the Cashback service API.
+
+The cashback service has a REST API which expects customer and order data. The implementation of the API populates the local database of the service.
+
+For the customer data, an integration service consumes the change events from the customer table, extracts the relevant information from the change event and calls the Cashback service REST API.
+
+For the order data, things are a bit more complex. The cashback service expects the total value for each order, which is not readily available in the change event streams. In the Globex database, the value of each order line item is stored as part of the line item entity, but the total order value is not stored. This means we need to combine the change events from orders and line items in order to obtain the total value for each order. This can be done by leveraging a streaming processing library, which allows to process, transform, join and aggregate streams of events into new event streams.
+
+So the complete architecture consists of:
+
+* Debezium: tails the transaction logs of the Globex retail database and creates change events which are sent to kafka topics (typically 1 distinct topic per database table).
+* Cashback service: stores a local view of customers and orders in its own database. Exposes a REST API.
+* Customer integration service: consumes the customer change events from Kafka, extracts the relevant information and calls the Cashback service REST API for each customer change event.
+* Order aggregation processing service: consumes the order and line item change events from Kafka. Joins the two event streams by order ID and aggregates them to obtain the total order value. The resulting aggregated order events are published into a Kafka topic.
+* Aggregated order integration service: consumes from the aggregated order events from Kafka, and calls the Cashback service REST API for each aggregated order event.
+
+A graphical representation of the architecture:
+
+image::images/globex-deployment-3.png[]
 
 == Cashback Service Implementation
 

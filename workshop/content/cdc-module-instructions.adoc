@@ -6,7 +6,11 @@ TODO: deploy the solution through BackStage
 
 == Deployment Overview
 
-TODO: describe the deployment topology
+The architecture of the Cashback service looks as follows:
+
+image::images/globex-deployment-3.png[]
+
+Most of the components have been deployed for you as part of the provisioning of the lab. What is missing is the Debezium connector to power Change Data Capture, and the Camel K integration services to populate the cashback service with customer and order data.
 
 == Deploy the Debezium Connector
 
@@ -199,8 +203,9 @@ The _order-aggregator_ uses Kafka Streams to calculate the total value of an ord
 * Joins the LineItem events with the Order events by Order ID. This produces a new stream of events which contain both the Order and the LineItem.
 * Groups the joined stream by Order id
 * Aggregates the joined stream to produce a stream of _AggregatedOrder_ events. The aggregation function adds the value of each individual line item to the total order value.
+* Publishes the aggregated order events in a Kafka topic. 
 
-In case you want to see hoe this looks like in code, click on the link below:
+In case you want to see how this looks like in code, click on the link below:
 
 .[underline]#Click to see the code#
 [%collapsible]
