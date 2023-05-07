@@ -1,15 +1,39 @@
 :icons: font 
 
-In this module you discover how to build a multi-channel support service for Globex customers that allows clients to chat with a team of agents in real time.
+In this module you will participate to complete the implementation of a multi-channel support service for Globex customers that will enable clients to chat in real time with a team of agents.
 
 == Business and Technical Context
 
-TODO: expand
+As an added initiative to the digital transformation, Globex wants to implement a new, all digital, support service where customers can get instant help from a team of support agents. The goal is to build a pluggable event-driven architecture that allows multiple communication channels and services to integrate with ease to the platform.
 
-As mentioned in the introduction module (TODO: insert link) of the workshop, Globex went through a first modernization phase for their retail web application, moving from a legacy monolith to a containerized application. The Globex retail application runs on OpenShift in the public cloud.
-However, for a number of technical and regulatory reasons, the database of the Globex retail application is still running on-premise in one of Globex' data centers.
-The challenge for Globex is now to enable the retail application to connect to the database. For obvious reasons, Globex doesn't want to expose the database ove the public internet, so a private, secure link needs to be setup between the OpenShift instance on the public cloud and the Globex data center. 
-This can be accomplished with a VPN between the public cloud and the Globex data center. However a VPN can be hard to set up, and requires deep networking expertise. A dedicated layer 7 service network such as Red Hat Service Interconnect on the other hand is a lot easier to set up.
+[pending] image here
+
+You will be involved in the new hub's first iteration (by completing all the module steps) to complete the integration of two customer facing channels with the agent's system. Customers will be able to choose contacting Globex via its Web portal or via its public space in Slack, available on-line (using a browser), or by installing the app or their devices. Slack is a very popular and widely adopted messaging platform for businesses.
+
+At the other end of the line, the team of agents providing support services for Globex will use Discord as their communication platform. Discord is a well known chat platform, very popular among gamers, but increasingly embraced by enterprises to connect internal teams but also for external interactions with customers as a way to maintain close contact.
+
+[pending] image here
+
+This module showcases how to integrate the service with some of the most popular messaging platforms (Slack & Discord), including Globex's in-house customer communication interface (Web chat widget), using a collection of capabilities all included in Red Hat Application Foundation.
+
+
+== Technical Capabilities
+
+The key capabilities you will use in this module are:
+
+ - Camel K, the integration tool to create all the processing flows.
+ - AMQ Broker, the messaging broker enabling event-based interactions.
+ - AMQ Streams (Kafka), to store and replay customer/agent interactions.
+ - DataGrid (Cache), to keep the context of interactions context alive.
+ - S3 storage, to store conversations.
++
+[NOTE]
+====
+S3 in this workshop is served using Minio for simplicity. Full featured on-premise storage capabilities are provided by OpenShift Data Foundation.
+====
+
+== Module exercises
+
 
 == What is Red Hat build of Apache Camel K?
 
@@ -19,3 +43,12 @@ TODO
 ====
 A random note
 ====
+
+
+== What is Red Hat AMQ Broker?
+
+== What is Red Hat AMQ Streams?
+
+== What is Red Hat AMQ DataGrid?
+
+== What is Red Hat OpenShift Data Foundation?
