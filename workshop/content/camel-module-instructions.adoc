@@ -324,8 +324,27 @@ Which integration lessons will you learn in this section?
  - How to integrate with AMQP Brokers.
  - How to invoke other Camel routes.
  - How to organise the code allow a pluggable architecture.
+ - How to define a properties file.
 
 {empty} +
+
+. Configure your listener
++
+The AMQ listener you're about to implement needs to consume from your dedicated address which is unique to avoid collisions with traffic from other students. You need to use your personal GlobexSupport Slack channel ID to configure your integration.
++
+Open the `my.properties` file in your editor end edit the following property:
++
+[source, subs=]
+----
+slack.globex.channel.id=MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID
+----
++
+IMPORTANT: Make sure you replace `MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID` using your personal GlobexSupport channel ID from Slack.
++
+Now you can proceed with the creation of your route.
++
+{empty} +
++
 
 . In your terminal, execute the `kamel` command below to create a new source file to process AMQP events:
 +
@@ -522,7 +541,27 @@ The `kafka` component requires no extra parameters because it has been pre-confi
 
 {empty} +
 
-=== Deploy and test your code
+=== Run your code in `dev` mode
+
+You have completed the processing flow from customers (in Slack) to agents (in Discord). The returning flow is still pending to implement, but you can already test what you have implemented so far.
+
+Camel K features a special running mode called `development` mode, which allows the developer to run/test the code in Kubernetes and make live code updates on the fly, as if he was working locally. Camel K deploys a test instance that is removed when you stop it.
+
+Let's run your code in `dev` mode to validate the flow works as expected.
+
+. From your terminal, execute the following command:
++
+[source, subs=]
+----
+./dev.sh<br>
+----
++
+NOTE: The `dev.sh` scripts runs a `kamel run` command with the flag `--dev` mode indicating to run in development mode. +
+It also defines all the necessary support resources and parameters to run your integration.
++
+{empty} +
+
+. From Slack, send a message...
 
 PENDING
 
@@ -580,7 +619,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 +
 ```yaml
 - from:
-    uri: "process-agent-message"
+    uri: "direct:process-agent-message"
     steps:
     - setProperty:
         name: text
@@ -693,7 +732,7 @@ Include in the same YAML file (copy and paste) the snippet below:
 
 ```yaml
 - from:
-    uri: "process-channel-closure"
+    uri: "direct:process-channel-closure"
     steps:
     - setProperty:
         name: key
