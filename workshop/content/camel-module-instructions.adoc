@@ -171,7 +171,7 @@ image::images/crw-open-yaml.png[align="left", width=50%]
 +
 {empty} +
 +
-. Delete the code in `routes-cache` and replace with the following snippet:
+. Delete the example route (full `from` definition) in `routes-cache` and replace with the following snippet:
 +
 ```yaml
 - from:
@@ -179,15 +179,15 @@ image::images/crw-open-yaml.png[align="left", width=50%]
     steps:
       - marshal:
           json: {}
-      - remove-headers:
-          exclude-pattern: '*'
-      - set-header:
+      - removeHeaders:
+          pattern: '*'
+      - setHeader:
           name: ${{{cache.operation}}}
           simple: ${{{cache.put}}}
-      - set-header:
+      - setHeader:
           name: ${{{cache.value}}}
           simple: ${body}
-      - set-header:
+      - setHeader:
           name: ${{{cache.key}}}
           simple: ${exchangeProperty.key}
       - to:
@@ -226,10 +226,10 @@ Add in your code (copy and paste) the snippet below:
     steps:
       - removeHeaders:
           pattern: '*'
-      - set-header:
+      - setHeader:
           name: ${{{cache.operation}}}
           simple: ${{{cache.get}}}
-      - set-header:
+      - setHeader:
           name: ${{{cache.key}}}
           simple: ${exchangeProperty.key}
       - to:
@@ -274,10 +274,10 @@ Copy and paste the snippet below:
     steps:
       - removeHeaders:
           pattern: '*'
-      - set-header:
+      - setHeader:
           name: ${{{cache.operation}}}
           simple: ${{{cache.remove}}}
-      - set-header:
+      - setHeader:
           name: ${{{cache.key}}}
           simple: ${exchangeProperty.key}
       - to:
@@ -301,7 +301,7 @@ You can consider the `${exchangeProperty.key}` as a parameter the calling route 
 +
 {empty} +
 
-If you have included in your code the 3 route definitions above, your work is done here and you can resume with the tasks that follow.
+You should see now included in your `routes-cache.yaml` definition the 3 above routes. Your work is done here and you can resume with the tasks that follow.
 
 {empty} +
 
@@ -338,7 +338,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 
 . Open the `routes-from-amq.yaml` file in your editor.
 
-. Copy and paste the following snippet:
+. Delete the example route (full `from` definition) and replace with the following snippet:
 +
 ```yaml
 - from:
@@ -382,16 +382,15 @@ In the same YAML file, copy and paste the following snippet:
     steps:
       - unmarshal:
           json: {}
-      - set-property:
+      - setProperty:
           name: in
           simple: ${body}
       - to:
            uri: "direct:get-cache-entry"
-      - set-property:
+      - setProperty:
           name: discord-channel
           simple: ${exchangeProperty.cache.get(target).get(room)}
-
-      - set-body:
+      - setBody:
           simple: ${exchangeProperty.in.get(text)}
       - to:
            uri: "direct:discord-push-message"
@@ -415,6 +414,13 @@ the `setProperty` tag tells Camel to create a placeholder that can be used down 
 ====
 5. Sets the text message to be sent to Discord
 6. Delegates the message delivery to the route `discord-push-message`
+
+{empty} +
+
+In the next sections you will see the :
+
+- Review the `get-cache-entry` logic the route above calls
+- And later, you will implement the route `discord-push-message` the route above also calls.
 
 {empty} +
 
@@ -462,19 +468,19 @@ Still in the same YAML file, copy and paste the following snippet:
     steps:
       - removeHeaders:
           pattern: '*'
-      - set-header:
+      - setHeader:
           name: Authorization
           simple: Bot {{discord.token}}
-      - set-header:
+      - setHeader:
           name: Content-Type
           simple: application/json
-      - set-property:
+      - setProperty:
           name: kafka-body
           simple: ${body}
       - setBody:
           simple: '{"content":"${body}"}'
       - toD:
-          uri: "https://discordapp.com/api/channels/${exchangeProperty.discord-channel}/messages?connectionClose=true"
+          uri: "https://discordapp.com/api/channels/${exchangeProperty.discord-channel}/messages"
           parameters:
             connectionClose: true
       - setBody:
@@ -572,13 +578,13 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 - from:
     uri: "process-agent-message"
     steps:
-    - set-property:
+    - setProperty:
         name: text
         simple: ${body.get(d).get(content)}
-    - set-property:
+    - setProperty:
         name: agent
         simple: ${body.get(d).get(author).get(username)}
-    - set-property:
+    - setProperty:
         name: key
         simple: ${body.get(d).get(channel_id)}
     - to:
@@ -595,7 +601,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
               uri: "language:simple:${body.put(agent,${exchangeProperty.agent})}"
               parameters:
                 transform: false
-          - set-property:
+          - setProperty:
               name: source
               simple: ${body.get(source).get(uname)}
           - marshal:
@@ -604,7 +610,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
               uri: "amqp:topic:support.${exchangeProperty.source}"
               parameters:
                 connectionFactory: "#myFactory"
-          - set-body:
+          - setBody:
               simple: '${exchangeProperty.agent}: ${exchangeProperty.text}'
           - toD:
               uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.key}"
@@ -684,7 +690,7 @@ Include in the same YAML file (copy and paste) the snippet below:
 - from:
     uri: "process-channel-closure"
     steps:
-    - set-property:
+    - setProperty:
         name: key
         simple: ${body.get(d).get(id)}
     - to:
@@ -701,15 +707,15 @@ Include in the same YAML file (copy and paste) the snippet below:
               uri: "language:simple:${body.put(agent,'support')}"
               parameters:
                 transform: false
-          - set-property:
+          - setProperty:
               name: source
               simple: ${body.get(source).get(uname)}
-          - set-property:
+          - setProperty:
               name: key-slack
               simple: ${body.get(source).get(room)}
           - marshal:
               json: {}
-          - set-property:
+          - setProperty:
               name: context
               simple: ${body}
           - toD:
@@ -718,22 +724,22 @@ Include in the same YAML file (copy and paste) the snippet below:
                 connectionFactory: "#myFactory"
           - to:
               uri: "direct:cache-remove"
-          - set-property:
+          - setProperty:
               name: kafka-client
               simple: ${exchangeProperty.key}
-          - set-property:
+          - setProperty:
               name: key
               simple: ${exchangeProperty.key-slack}
           - to:
               uri: "direct:cache-remove"
-          - set-body:
+          - setBody:
               simple: done
-          - set-header:
+          - setHeader:
               name: context
               simple: ${exchangeProperty.context}
           - toD:
               uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.kafka-client}"
-          - set-body:
+          - setBody:
               simple: ${exchangeProperty.kafka-client}
           - toD:
               uri: "kafka:support.${env.NAMESPACE}.closed"
