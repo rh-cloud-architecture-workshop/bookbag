@@ -13,10 +13,10 @@ modules:
     name: Build new functionality with Change Data Capture - Instructions
     exit_sign: Continue 
   apim-module:
-    name: Building APIs with Contract-First Approach - Introduction
+    name: Launch new channels with Contract-First Approach - Introduction
     exit_sign: Continue
   apim-module-instructions:
-    name: Building APIs with Contract-First Approach - Instructions
+    name: Launch new channels with Contract-First Approach - Instructions
     exit_sign: Continue
   skupper-module:
     name: Building a secure service network with Red Hat Service Interconnect - Introduction
