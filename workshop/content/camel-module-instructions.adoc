@@ -567,6 +567,11 @@ PENDING
 
 {empty} +
 
+When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance.
++
+
+{empty} +
+
 == Enable the Discord to Slack interaction
 
 You've completed one directional flow to deliver customer messages from Slack to agents in Discord. Now, you need to transfer agent responses in Discord, back to customers in Slack.
@@ -601,6 +606,8 @@ Which new integration lessons will you learn in this section?
  - How to push events via AMQP to the Broker.
 
 {empty} +
+
+. Ensure you've stopped your `dev` instance from the test in the previous section. If not stopped yet, from your terminal press `Ctrl`+`C` to stop it.
 
 . From your terminal, execute the `kamel` command below to create a new source file to process Discord events:
 +
@@ -863,6 +870,8 @@ PENDING IMAGE.
 
 ==== Code the Camel route
 
+. First of all, close in your editor all the open files/tabs to ensure your IDE is clean.
+
 . Run in your terminal the snippet below to set the working directory for this task:
 +
 [source, subs=]
@@ -878,29 +887,30 @@ NOTE: The working folder contains a `code` folder to support you on this exercis
 +
 [source, subs=]
 ----
-kamel init routes-globex.java<br>
+kamel init routesglobex.java<br>
 ----
 +
 NOTE: This time we're choosing the Java language to showcase how all DSLs follow the same structure when defining Camel routes.
 +
 {empty} +
 
-. Open the `routes-globex.java` file in your editor.
+. Open the `routesglobex.java` file in your editor.
 +
 Select from your project tree:
 +
-* workshop -> module-camel -> lab -> globex-support -> routes-globex.java
+* workshop -> module-camel -> lab -> globex-support -> routesglobex.java
 +
 {empty} +
 +
-. Delete the sample Camel route in `routes-globex` and replace with the following one:
+. Delete the sample Camel route in `routesglobex` and replace with the following one:
 +
 ```java
-from("platform-http:/support/message")
-    .setProperty("clientid", simple("${env.NAMESPACE}"))
-    .convertBodyTo(String.class)
-    .to("jslt:request.jslt?allowContextMapAll=true")
-    .toD("amqp:topic:{{broker.amqp.topic.clients}}${env.NAMESPACE}?disableReplyTo=true&amp;connectionFactory=#myFactory");
+      from("platform-http:/support/message")
+        .setProperty("clientid", simple("${env.NAMESPACE}"))
+        .convertBodyTo(String.class)
+        .to("jslt:request.jslt?allowContextMapAll=true")
+        .toD("amqp:topic:{{broker.amqp.topic.clients}}${env.NAMESPACE}?disableReplyTo=true&amp;connectionFactory=#myFactory");
+
 ```
 +
 [NOTE]
@@ -1011,10 +1021,10 @@ If you feel curious on how this Camel AMQP consumer is implemented, open in your
 Include in the same Java file (copy and paste) the snippet below:
 
 ```java
-from("direct:support-response")
-    .convertBodyTo(String.class)
-    .to("jslt:response.jslt?allowContextMapAll=true")
-    .to("{{client.callback.url}}");
+      from("direct:support-response")
+        .convertBodyTo(String.class)
+        .to("jslt:response.jslt?allowContextMapAll=true")
+        .to("{{client.callback.url}}");
 ```
 
 In the route above:
