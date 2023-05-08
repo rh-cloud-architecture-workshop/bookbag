@@ -1,97 +1,108 @@
-In this module you discover how Contract First Approach provides the right framework to help internal and external teams to build microservices and APIs based systems.
+
+In this module you discover how Contract First Approach provides the right framework to acclerate launching new channels in a secure way across internal and external teams to build microservices and APIs based systems.
 
 == Business context
-With growing popularity, Globex would like to add new channels  to their existing, web-based application. They are working towards launching their own *Globex Mobile App* and  partnering with other large retail portals. This requires formalizing the application API definitions and exposing the APIs through a API Management solution for consumption by the Globex Mobile App and by Partner Portals.
 
-*(a) Partner Portal*
-
-* Retail partner aggregators would like to showcase Globex' product catalogue on their website
-* To allow for this access, Globex would like to expose an API to allow access to their APIs
+As mentioned in the introduction module of the workshop, Globex went through a first modernization phase for their retail web application, moving from a legacy monolith to a containerized application.
+Now with their growing popularity, Globex would like to add new channels to their existing, web-based e-commerce application.
 
 
-*(b) Mobile App*
+=== Mobile Application 
+With the launch of a Mobile App, Globex will be able to reach a larger audience. But Globex does not have the necessary expertise in mobile development, so development will have to be outsourced.
+ 
+ 
+=== Partner Aggregarors
+eСommerce aggregators would like include Globex' product catalogue as part of their unified shooping interface. Globex would like to have their catalogue available to these partners in a secure fashion.
 
-* Globex would like to launch a mobile application as well in addition to the retail web-site. Globex does not have the necessary expertise in mobile development, so development will have to be outsourced.
-* This means that, the mobile application will also need secure access to the APIs
 
+
+== Challenges
+
+The new requirements to expand Globex's business by adding additional channels bring its own set of challenges:
+
+* Launching a  Mobile App is  difficult because it would be tightly coupled with the e-commnrce retail application's core services
+* It is not easy to establish a secure way for the mobile app team building the mobile app to access these existing services.
+* Lack of a standardised API format makes it a serious challenge in gaining access the data needed from Globex
+* Inter-dependencies between various teams during the dev phase can slow down the dev productivity and time to market.
+* Lack of governance and inadvertent changes to the services can lead to adverse effect on the dev teams
 
 == Solution overview
 
-Globex decides to adopt a *Contract First approach*: before tackling the development of new services, the API contract is formalized in a OpenAPI spec document. 
+In order to cope with these challenges, the development team decides to adoption a new approach.
 
-With Contract-First, all the relevant parties including the service (API) providers, the various internal, and external development teams, and 3rd party systems are on the same page before writing the first line of code. This is achieved by clearly setting out the contract definition (API definitions) through which the entire gamut of systems will speak with each other through OpenAPI specifications or AsynchAPI specifications.
+With *Contract-First*, all the relevant parties including the service/API providers (_Globex core services_), the various internal teams (_eCommerce App_), and external development (_Mobile App_) teams, and 3rd party systems (_eCommerce Aggregators_) are on the same page before writing the first line of code. This is achieved by clearly setting out the contract definition (API definitions) through which the entire gamut of systems will speak with each other through OpenAPI specifications or AsynchAPI specifications.
 
-This API design phase is done collaboratively with all stakeholders. Once a first version of the OpenAPI spec document is ready, it is pushed and managed in a service registry, which acts a the system of truth, and also serves to help development team build mocks out of them.
+This API design phase is done collaboratively with all stakeholders. Once a first version of the OpenAPI spec document is ready, it is pushed and managed in a service registry, which acts a the system of truth. Mocks are created for the API.
 
-An API Management solution (Red Hat 3scale API management) to expose, secure and manage the APIs to the application backend services is introduced. This allows to introduce new channels (mobile application, B2B transactions) in a controlled way.
+.[.underline]#*[Click to know] What is an OpenAPI?*#
+[%collapsible]
+====
+The OpenAPI Specification (OAS) provides a consistent means to carry information through each stage of the API lifecycle. It is a specification language for HTTP APIs that defines structure and syntax in a way that is not wedded to the programming language the API is created in. API specifications are typically written in YAML or JSON, allowing for easy sharing and consumption of the specification.
+====
 
-Using a contract-first approach, the APIs are specified in a OpenAPI spec document and managed in a registry. Once implemented, they are onboarded on the API management platform.
+The team introduces *Red Hat 3scale API management*  to expose, secure and manage the APIs to the core application backend services. This allows to introduce new channels (mobile application, B2B transactions) in a controlled way.
+
+*Parallel Development streams*. The API first approach enables parallel development streams. UI development teams and other API consumers can start their development against the mocked APIs, without having to wait for an actual implementation. In parallel, backend development teams can implement the APIs using modern cloud-native frameworks. They continuously test the implementation against the OpenAPI spec to ensure that the implementation does not break the contract.
+
+*Manage and Secure the APIs*. An API management platform allows to expose the APIs in a secure and managed manner for access by the mobile app and other third party applications.
+
 
 == Technical considerations
 
 === Red Hat SSO
 
-Globex uses to use Red Hat SSO to provide single sign-on (SSO) capabilities to Web apps and RESTful web services. Red Hat SSO can also be used to secure the Web and Mobile applications by providing Web single sign-on (SSO) capabilities based on popular standards such as SAML 2.0, OpenID Connect and OAuth 2. In this case, the APIs are also secured with OpenID Connect with Red Hat SSO. 
+Globex uses to use Red Hat SSO to provide single sign-on (SSO) capabilities to Users, Web apps and APIs.
 
 
-[source,bash,role=copy]
-----
-echo "copy text to buffer"
-----
+In this case, OpenID Connect is used as the security scheme for its API management and security. OpenID Connect (OIDC) is a simple identity layer on top of the popular OAuth framework (i.e. it verifies the user by obtaining basic profile information and using an authentication server). 
 
-
-[Note]
+[NOTE]
 ====
 OpenID Connect is built on top of OAuth 2.0 that complements the OAuth 2.0 Authorization framework with an authentication mechanism. When OpenID Connect authentication option is used, the API requests are authenticated using the access tokens in the JSON Web Token (JWT) format (https://tools.ietf.org/html/rfc7519[RFC 7519]).
 ====
 
-
-In this case, OpenID Connect is used as the security scheme for its API management and security. OpenID Connect (OIDC)  is a simple identity layer on top of the popular OAuth framework (i.e. it verifies the user by obtaining basic profile information and using an authentication server). It is being used in two ways +
+It is being used in two ways +
 
 * When an application wants to authenticate a user (Globex Web and Mobile users)
-* When a client that wants to gain access to remote services
+* When a client that wants to gain access to remote services such as APIs
 
-<TBC - write about token >
+//TBC - write about token 
 
 === API Designer
 
-Red Hat API Designer based on Apicurio provides web based API Designer tool which is incredibly lightweight, easy to package, deploy, and use.  In this workshop this is used to load an OpenAPI file from your local file system and visually edit it (and then save it back to your disk)!
+Red Hat API Designer based on Apicurio provides web based API Designer tool which is incredibly lightweight, easy to package, deploy, and use. In this workshop this is used to load an OpenAPI file from your local file system and visually edit it (and then save it back to your disk)!
 
 === Service Registry
-Once the API design is complete, and we have the first version of the API, this can now be published in a schema registry.  Service Registry which is part of  Red Hat Application Foundations allows us to publish the OpenAPIs, makes it accessible, and manage the OpenAPI easily.
+Once the API design is complete andthe first version of the API is available, this can now be published in a schema registry. Service Registry, which is part of Red Hat Application Foundations, allows us to publish the OpenAPIs, makes it accessible, and manage the OpenAPI easily.
 
+.[.underline]#*Click to learn amore about Service Registry*#
+[%collapsible]
+====
 Service Registry is a datastore for sharing standard event schemas and API designs across API and event-driven architectures. You can use Service Registry to decouple the structure of your data from your client applications, and to share and manage your data types and API descriptions at runtime using a REST interface.
 
 You can upload new artifacts, new versions, view the metadata, download the specs, view documentation and view the content as well. Through Content rules one can validate new versions of the APIs against the existing specs to ensure validity and backward compatibility.
 
 Service Registry acts as the single source of truth for the OpenAPI Specifications. This spec can be used to share and manage the data types and API descriptions at runtime using a REST interface with internal teams and other external developers and partners.
+====
 
-In this workshop, the REST endpoint of the artifact is used as to create ActiveDocs within API Management platform.
+In this workshop, the REST endpoint of the artifact (APIs) is used to create ActiveDocs within the API Management platform.
 
 === 3scale API Management
-We use the  Red Hat 3scale API Management platform to publish, manage and secure the backend APIs. API Management helps you to define, deploy, consume, or publish your APIs for use by other developers, channels and partners. You can implement proxies, security policies, rate limiting, logging, metrics, and an API developer portal for sign-up and documentation. 
+We use the Red Hat 3scale API Management platform to publish, manage and secure the backend APIs. API Management helps you to define, deploy, consume, or publish your APIs for use by other developers, channels and partners. You can implement proxies, security policies, rate limiting, logging, metrics, and an API developer portal for sign-up and documentation. 
 
-Each API can be configured to be secured using a number of ways. 
+Each API can be configured to be secured using a number of ways.  In this workshop, you will work with OpenID Connect to secure the APIs.
 
 3scale allows you to have various application plans for each of the APIs. Developers can subscribe to those APIs and can access APIs by using the OpenID Connect details securely. You can also monitor the APIs and track usage. +
 
 image::images/apim/3scale-architecture.png[]
 
-==  Architecture Overview
-
-TODO: 
-
-image::images/todo-sticky.jpg[]
 
 == Deployment Overview
 
-TODO: describe the deployment topology
-
-image::images/todo-sticky.jpg[]
-
 image::images/apim/apim_deployment.png[] 
 
+TBC: discussion of deployment 
 
-==   Implementation
+== Implementation
 
 In the next chapter, you will be guided through the implementation and deployment of the Contract First Approach. Of course this entails way more than can be achieved during a workshop, so instead most components are already in place, and you will focus on a number of key activities to deploy and run the solution.
