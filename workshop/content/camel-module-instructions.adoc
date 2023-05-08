@@ -3,6 +3,7 @@
 :toc: 
 
 :sectnums:
+:experimental:
 
 == Quick overview of the lab exercises
 
@@ -65,22 +66,22 @@ If the the output of the `oc whoami` command does not correspond to your usernam
 [source,bash,role=copy]
 ----
 oc logout
-oc login -u %user_name% -p %user_password% 
+oc login -u %user_name% -p %user_password% %openshift_api_internal%
 ----
 
 ====
 
-* You will be working in the `globex-apim-%user_name%` namespace. So run this following command to start using that particular project
+* You will be working in the `globex-camel-%user_name%` namespace. So run this following command to start using that particular project
 
 +
 [source,bash,role=copy]
 ----
-oc project `globex-apim-%user_name%`
+oc project globex-camel-%user_name%
 ----
 +
 .Output
 ----
-%user_name%
+Now using project "globex-camel-%user_name%" on server "%openshift_api_internal%".
 ----
 
 +
@@ -93,9 +94,9 @@ As you work through this Contract First APIs module, there are a few variables a
 
 == Enable the Slack to Discord interaction
 
-As previously described, the Slack integration is already in place and users can already post questions on the GlobexSupport app which are channeled and available in the AMQ Broker.
+As previously described, the Slack integration is already in place and users can already post questions on the _GlobexSupport_ app which are channelled and available in the AMQ Broker.
 
-In this first implementation activity you need to close the end-to-end data flow between Slack and Discord. Events can already travel half the way up to the broker (AMQ), but the second stage, from the Broker to Discord, is still pending.
+In this first implementation activity you need to enable the end-to-end data flow between Slack and Discord. Events can already travel half the way up to the broker (AMQ), but the second stage, from the Broker to Discord, is still pending.
 
 {line}
 
@@ -109,6 +110,51 @@ On Discord, where the agents operate, each new customer request will initiate a 
 
 {empty} +
 
+=== Onboard on the Slack platform
+
+You will need to open Slack in your browser to complete the work. We have prepared a Slack workspace dedicated to the workshop to make things easy.
+
+To join the workspace in Slack, simply follow the invite link below:
+--
+* link:https://join.slack.com/t/camel-globex/shared_invite/zt-1uqxzxrkz-9GHr8rdvB~m6gjBM~1zM3g[window="_blank"]
+--
+
+{empty} +
+
+Then, follow the steps below to complete preparations:
+
+. Slack will prompt you to login, choose your preferred login option.
+. Once in, ensure you add the GlobexSupport app:
+.. From the left panel, choose:
++
+--
+kbd:[▾] Apps -> kbd:[+] Add apps
+--
+.. Then, select from the menu the `GlobexSupport` app.
++
+You should see in your left panel the app visible:
++
+--
+kbd:[▾] Apps +
+kbd:[Ⓖ] GlobexSupport +
+kbd:[+] Add apps +
+--
+
+. Right click the app: kbd:[Ⓖ] GlobexSupport +
+and select the option:
+- View app details
+
+
+. A window pops up. +
+At the very bottom, copy your personal GlobexSupport `Channel ID`.
+
+. Keep the ID somewhere safe (your scratch-pad), as you'll need it to configure _Camel_.
+
+{empty} +
+
+You're all set to continue
+
+{empty} +
 
 === The role of Caching
 
@@ -141,7 +187,8 @@ Your first task is to define the Camel routes responsible to interact with DataG
 
 . Run in your terminal the snippet below to find your working directory:
 +
-[source, subs=]
+
+[source,bash,role=copy,subs=]
 ----
 cd workshop/module-camel/lab/discord/<br>
 ----
@@ -152,7 +199,7 @@ NOTE: The working folder contains a `code` folder to support you on this exercis
 
 . In your terminal, use the `kamel` (Camel K client) command below to create a new Camel source file where to define your Camel routes for the caching logic:
 +
-[source, subs=]
+[source,bash,role=copy,subs=]
 ----
 kamel init routes-cache.yaml<br>
 ----
@@ -173,131 +220,138 @@ image::images/crw-open-yaml.png[align="left", width=50%]
 +
 . Delete the example route (full `from` definition) in `routes-cache` and replace with the following snippet:
 +
-```yaml
+--
+[source,yaml,role=copy,subs=]
+----
 - from:
-    uri: "direct:cache-put"
+    uri: "direct:cache-put"             # <1>
     steps:
-      - marshal:
+      - marshal:                        # <2>
           json: {}
-      - removeHeaders:
+      - removeHeaders:                  # <3>
           pattern: '*'
-      - setHeader:
+      - setHeader:                      # <4>
           name: ${{{cache.operation}}}
           simple: ${{{cache.put}}}
-      - setHeader:
+      - setHeader:                      # <4>
           name: ${{{cache.value}}}
           simple: ${body}
-      - setHeader:
+      - setHeader:                      # <4>
           name: ${{{cache.key}}}
           simple: ${exchangeProperty.key}
       - to:
-           uri: "infinispan://default"
-
-```
-+
+           uri: "infinispan://default"  # <5>
+----
 You could consider the _Camel_ route above equivalent to a subroutine in any programming language. It executes the action of pushing a new entry in cache:
 
-- The `from` element uses the `direct` _Camel_ component, which is a special component that allows other _Camel_ routes in the code to make internal invocations to this one.
-- Next, a JSON marshaller renders the payload in JSON format. This implies the route expects the payload (`body` in _Camel_ terms) to contain a Java data structure (Map). This one liner automatically converts the Java Map into JSON by using a _Camel_ DataFormat.
-- In preparation for the PUT operation, the `removeHeaders` instruction ensures all (star symbol) residual headers are erased beforehand.
-- Next, the route sets the 3 headers required to invoke the cache system. These are: the type of operation (PUT), the value (the payload/body), and the key (unique key to access the data).
+<1> The `from` element uses the `direct` _Camel_ component, which is a special component that allows other _Camel_ routes in the code to make internal invocations to this one.
+<2> Next, a JSON marshaller renders the payload in JSON format. This implies the route expects the payload (`body` in _Camel_ terms) to contain a Java data structure (Map). This one liner automatically converts the Java Map into JSON by using a _Camel_ DataFormat.
+<3> In preparation for the PUT operation, the `removeHeaders` instruction ensures all (star symbol) residual headers are erased beforehand.
+<4> Next, the route sets the 3 headers required to invoke the cache system. These are: the type of operation (PUT), the value (the payload/body), and the key (unique key to access the data).
 +
 [NOTE]
 ====
 You'll observe the setters are using a `${{{...}}}` syntax to resolve the name and value from configuration parameters. The double bracket finds the parameter, the dollar/bracket belongs to the `simple` syntax in Camel.
 ====
-- Finally, the route defines the `infinispan` component to connect and push the information to _DataGrid_ using the key/value/operation headers provided.
+<5> Finally, the route defines the `infinispan` component to connect and push the information to _DataGrid_ using the key/value/operation headers provided.
 +
 [NOTE]
 ====
 The `infinispan` component requires no extra parameters because it has been pre-configured for you, it's secured with TLS and Scram, and points to your DataGrid instance.
 ====
+--
 +
 ---
 +
 {empty} +
 +
-. The route above implemented the `PUT` operation. Let's define the `GET`` operation with the definition below.
+. The route above implemented the `PUT` operation. +
+Let's define the `GET` operation with the definition below.
 +
 Add in your code (copy and paste) the snippet below:
 +
-```yaml
+--
+[source,yaml,role=copy,subs=]
+----
+ #
 - from:
-    uri: "direct:cache-get"
+    uri: "direct:cache-get"                # <1>
     steps:
-      - removeHeaders:
+      - removeHeaders:                     # <2>
           pattern: '*'
-      - setHeader:
+      - setHeader:                         # <3>
           name: ${{{cache.operation}}}
           simple: ${{{cache.get}}}
-      - setHeader:
+      - setHeader:                         # <3>
           name: ${{{cache.key}}}
           simple: ${exchangeProperty.key}
       - to:
-           uri: "infinispan://default"
+           uri: "infinispan://default"     # <4>
       - when:
-          simple: ${body} != null
+          simple: ${body} != null          # <5>
           steps:
-          - unmarshal:
+          - unmarshal:                     # <6>
               json: {}
+----
 
-```
-+
 In a very similar fashion, the `GET` route definition:
 
-- The `from` element is defined with the `direct` component to allow other _Camel_ routes invoke it.
-- Removes residual headers.
-- Sets the operation (`GET`) and key to obtain the cache entry.
+<1> The `from` element is defined with the `direct` component to allow other _Camel_ routes invoke it.
+<2> Removes residual headers.
+<3> Sets the operation (`GET`) and key to obtain the cache entry.
 +
 [NOTE]
 ====
 You can consider the `${exchangeProperty.key}` as a parameter the calling route needs to preset. Exchange properties are like variables you can define during the lifetime of a _Camel_ transaction.
 ====
-+
-- Uses the `infinispan` component to request the cache entry.
-- The `when` element checks if a value is returned (it might not exist), and if so, it un-marshals the JSON body into a Java Map.
+<4> Uses the `infinispan` component to request the cache entry.
+<5> The `when` element checks if a value is returned (it might not exist).
+<6> When true, it un-marshals the JSON body into a Java Map.
 +
 [NOTE]
 ====
 Un-marshalling the payload into a Java structure allows for an easier handling of the JSON data in other parts of the Camel implementation.
 ====
-+
+--
 ---
 +
 {empty} +
-+
-. The last of the cache interactions to define is a `REMOVE` operation. Let's define it with the definition below.
+
+. The last cache operation to define is `REMOVE`. Let's define it with the definition below.
 +
 Copy and paste the snippet below:
 +
-```yaml
+--
+[source,yaml,role=copy,subs=]
+----
+ #
 - from:
-    uri: "direct:cache-remove"
+    uri: "direct:cache-remove"             # <1>
     steps:
-      - removeHeaders:
+      - removeHeaders:                     # <2>
           pattern: '*'
-      - setHeader:
+      - setHeader:                         # <3>
           name: ${{{cache.operation}}}
           simple: ${{{cache.remove}}}
-      - setHeader:
+      - setHeader:                         # <3>
           name: ${{{cache.key}}}
           simple: ${exchangeProperty.key}
       - to:
-           uri: "infinispan://default"
-```
-+
+           uri: "infinispan://default"     # <4>
+----
+
 In a very similar fashion, the `REMOVE` route definition:
 
-- The `from` element is defined with the `direct` component to allow other _Camel_ routes invoke it.
-- Removes residual headers.
-- Sets the operation (REMOVE) and key to target.
+<1> The `from` element is defined with the `direct` component to allow other _Camel_ routes invoke it.
+<2> Removes residual headers.
+<3> Sets the operation (REMOVE) and key to target.
 +
 [NOTE]
 ====
 You can consider the `${exchangeProperty.key}` as a parameter the calling route needs to preset. Exchange properties are like variables you can define during the lifetime of a _Camel_ transaction.
 ====
-+
-- Uses the `infinispan` component to perform the operation.
+<4> Uses the `infinispan` component to perform the operation.
+--
 +
 ---
 +
@@ -339,7 +393,8 @@ Open the `my.properties` file in your editor end edit the following property:
 slack.globex.channel.id=MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID
 ----
 +
-IMPORTANT: Make sure you replace `MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID` using your personal GlobexSupport channel ID from Slack.
+IMPORTANT: Make sure you replace `MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID` using your personal GlobexSupport channel ID from Slack. +
+For example: `slack.globex.channel.id=D03P7AH5347`
 +
 Now you can proceed with the creation of your route.
 +
@@ -348,7 +403,7 @@ Now you can proceed with the creation of your route.
 
 . In your terminal, execute the `kamel` command below to create a new source file to process AMQP events:
 +
-[source, subs=]
+[source,bash,role=copy,subs=]
 ----
 kamel init routes-from-amq.yaml<br>
 ----
@@ -361,26 +416,35 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 
 . Delete the example route (full `from` definition) and replace with the following snippet:
 +
-```yaml
+--
+[source,yaml,role=copy,subs=]
+----
 - from:
-    uri: "amqp:topic:{{broker.amqp.topic.clients.slack}}{{slack.globex.channel.id}}"
+    uri: "amqp:topic:{{broker.amqp.topic.clients.slack}}{{slack.globex.channel.id}}"  # <1>
     parameters:
-      connectionFactory: "#myFactory"
+      connectionFactory: "#myFactory"    # <2>
     steps:
       - to:
-           uri: "direct:support-request"
+           uri: "direct:support-request" # <3>
+----
+The route above:
 
-```
-+
-The route above subscribes to an AMQ address and directs all events to a different Camel route. This route does not perform any processing because our goal is to maintain a pluggable architecture. It means that we can define additional Camel routes fetching events from other sources and direct them to the main processing logic.
-+
+<1> Subscribes to an AMQ address (using the AMQP protocol)
+<2> The component is defined with a pre-configured (provided) connection factory to secure and point the connection to the shared AMQ Broker.
+<3> And directs all events to the Camel route `support-request`.
+
+This route does not perform any processing because our goal is to maintain a pluggable architecture. It means that we can define additional Camel routes fetching events from other sources and direct them to the main processing logic.
+
 [NOTE]
 ====
 Later, a second channel will also plug in to this logic to consume events from the Globex Web portal via its chat widget.
 ====
-+
+--
+
+{empty} +
+
 The section that follows helps you implement the route `direct:support-request` where all AMQP events are directed
-+
+
 {empty} +
 
 ==== Create the main processing route
@@ -398,51 +462,52 @@ Which integration lessons will you learn in this section?
 
 In the same YAML file, copy and paste the following snippet:
 
-```yaml
+[source,yaml,role=copy,subs=]
+----
+ #
 - from:
     uri: "direct:support-request"
     steps:
-      - unmarshal:
+      - unmarshal:                                                # <1>
           json: {}
-      - setProperty:
+      - setProperty:                                              # <2>
           name: in
           simple: ${body}
       - to:
-           uri: "direct:get-cache-entry"
+           uri: "direct:get-cache-entry"                          # <3>
       - setProperty:
-          name: discord-channel
+          name: discord-channel                                   # <4>
           simple: ${exchangeProperty.cache.get(target).get(room)}
-      - setBody:
+      - setBody:                                                  # <5>
           simple: ${exchangeProperty.in.get(text)}
       - to:
-           uri: "direct:discord-push-message"
-
-```
+           uri: "direct:discord-push-message"                     # <6>
+----
 
 The route above:
 
-1. Un-marshals the payload into a Java Map (for easier access)
-2. Defines a property `in` to keep the original incoming data.
-3. Obtains the cache entry from invoking the `get-cache-entry` route.
+<1> Un-marshals the payload into a Java Map (for easier access)
+<2> Defines a property `in` to keep the original incoming data.
++
+[NOTE]
+====
+the `setProperty` keyword instructs _Camel_ to create a placeholder that can be used down the processing line.
+====
+<3> Obtains the cache entry from invoking the `get-cache-entry` route.
 +
 [NOTE]
 ====
 Cache entries are created, used and deleted during the lifetime of a support session. The logic to manage the lifecycle of cache entries is delegated to other parts of the code.
 ====
-4. Defines the target Discord channel where to send the message
-+
-[NOTE]
-====
-the `setProperty` tag tells Camel to create a placeholder that can be used down the processing line.
-====
-5. Sets the text message to be sent to Discord
-6. Delegates the message delivery to the route `discord-push-message`
+<4> Sets a property with the target _Discord_ channel where to send the message
+<5> Sets the text message to be sent to _Discord_
+<6> Delegates the message delivery to the route `discord-push-message`
 
 {empty} +
 
-In the next sections you will see the :
+In the next sections:
 
-- Review the `get-cache-entry` logic the route above calls
+- You will review the `get-cache-entry` logic the route above calls
 - And later, you will implement the route `discord-push-message` the route above also calls.
 
 {empty} +
@@ -473,6 +538,7 @@ All the pieces are in place, you have the cache interaction resolved, you have t
 Which integration lessons will you learn in this section?
 
  - How to easily prepare and call APIs using Camel.
+ - How to dynamically evaluate at runtime the target endpoint 
  - How to push events to Kafka using Camel.
 
 {empty} +
@@ -485,59 +551,84 @@ In our lab, our choice is tp simply invoke the API calls documented in Discord t
 
 Still in the same YAML file, copy and paste the following snippet:
 
-```yaml
+[source,yaml,role=copy,subs=]
+----
+ #
 - from:
-    uri: "direct:discord-push-message"
+    uri: "direct:discord-push-message"      # <1>
     steps:
-      - removeHeaders:
-          pattern: '*'
-      - setHeader:
-          name: Authorization
-          simple: Bot {{discord.token}}
-      - setHeader:
-          name: Content-Type
-          simple: application/json
-      - setProperty:
+      - setProperty:                        # <2>
           name: kafka-body
           simple: ${body}
-      - setBody:
+      - removeHeaders:                      # <3>
+          pattern: '*'
+      - setHeader:                          # <4>
+          name: Authorization
+          simple: Bot {{discord.token}}
+      - setHeader:                          # <4>
+          name: Content-Type
+          simple: application/json
+      - setBody:                            # <5>
           simple: '{"content":"${body}"}'
       - toD:
-          uri: "https://discordapp.com/api/channels/${exchangeProperty.discord-channel}/messages"
+          uri: "https://discordapp.com/api/channels/${exchangeProperty.discord-channel}/messages"     # <6>
           parameters:
             connectionClose: true
-      - setBody:
+      - setBody:                                           # <7>
           simple: 'you: ${exchangeProperty.kafka-body}'
       - toD:
-          uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.discord-channel}"
-```
+          uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.discord-channel}"  # <8>
+----
 
 The route above:
 
-- Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
-- Keeps a copy of the customer message (used later).
-- Removes residual headers.
-- Sets the HTTP headers `authorisation` and `content-type` needed for the API call.
+<1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
+<2> Keeps a copy of the customer message (used later).
+<3> Removes residual headers.
+<4> Sets the HTTP headers `authorisation` and `content-type` needed for the API call.
 +
 [NOTE]
 ====
 You can read Discord's API documentation here.
 ====
 +
-- Defines the JSON payload to be sent containing the customer's text.
-- Performs the API call using Camel's HTTP component.
-- Prepares a payload message to be sent to Kafka.
+<5> Defines the JSON payload to be sent containing the customer's text.
+<6> Performs the API call using Camel's HTTP component.
++
+[NOTE]
+====
+the call uses `toD` (Dynamic `to`) to evaluate at runtime the target HTTP path using the `discord-channel` property.
+====
+<7> Prepares a payload message to be sent to Kafka.
 +
 [NOTE]
 ====
 Every customer/agent interaction is streamed to Kafka. Later in the lab you'll understand the purpose of replaying the Kafka streams.
 ====
-- pushes the message to Kafka.
+<8> pushes the message to Kafka.
 +
 [NOTE]
 ====
 The `kafka` component requires no extra parameters because it has been pre-configured for you, it's secured with TLS and Scram, and points to the shared environment's Kafka cluster.
 ====
+
+{empty} +
+
+
+
+=== Onboard on the Discord platform
+
+You will need to open Discord in your browser to complete the work. We have prepared a Discord server dedicated to the workshop to make things easy.
+
+To join the workspace in Discord, simply follow the invite link below:
+--
+* link:https://discord.gg/QpVvJPhHw3[window="_blank"]
+--
+
+{empty} +
+
+PENDING EXTRA DESCRIPTION
+
 
 {empty} +
 
@@ -551,7 +642,7 @@ Let's run your code in `dev` mode to validate the flow works as expected.
 
 . From your terminal, execute the following command:
 +
-[source, subs=]
+[source,bash,role=copy,subs=]
 ----
 ./dev.sh<br>
 ----
@@ -561,11 +652,10 @@ It also defines all the necessary support resources and parameters to run your i
 +
 {empty} +
 
-. From Slack, send a message...
+. From Slack, send a message... +
+You should see in Discord a new Channel created and the message from Slack displayed.
 
 PENDING
-
-{empty} +
 
 When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance.
 +
@@ -611,7 +701,7 @@ Which new integration lessons will you learn in this section?
 
 . From your terminal, execute the `kamel` command below to create a new source file to process Discord events:
 +
-[source, subs=]
+[source,bash,role=copy,subs=]
 ----
 kamel init routes-from-discord-main.yaml<br>
 ----
@@ -624,87 +714,94 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 
 . Copy and paste the following snippet:
 +
-```yaml
+--
+[source,yaml,role=copy,subs=]
+----
 - from:
-    uri: "direct:process-agent-message"
+    uri: "direct:process-agent-message"                       # <1>
     steps:
-    - setProperty:
+    - setProperty:                                            # <2>
         name: text
         simple: ${body.get(d).get(content)}
-    - setProperty:
+    - setProperty:                                            # <2>
         name: agent
         simple: ${body.get(d).get(author).get(username)}
-    - setProperty:
+    - setProperty:                                            # <2>
         name: key
         simple: ${body.get(d).get(channel_id)}
     - to:
-         uri: "direct:cache-get"
+         uri: "direct:cache-get"                              # <3>
     - choice:
         when:
-        - simple: ${body} != null
+        - simple: ${body} != null                             # <4>
           steps:
           - to:
-              uri: "language:simple:${body.replace(text,${exchangeProperty.text})}"
+              uri: "language:simple:${body.replace(text,${exchangeProperty.text})}"  # <5>
               parameters:
                 transform: false
           - to:
-              uri: "language:simple:${body.put(agent,${exchangeProperty.agent})}"
+              uri: "language:simple:${body.put(agent,${exchangeProperty.agent})}"    # <5>
               parameters:
                 transform: false
-          - setProperty:
+          - setProperty:                                             # <6>
               name: source
               simple: ${body.get(source).get(uname)}
-          - marshal:
+          - marshal:                                                 # <7>
               json: {}
           - toD:
-              uri: "amqp:topic:support.${exchangeProperty.source}"
+              uri: "amqp:topic:support.${exchangeProperty.source}"   # <8>
               parameters:
                 connectionFactory: "#myFactory"
           - setBody:
-              simple: '${exchangeProperty.agent}: ${exchangeProperty.text}'
+              simple: '${exchangeProperty.agent}: ${exchangeProperty.text}'  # <9>
           - toD:
               uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.key}"
-        otherwise:
+        otherwise:                                                           # <10>
           steps:
           - log: "no cache entry, ignoring message from user: ${exchangeProperty.agent}"
 
-```
-+
+----
+
 The route above:
 
-- Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
-- Keeps necessary values (as properties) from Discord's event.
+<1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
+<2> Keeps necessary values (as properties) from Discord's event.
 +
 [NOTE]
 ====
-- The Discord JSON event has already been un-marshalled for you.
+The Discord JSON event has already been un-marshalled for you.
 ====
-+
-- Fetches from the cache system the customer/agent context
+<3> Fetches from the cache system the customer/agent context
 +
 [NOTE]
 ====
-- We use _Discord_'s `channel_id` as our key to fetch the cache entry.
+We use _Discord_'s `channel_id` as our key to fetch the cache entry.
 ====
 +
-- When the cache entry exists:
-* The cache payload is recycled, it updates the text field to contain the agent's answer and injects the agent's name.
+<4> Evalueates if the cache entry exists with a `choice`.
+* if true, it executes [5] to [9]
+* if false, it executes the `otherwise` block [10]
+<5> When true, the cache payload is recycled, it updates the text field to contain the agent's answer and also injects the agent's name.
 +
 [NOTE]
 ====
 There are many strategies in Camel to manipulate data. For minor changes on payloads the `language` component is very handy.
 ====
 +
-* Obtains from the cache entry the `uname` (customer's unique name) which is necessary to route the event to the right destination.
-* Marshals the Java Map in JSON.
-* Sends the event over the wire to the AMQ Broker using the AMQP component.
+<6> Obtains from the cache entry the `uname` (customer's unique name) which is necessary to route the event to the right destination.
+<7> Marshals the Java Map in JSON.
+<8> Sends the event over AMQP to the AMQ Broker.
++
+[NOTE]
+====
+the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP address using the `source` property.
+====
 +
 [NOTE]
 ====
 The `amqp` component requires no extra parameters because it has been pre-configured for you, it's secured with TLS and Scram, and points to the shared environment's AMQ Broker.
 ====
-+
-* Finally, the interaction is recorded and streamed to Kafka
+<9> Finally, the interaction is recorded and streamed to Kafka
 ** a payload in the format `agent: text` is prepared using Camel's `simple` expression
 ** pushes the message to Kafka.
 +
@@ -714,12 +811,13 @@ The `amqp` component requires no extra parameters because it has been pre-config
 - The `kafka` component requires no extra parameters because it has been pre-configured for you, it's secured with TLS and Scram, and points to the shared environment's Kafka cluster.
 ====
 
-- Lastly, when a cache entry does not exist, we ignore it.
+<10> Lastly, when a cache entry does not exist, we ignore it.
 +
 [NOTE]
 ====
 This is necessary in our lab to prevent other students from interfering with your tests. In a real-world implementation, you would perform the check anyway for robust error handling.
 ====
+--
 +
 
 {empty} +
@@ -737,7 +835,9 @@ Let's implement the logic required which is very similar to our previously defin
 
 Include in the same YAML file (copy and paste) the snippet below:
 
-```yaml
+[source,yaml,role=copy,subs=]
+----
+ #
 - from:
     uri: "direct:process-channel-closure"
     steps:
@@ -745,17 +845,17 @@ Include in the same YAML file (copy and paste) the snippet below:
         name: key
         simple: ${body.get(d).get(id)}
     - to:
-         uri: "direct:cache-get"
+         uri: "direct:cache-get"   # <1>
     - choice:
         when:
         - simple: ${body} != null
           steps:
           - to:
-              uri: "language:simple:${body.replace(text, 'your session ended, conversation is now closed.')}"
+              uri: "language:simple:${body.replace(text, 'your session ended, conversation is now closed.')}"      # <2>
               parameters:
                 transform: false
           - to:
-              uri: "language:simple:${body.put(agent,'support')}"
+              uri: "language:simple:${body.put(agent,'support')}"    # <2>
               parameters:
                 transform: false
           - setProperty:
@@ -770,11 +870,11 @@ Include in the same YAML file (copy and paste) the snippet below:
               name: context
               simple: ${body}
           - toD:
-              uri: "amqp:topic:support.${exchangeProperty.source}"
+              uri: "amqp:topic:support.${exchangeProperty.source}"   # <3>
               parameters:
                 connectionFactory: "#myFactory"
           - to:
-              uri: "direct:cache-remove"
+              uri: "direct:cache-remove"                             # <4>
           - setProperty:
               name: kafka-client
               simple: ${exchangeProperty.key}
@@ -782,50 +882,86 @@ Include in the same YAML file (copy and paste) the snippet below:
               name: key
               simple: ${exchangeProperty.key-slack}
           - to:
-              uri: "direct:cache-remove"
-          - setBody:
+              uri: "direct:cache-remove"                             # <5>
+          - setBody:                                                 # <6>
               simple: done
           - setHeader:
               name: context
-              simple: ${exchangeProperty.context}
+              simple: ${exchangeProperty.context}                    # <6>
           - toD:
-              uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.kafka-client}"
+              uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.kafka-client}"  # <7>
           - setBody:
               simple: ${exchangeProperty.kafka-client}
           - toD:
-              uri: "kafka:support.${env.NAMESPACE}.closed"
+              uri: "kafka:support.${env.NAMESPACE}.closed"           # <8>
         otherwise:
           steps:
           - log: no cache entry, ignoring message
-```
+----
 
 You will observe the route above is almost identical to the previous one. Let's simply summarize below the differences.
 
-- It also fetches from the cache system the customer/agent context. Only this time the channel identifier sits in a different field (`.d.id`) in the Discord JSON event.
-- It recycles the cache payload, only this time using an automated closing message.
-- After sending the closing event via AMQP, it deletes the two cache entries relevant to this conversation:
+<1> It also fetches from the cache system the customer/agent context. Only this time the channel identifier sits in a different field (`.d.id`) in the Discord JSON event.
+<2> It recycles the cache payload, only this time using an automated closing message.
+<3> It sends the closing event via AMQP, and proceeds [4] & [5] to delete the two cache entries relevant to this conversation:
 +
 [NOTE]
 ====
 Reminder: each customer/agent session owns 2 cache entries. One uses the source key, handy on customer-to-agent processing, and the second uses Discord's channel ID, handy for agent-to-customer processing.
 ====
 +
-* it deletes the cache entry with source identifier (Slack or other).
-* it deletes the cache entry with target identifier (Discord).
+[NOTE]
+====
+the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP address using the `source` property.
+====
+<4> It deletes the cache entry with source identifier (Slack or other).
+<5> It deletes the cache entry with target identifier (Discord).
 +
-- Finally, it prepares and sends two closure Kafka events.
-* the first contains the context information, sent to the conversation topic.
-* the second is signal event, a notification that allows other applications to react.
+<6> Finally, it prepares body and headers to send two closure Kafka events [7] & [8].
+<7> The first event to Kafka contains the context information, sent to the conversation topic.
+<8> The second one is signal event, a notification that allows other applications to react.
+
+{empty} +
+
+You have completed the return processing flow from agents (in Discord) to customers (in Slack). Next, deploy your integration in OpenShift and send some messages to validate it.
 
 {empty} +
 
 === Deploy and test your code
 
+With the Camel K client `kamel` you can deploy your integrations with one command. Camel K will take care of collecting all your sources, containerizing them and deploying an instance.
+
+Let's deply your code .
+
+. From your terminal, execute the following command:
++
+[source,bash,role=copy,subs=]
+----
+./deploy.sh<br>
+----
++
+NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
++
+{empty} +
+
+. From Discord
+.. Click on the newly created channel `slack-%user_name%` to display the messages.
+.. Type a message, for example `How can I help you with?` and send it.
++
+{empty} +
+
+. You should see the agent's message sent from Discord appear in the Slack CamelGlobex app. 
+
+. From Discord, right-click and delete the channel to close the session.
+
+. In Slack, you should see a notification informing the session has ended.
+{empty} +
+
 PENDING
 
 {empty} +
 
-== Plug the Globex Web console
+== Plug the Globex Web Chat
 
 All the work done so far has enabled bi-directional communication between customers and agents between Slack and Discord. Our open architecture approach allows us to easily plug in new communication channels.
 
@@ -857,6 +993,7 @@ PENDING ILLUSTRATION
 
 In the diagram above we can see how Slack is already integrated, via AMQ, to Discord. The common data model easily helps us integrate Globex with the platform.
 
+{empty} +
 
 === Implement the customer to agent flow
 
@@ -874,7 +1011,7 @@ PENDING IMAGE.
 
 . Run in your terminal the snippet below to set the working directory for this task:
 +
-[source, subs=]
+[source,bash,role=copy,subs=]
 ----
 cd ../globex-support/<br>
 ----
@@ -885,7 +1022,7 @@ NOTE: The working folder contains a `code` folder to support you on this exercis
 
 . In your terminal, use the `kamel` (Camel K client) command below to create a new Camel source file where to define your Camel routes for the caching logic:
 +
-[source, subs=]
+[source,bash,role=copy,subs=]
 ----
 kamel init routesglobex.java<br>
 ----
@@ -904,45 +1041,53 @@ Select from your project tree:
 +
 . Delete the sample Camel route in `routesglobex` and replace with the following one:
 +
-```java
-      from("platform-http:/support/message")
-        .setProperty("clientid", simple("${env.NAMESPACE}"))
-        .convertBodyTo(String.class)
-        .to("jslt:request.jslt?allowContextMapAll=true")
-        .toD("amqp:topic:{{broker.amqp.topic.clients}}${env.NAMESPACE}?disableReplyTo=true&connectionFactory=#myFactory");
+--
+[source,java,role=copy,subs=]
+----
+      from("platform-http:/support/message")                      // <1>
+        .setProperty("clientid", simple("${env.NAMESPACE}"))      // <2>
+        .convertBodyTo(String.class)                              // <3>
+        .to("jslt:request.jslt?allowContextMapAll=true")          // <4>
+        .toD("amqp:topic:{{broker.amqp.topic.clients}}${env.NAMESPACE}?disableReplyTo=true&connectionFactory=#myFactory");  // <5>
+----
 
-```
-+
 [NOTE]
 ====
-Observe how the route above is defined with a Java based DSL using the fluent builder style. With some minor differences, the structure is almost identical to other DSLs (XML/YAML). 
+Observe how the route above is defined with a Java based DSL using the fluent builder style. Except minor differences, the structure is almost identical to other DSLs (XML/YAML). 
 ====
-+
+
 In the route above:
 
-- The `from` element uses the _Camel_ component `platform-http`, which wires the runtime's HTTP listener to capture all the incoming requests to the given `support/message` path.
+<1> The `from` element uses the _Camel_ component `platform-http`, which wires the runtime's HTTP listener to capture all the incoming requests to the given `support/message` path.
 +
 [NOTE]
 ====
 This is a simple code-first approach to define APIs. This type of definition is handy for rapid development and convenient for this workshop. For production systems a better approach is 'api-first' where an API contract (OpenApi) specifies the interface between client and server, and Camel provides its implementation. 
 ====
-+
-- Next, a property (processing variable) is set to define the client identifier integrating with the communication hub. As we have many distinct students in this workshop, we use the namespace that uniquely identifies your system from others.
-- In preparation for the transformation that follows we convert the incoming payload into a `String`.
+
+<2> Next, a property (processing variable) is set to define the client identifier integrating with the communication hub. As we have many distinct students in this workshop, we use the namespace that uniquely identifies your system from others.
+
+<3> In preparation for the transformation that follows we convert the incoming payload into a `String`.
 +
 [NOTE]
 ====
 The JSLT transformer (next step) requires a `String` input, however the `platform-http` component may encapsulate the payload in a different _Java_ object. 
 ====
-+
-- The JSON input is transformed using a JSLT stylesheet (`request.jslt`), to map its values to the Hub's common data model.
+
+<4> The JSON input is transformed using a JSLT stylesheet (`request.jslt`), to map its values to the Hub's common data model.
 +
 [NOTE]
 ====
 The JSLT transformer is a powerful JSON to JSON data mapping tool. JSLT is inspired in XSLT (XML transformer), the most powerful transformation tool for XML.
 ====
+
+<5> Finally, the adapted JSON payload is sent using the `amqp` Camel component to the AMQ Broker. From the broker, the Discord Camel K instance consumes the events and forwards them to the team of agents.
 +
-- Finally, the adapted JSON payload is sent using the `amqp` Camel component to the AMQ Broker. From the broker, the Discord Camel K instance consumes the events and forwards them to the team of agents.
+[NOTE]
+====
+the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP address using the environment's `NAMESPACE` variable.
+====
+--
 
 {empty} +
 
@@ -956,7 +1101,7 @@ As previously described, it is now the time to transform the JSON payload from G
 
 . From your terminal, execute the command below to create a new source file that will contain the JSLT definition:
 +
-[source, subs=]
+[source,java,role=copy,subs=]
 ----
 touch request.jslt<br>
 ----
@@ -965,31 +1110,30 @@ touch request.jslt<br>
 
 . Copy and paste the following snippet:
 +
-```json
+--
+[source,json,role=copy,subs=]
+----
 {
-    "user": .user,
-    "text": .text,
-    "source": {
-    	"name" : "globex",
-    	"uname": "globex."+$exchange.properties.clientid,
-    	"room" : .sessionid
+    "user": .user,           // <1>
+    "text": .text,           // <1>
+    "source": {              // <2>
+    	"name" : "globex",   // <3>
+    	"uname": "globex."+$exchange.properties.clientid, // <4>
+    	"room" : .sessionid  // <5>
     }
 }
-```
-+
+----
+
 NOTE: You'll notice the JSLT feels like natural JSON, except it includes expressions that assign a value to the fields. Expressions use a syntax similar to `jq`. 
-+
---
+
 The JSLT definition above:
 
-- Directly maps the fields `user` and `text` (as is).
-- Defines a `source` node with:
-* the field `name` set to a static value `globex`.
-* the field `uname` (unique name) as a concatenation of the string `globex.` with the dynamic value obtained from the property `clientid`, previously evaluated in the Camel route.
-* the field `room` mapped with the incoming `sessionid` field.
+<1> Directly maps the fields `user` and `text` (as is).
+<2> Defines a `source` node with:
+<3> the field `name` set to a static value `globex`.
+<4> the field `uname` (unique name) as a concatenation of the string `globex.` with the dynamic value obtained from the property `clientid`, previously evaluated in the Camel route.
+<5> the field `room` mapped with the incoming `sessionid` field.
 --
-+
-{empty} +
 +
 [NOTE]
 ====
@@ -999,6 +1143,7 @@ Other transformation methods generally involve more complex code, very difficult
 
 You have now the processing flow ready to move events from Globex (customers) to agents. Now you need to complete the reverse flow to bring agent responses to customers texting from Globex.
 
+{empty} +
 
 === Implement the agent to customer flow
 
@@ -1020,26 +1165,28 @@ If you feel curious on how this Camel AMQP consumer is implemented, open in your
 
 Include in the same Java file (copy and paste) the snippet below:
 
-```java
-      from("direct:support-response")
-        .convertBodyTo(String.class)
-        .to("jslt:response.jslt?allowContextMapAll=true")
-        .to("{{client.callback.url}}");
-```
+[source,java,role=copy,subs=]
+----
+ //
+      from("direct:support-response")                      // <1>
+        .convertBodyTo(String.class)                       // <2>
+        .to("jslt:response.jslt?allowContextMapAll=true")  // <3>
+        .to("{{client.callback.url}}");                    // <4>
+----
 
 In the route above:
 
-- The `from` element uses the _Camel_ component `direct` to allow the AMQP listener (provided) to handover events consumed from the AMQ broker.
-- In preparation for the transformation that follows we convert the incoming payload into a `String`.
+<1> The `from` element uses the _Camel_ component `direct` to allow the AMQP listener (provided) to handover events consumed from the AMQ broker.
+<2> In preparation for the transformation that follows we convert the incoming payload into a `String`.
 +
 [NOTE]
 ====
 The JSLT transformer (next step) requires a `String` input, however the `amqp` component may encapsulate the payload in a different _Java_ object.
 ====
-+
-- The JSON input is transformed using a JSLT stylesheet (`response.jslt`), to map its values from the common data model to Globex's specific model.
-+
-- Finally, the mapped JSON payload is sent via HTTP to Globex's callback URL, configured in the properties file.
+
+<3> The JSON input is transformed using a JSLT stylesheet (`response.jslt`), to map its values from the common data model to Globex's specific model.
+
+<4> Finally, the mapped JSON payload is sent via HTTP to Globex's callback URL, configured in the properties file.
 
 {empty} +
 
@@ -1053,7 +1200,7 @@ Let's transform the JSON payload from the common data model (source) to Globex's
 
 . From your terminal, execute the command below to create a new source file that will contain the JSLT definition:
 +
-[source, subs=]
+[source,java,role=copy,subs=]
 ----
 touch response.jslt<br>
 ----
@@ -1062,19 +1209,21 @@ touch response.jslt<br>
 
 . Copy and paste the following snippet:
 +
-```json
+--
+[source,json,role=copy,subs=]
+----
 {
-    "agent": .agent,
-    "text": .text,
-    "sessionid" : .source.room,
-    "pdf":  .pdf
+    "agent": .agent,             // <1>
+    "text": .text,               // <1>
+    "sessionid" : .source.room,  // <2>
+    "pdf":  .pdf                 // <3>
 }
-```
-+
+----
+
 The JSLT definition above:
 
-- Directly maps the fields `agent` and `text` (as is).
-- Sets the `sessionid` with the source `room`.
+<1> Directly maps the fields `agent` and `text` (as is).
+<2> Sets the `sessionid` with the source `room`.
 +
 [NOTE]
 ====
@@ -1085,25 +1234,87 @@ the `sessionid` is part of the context the caching system keeps during the lifet
 ====
 the `sessionid` represents the internal Globex customer session identifier. Globex needs to get the session back to push the agent's message over the right websocket open by the customer's chat session.
 ====
-+
-- Maps a `pdf` field (when available)
+
+<3> Maps a `pdf` field (when available)
 +
 [NOTE]
 ====
 Later in the lab, you'll work to generate the value mapped in this definition.
 ====
+--
 
 {empty} +
 
 
 === Deploy and test your code
 
+With the Camel K client `kamel` you can deploy your integrations with one command. Camel K will take care of collecting all your sources, containerizing them and deploying an instance.
+
+Let's deply your code .
+
+. From your terminal, execute the following command:
++
+[source,bash,role=copy,subs=]
+----
+./deploy.sh<br>
+----
++
+NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
++
+{empty} +
+
+. From Globex
+.. Open the Chat window
+.. Send a message, for example `Hello, can someone assist please?`
++
+You should see in Discord a new channel `slack-%user_name%` created.
++
+{empty} +
+
+. From Discord
+.. Click on the newly created channel `globex-%user_name%` to display the messages.
+.. Type a message, for example `How can I help you with?` and send it.
++
+{empty} +
+
+. You should see the agent's message sent from Discord appear in the Globex chat window. 
+
+. From Discord, right-click and delete the channel to close the session.
+
+. In Globex, you should see a notification informing the session has ended.
+
 PENDING
+
+{empty} +
 
 {empty} +
 
 
 ---
+
+== Persist and Share a Session Transcript 
+
+Use OpenShift persistence to provide storage capabilities and services to the MessageHub platform.
+
+All the lab stages you have completed so far have focussed on interconnecting independent instant messaging platforms. This lab however simulates the need to respond to government regulations (or policies alike) to meet legal and business data archival requirements.
+
+Adding Kafka in the architecture was a strategical decision. Any type of message broker would also qualify, but we chose Kafka because of its unique ability to replay data streams.
+
+The plan is to replay and process data streams from channel conversations and transfer them to a storage layer dedicated to meet the data retention requirements.
+
+DIAGRAM PENDING
+
+In the diagram above we see a number of instant messaging platforms interacting together via Kafka. The depicted _Camel_ process represents the new integration to develop responsible to replay streams and push conversations to the storage system.
+
+The clock in the diagram illustrates an on/off mechanism described as follows: the OpenShift platform starts up the new Camel process at scheduled intervals, for example once a day, to process and archive daily conversations. Once the job done, the platform shutdowns the Camel process until the next scheduled run.
+{empty} +
+
+
+=== Understand the decoupled architecture
+
+One fundamental architecture consideration is that if we want an easy to plugin platform where other communication systems or services need to plugin with ease, a standard data model as a common interface is needed.
+
+
 
 === section
 sdfsdf
