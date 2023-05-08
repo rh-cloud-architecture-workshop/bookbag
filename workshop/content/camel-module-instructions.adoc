@@ -909,7 +909,7 @@ Select from your project tree:
         .setProperty("clientid", simple("${env.NAMESPACE}"))
         .convertBodyTo(String.class)
         .to("jslt:request.jslt?allowContextMapAll=true")
-        .toD("amqp:topic:{{broker.amqp.topic.clients}}${env.NAMESPACE}?disableReplyTo=true&amp;connectionFactory=#myFactory");
+        .toD("amqp:topic:{{broker.amqp.topic.clients}}${env.NAMESPACE}?disableReplyTo=true&connectionFactory=#myFactory");
 
 ```
 +
