@@ -192,6 +192,7 @@ image::images/crw-open-yaml.png[align="left", width=50%]
           simple: ${exchangeProperty.key}
       - to:
            uri: "infinispan://default"
+
 ```
 +
 You could consider the _Camel_ route above equivalent to a subroutine in any programming language. It executes the action of pushing a new entry in cache:
@@ -239,6 +240,7 @@ Add in your code (copy and paste) the snippet below:
           steps:
           - unmarshal:
               json: {}
+
 ```
 +
 In a very similar fashion, the `GET` route definition:
@@ -348,6 +350,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
     steps:
       - to:
            uri: "direct:support-request"
+
 ```
 +
 The route above subscribes to an AMQ address and directs all events to a different Camel route. This route does not perform any processing because our goal is to maintain a pluggable architecture. It means that we can define additional Camel routes fetching events from other sources and direct them to the main processing logic.
@@ -394,6 +397,7 @@ In the same YAML file, copy and paste the following snippet:
           simple: ${exchangeProperty.in.get(text)}
       - to:
            uri: "direct:discord-push-message"
+
 ```
 
 The route above:
@@ -617,6 +621,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
         otherwise:
           steps:
           - log: "no cache entry, ignoring message from user: ${exchangeProperty.agent}"
+
 ```
 +
 The route above:
