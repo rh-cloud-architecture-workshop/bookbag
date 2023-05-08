@@ -1,12 +1,12 @@
 :icons: font 
 
-In this lab, you will use two OpenShift clusters. One cluster is running on AWS. On this cluster the Globex application is deployed. The other cluster is running on Azure, and that is where the Globex retail database is deployed. In the lab, you will create a service network between these two clusters, so that the Globex application on the AWS OpenShift can connect and use the database on the Azure OpenShift cluster. Note that the database is not exposed to the outside world.
+In this lab, you will use two OpenShift clusters. One cluster is running on AWS. On this cluster the Globex application is deployed. The other cluster is running on Azure, and that is where the Globex retail database is deployed. In the lab, you will create a service network between these two clusters, so that the Globex application on the AWS OpenShift can connect and use the database on the Azure OpenShift cluster. *Note that the database is not exposed to the outside world.*
 
 
 == Deployment overview: AWS cluster
 
 * In a browser window, navigate to the OpenShift console of the OpenShift cluster running on AWS at %openshift_cluster_console%. If needed, login with your username and password (%user_name%/%user_password%). +
-If this is the first time you open the console, you will be directed to te Developer Perspective of the console, which shows you the different namespaces you have access to. 
+If this is the first time you open the console, you will be directed to the Developer Perspective of the console, which shows you the different namespaces you have access to. 
 +
 image::images/openshift-console-namespaces.png[]
 +
@@ -14,20 +14,7 @@ Click on the `globex-skupper-%user_name%` link to select the namespace you are g
 +
 image::images/openshift-console-topology-skupper-aws.png[]
 
-* Expect to see two deployments: The Globex retail application frontend (called *globex-web*, and running on Node.js) and the Globex retail application itself, called *globex-store-app*. Note that the Globex retail application is scaled down to zero pods. As the database is missing, the application would not get into ready state if scaled up. You will scale it up once the connection with the database running on the Azure OpenShift cluster is established.
-
-* You can check the state of the application by clicking on the image:images/openshift-console-open-url.png[] icon next to the Node.js deployment.
-+
-image::images/openshift-console-open-url-5.png[]
-+
-This opens a new browser tab pointing to the home page of the Globex retail application.
-+
-image::images/globex-home-page-skupper.png[]
-
-* Click on the *Cool Stuff Store* link in the top menu. This opens a view of the Globex store catalog. If the application would run as expected, you should see a paginated listing of products. However in this case, you will see an empty list:
-+
-image::images/globex-catalog-empty.png[]
-
+* Expect to see two deployments: The Globex retail application frontend (running on Node.js) and the Globex retail application itself. Note that the Globex retail application is scaled down to zero pods. As the database is missing, the application would crash if scaled up. You will scale it up once the connection with the database running on the Azure OpenShift cluster is established.
 
 == Deployment overview: Azure cluster
 
@@ -42,14 +29,14 @@ image::images/openshift-console-topology-skupper-azure.png[]
 
 * Expect to see the deployment for the Globex retail app database.
 
-== Create the Red Hat Service Interconnect network
+== Connect the Services with Red Hat Service Interconnect
 
-Building a Service Interconnect network between the two OpenShift clusters (more precisely between namespaces of the two OpenShift clusters) takes several steps:
+Building a Service network between the two OpenShift clusters (more precisely between namespaces of the two OpenShift clusters) takes several steps:
 
-* Install the Service Interconnect assets in the namespaces of both clusters.
+* Install Service Interconnect in the namespaces of both clusters.
 * Create a connection token on one of the clusters.
 * Use the token on the other cluster to create a link between the namespaces of the two clusters.
-* Expose services of one cluster on the other cluster. In this case, you wil expose the Globex database on the AWS cluster, so that the Globex retail app can connect to it as if it were a local service.
+* Expose services of one cluster on the other cluster. In this case, you will expose the Globex database on the AWS cluster, so that the Globex retail app can connect to it as if it were a local service.
 
 === Install Red Hat Service Interconnect: AWS cluster
 
@@ -112,7 +99,7 @@ Skupper is now installed in namespace 'globex-skupper-%user_name%'.  Use 'skuppe
 +
 image::images/openshift-console-topology-skupper-aws-2.png[]
 
-* Service Interconnect alo comes with its own console, which you can access by opening a new browser tab and navigating to %skupper_console_aws%. At the moment there is not a lot to see as we have only installed one side of the service network.
+* Service Interconnect also comes with its own console, which you can access by opening a new browser tab and navigating to %skupper_console_aws%. At the moment there is not a lot to see as we have only installed one side of the service network.
 +
 image::images/skupper-console.png[]
 
@@ -181,9 +168,9 @@ skupper status
 Skupper is enabled for namespace "globex-%user_name%" in interior mode. It is not connected to any other sites. It has no exposed services.
 ----
 
-=== Create a link between the two clusters
+=== Create a link between the namespaces on the two clusters
 
-To create a link between the two clusters, you crate a token on one of the clusters, and then use the token to create the link on the other cluster.
+To create a link between the two clusters, you create a token on one of the clusters, and then use the token to create the link on the other cluster.
 
 * Navigate to the browser tab pointing to the OpenShift Web terminal on the AWS cluster. +
 Issue the following command:
@@ -348,7 +335,7 @@ skupper-router-local                ClusterIP   172.30.49.91     <none>        5
 workspace207858d3e7d2450b-service   ClusterIP   172.30.2.112     <none>        4444/TCP                     93m
 ----
 +
-The `globex-db` service is the proxy service created by exposing the `globex-db` deployment n the Azure cluster over the service network.
+The `globex-db` service is the proxy service created by exposing the `globex-db` deployment in the Azure cluster over the service network.
 
 * You can also check out the `globex-db` service through the OpenShift console. Navigate to the browser tab pointing to the Developer perspective of the OpenShift console of AWS cluster. +
 On the left menu, select *Project*, and in the *Inventory* list click on *Services*.
@@ -399,4 +386,4 @@ In the *Network* section, select the *Components* tab, which  shows the connecti
 +
 image::images/skupper-console-network-components.png[]
 
-Congratulations! You successfully used Red Hat Service Interconnect to build a secure service network between two namespaces on two different OpenShift clusters and allow application to connect and communicate over the secure network.
+Congratulations! You successfully used Red Hat Service Interconnect to build a secure service network between two services on two different OpenShift clusters and allow application to connect and communicate over the secure network.
