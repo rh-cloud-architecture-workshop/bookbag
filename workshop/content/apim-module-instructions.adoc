@@ -4,9 +4,9 @@
 :sectnums:
 :toc: 
 
-:openshift_cluster_console: {openshift_cluster_console}
+:openshift_cluster_console: %openshift_cluster_console%
 :user_name: %user_name%
-:user_password: %openshift%
+:user_password: %user_password%
 :devspaces_dashboard: %devspaces_dashboard%
 :globex_user_password: %globex_user_password%
 :openshift_subdomain: %openshift_subdomain%
