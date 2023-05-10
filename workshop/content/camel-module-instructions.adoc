@@ -1287,14 +1287,10 @@ PENDING
 
 {empty} +
 
-{empty} +
-
-
----
 
 == Persist and Share a Session Transcript 
 
-Use OpenShift persistence to provide storage capabilities and services to the MessageHub platform.
+Use persistence to provide storage capabilities and services to the Globex support platform.
 
 All the lab stages you have completed so far have focussed on interconnecting independent instant messaging platforms. This lab however simulates the need to respond to government regulations (or policies alike) to meet legal and business data archival requirements.
 
@@ -1306,26 +1302,423 @@ DIAGRAM PENDING
 
 In the diagram above we see a number of instant messaging platforms interacting together via Kafka. The depicted _Camel_ process represents the new integration to develop responsible to replay streams and push conversations to the storage system.
 
-The clock in the diagram illustrates an on/off mechanism described as follows: the OpenShift platform starts up the new Camel process at scheduled intervals, for example once a day, to process and archive daily conversations. Once the job done, the platform shutdowns the Camel process until the next scheduled run.
+PENDING MORE?
+
 {empty} +
 
 
-=== Understand the decoupled architecture
+=== Understand the Transcript Logic
 
-One fundamental architecture consideration is that if we want an easy to plugin platform where other communication systems or services need to plugin with ease, a standard data model as a common interface is needed.
+You saw how, from time to time when events flowing between customers to agents, the processing logic was pushing events to Kafka to keep record of each one of the interactions between the two actors. Also, when the support session concludes, there's logic to send a signal to mark the end of the conversation (end of stream).
+
+This orchestrated flow of events is not easy to follow and remember during the course of the workshop. However, in order to complete the implementation you're about to work on, you really need to understand how the chat session was recorded in Kafka, and the order in which the new process needs to execute.
+
+Do not despair, the following sequence diagram should help you to see it all, crystal clear. The illustration below shows the entire processing logic relevant to the integration to build in this last stage of the learning module.
+
+PENDING DIAGRAM
+
+The above sequence diagram represents a full interaction between a customer and the support agent, from the moment the customer contacts Globex support until the customer feels satisfied and the session closes.
+
+In the diagram:
+
+. You can see all the chat messages being recorded in Kafka, including the end-of-session signal to mark the end of the conversation. 
+. Camel receives the end-of-session signal, and triggers a stream replay to collect and process the information.
+. When all the messages have been collected and aggregated, it generates a PDF document that includes the full conversation transcript.
+. Then, Camel pushes the document to an S3 bucket to archive the conversation.
+. Finally, it obtains from the storage system a shared URL and sends it via chat to the customer.
+
+Since all of the above happens in real time, that is, when the agent closes the session, the customer instantly receives the shared URL to access the transcript as part of the session closure.
+
+{empty} +
+
+=== Implement the Camel routes.
+
+To speed up the exercise, we've provided some of the Camel routes so that you can concentrate on the main pieces of logic.
+
+There are 3 Camel routes for you to complete:
+
+. The main processor driving the business logic.
+. The route responsible to push documents (the transcripts) to storage.
+. The route responsible to share the document URL to customers.
+
+{empty} +
+
+[NOTE]
+====
+Which new integration lessons will you learn in this section?
+
+ - How to perform execution loops using Camel's DSL.
+ - How to use Camel's content enricher (EIP).
+ - How to aggregate events (EIP).
+ - How to generate PDF documents.
+ - How to store data in S3 buckets.
+====
+
+{empty} +
 
 
+==== Implement the Main Processor
 
-=== section
-sdfsdf
+In the diagram from the previous section you can see the signal that initiates the processing. Signals are pushed to a dedicated Kafka topic that complies with the following name convention:
 
-=== section
-fsfds
+- support.NAMESPACE.closed
 
-=== section
-fsdfsdf
+This topic is different per student to prevent interferences during the workshop. +
+Your topic should be:
 
-=== section
-fsdfsdf
+- `support.globex-camel-%user_name%.closed`
+
+Because the topic name above is dynamic (different per user), we've provided the Camel route definition that connects to Kafka and subscribes to your particular topic. Its only role is to consume events (signals) and route them to `direct:process`.
+
+All you need to do is to implement the `direct:process` route.
+
+. First of all, ensure you close in your editor all the open files/tabs from the previous exercise to clean up your IDE.
+
+. Run in your terminal the snippet below to set the working directory for this task:
++
+[source,bash,role=copy,subs=]
+----
+cd ../transcript/<br>
+----
++
+NOTE: The working folder contains a `code` folder to support you on this exercise, as well as a `deploy` script to help you run it in OpenShift.
++
+{empty} +
+
+. In your terminal, use the `kamel` (Camel K client) command below to create a new Camel source file where to define your Camel routes for the caching logic:
++
+[source,bash,role=copy,subs=]
+----
+kamel init transcript.xml<br>
+----
++
+NOTE: We're choosing the XML DSL this time, so that you have a taste of all major Camel DSLs (YAML, Java and XML).
++
+{empty} +
+
+. Open the `transcript.xml` file in your editor.
++
+Select from your project tree:
++
+* workshop -> module-camel -> lab -> globex-support -> transcript.java
++
+{empty} +
++
+. Delete the sample Camel route in `transcript.xml` and replace with the following one:
++
+--
+[source,xml,role=copy]
+----
+    <route id="process">
+        <from uri="direct:process"/>                                                  <!-- 1 -->
+
+        <setProperty name="client">                                                   <!-- 2 -->
+            <simple>${body}</simple>
+        </setProperty>
+
+        <log message="Initiating KAFKA processor for: ${exchangeProperty.client}"/>   <!-- 3 -->
+
+        <setProperty name="continue">                                                 <!-- 4 -->
+            <simple>true</simple>
+        </setProperty>
+
+        <loop doWhile="true">                                                         <!-- 5 -->
+            <simple>${exchangeProperty.continue}</simple>
+
+            <pollEnrich>                                                              <!-- 6 -->
+                <simple>kafka:support.${env.NAMESPACE}.${exchangeProperty.client}?autoOffsetReset=earliest</simple>
+            </pollEnrich>
+
+            <when>                                                                    <!-- 7 -->
+                <simple>${body} == 'done'</simple>        
+                <setProperty name="continue">
+                    <simple>false</simple>
+                </setProperty>
+            </when>
+
+            <log message="source is: ${header.source}"/>
+            <log message="got message: ${body}"/>
+
+            <aggregate strategyRef="myStrategy">                                       <!-- 8 -->
+                <correlationExpression>
+                    <constant>true</constant>
+                </correlationExpression>
+                <completionPredicate>
+                    <simple>${exchangeProperty.continue} == false</simple>        
+                </completionPredicate>
+
+                <log message="aggregation done: ${body}"/>                             <!-- 9 --> 
+
+                <setProperty name="source">                                            <!-- 10 --> 
+                    <simple>${header.source}</simple>
+                </setProperty>
+
+                <to uri="pdf:create"/>                                                 <!-- 11 -->
+                <log message="PDF created."/>
+
+                <to uri="direct:store-pdf"/>                                           <!-- 12 -->
+                <to uri="direct:get-shared-url"/>                                      <!-- 13 -->
+                <to uri="direct:share-transcript"/>                                    <!-- 14 -->
+            </aggregate>
+        </loop>
+
+        <log message="KAFKA processor done"/>
+
+    </route>
+----
+
+[NOTE]
+====
+As you can observe the XML DSL reads similar to the YAML and Java DSLs. XML is more verbose, but not padding strict the way YAML is, and simple in content than Java.
+====
+
+In the route above:
+
+<1> The `from` element defines the `direct:process` entrypoint where the Camel Kafka consumer will direct the incoming events.
+<2> Next, a property (processing variable) keeps the value (from the body) that uniquely identifies the full customer/agent conversation which originates from the Discord channel ID created for the session.
+<3> A log statement helps tracing the execution.
+<4> A property `continue` (defaulted value `true`) helps controlling the processing loop (see [5]).
+<5> A loop defines the processing logic to iteratively collect all the conversation Kafka events.
+<6> For each loop iteration, a poll enricher consumes the next event available in the Kafka topic.
++
+[NOTE]
+====
+Camel's `<pollEnrich>` is an implementation of the link:https://www.enterpriseintegrationpatterns.com/patterns/messaging/DataEnricher.html[Content Enricher EIP] (Enterprise Integration Pattern). It allows Camel to run a consumer mid-way in the route (normally reserved only in the `from`).
+====
++
+[NOTE]
+====
+Camel is very versatile. The same logic could also be implemented, for instance, by dynamically creating and terminating routes at runtime.
+====
+<7> Each Kafka event is evaluated: when the payload is marked as `done`, the property `continue` is set to `false` to stop the loop cycle.
+<8> An aggregator allows the route to collect events and merge them into a single one.
++
+[NOTE]
+====
+Camel's `<aggregate>` is an implementation of the link:https://www.enterpriseintegrationpatterns.com/patterns/messaging/Aggregator.html[Aggregator EIP].
+====
++
+[NOTE]
+====
+The key `completionPredicate` is a parameter that controls when the aggregation finishes, and when it does, it wraps the result and triggers the execution to process it (steps [9] to [13]).
+====
+<9> A log statement helps visualise when the result processing of an aggregation begins.
+<10> TODO: REWORK CODE AND REMOVE
+<11> Using Camel's PDF component, the aggregated result (full conversation) gets rendered in a PDF document.
+<12> Calls a route `store-pdf` (to be implemented) responsible to push the document to an S3 bucket.
+<13> Calls a route `get-shared-url` (provided) in order to obtain (from the Storage system) a direct URL to access the document that can be shared with the customer.
+<14> Calls a route `share-transcript` (to be implemented) that sends a message to the customer sharing the document's URL.
+--
+
+{empty} +
+
+The next section will assist you in implementing the route, invoked in step [12], responsible to store the transcript.
+
+{empty} +
+
+==== Implement the `store-pdf` route
+
+This Camel route prepares the payload and invokes the S3 subsystem to store the PDF document in an S3 bucket.
+
+In the same XML file, copy and paste the following snippet:
+
+[source,xml,role=copy]
+----
+<!---->
+    <route id="store-pdf">
+        <from uri="direct:store-pdf"/>                                       <!-- 1 -->
+
+        <setProperty name="store-key">
+            <simple>transcript_${date:now:yyyy-MM-dd_HH-mm-ss}.pdf</simple>  <!-- 2 -->
+        </setProperty>
+
+        <setHeader name="CamelFileName">                                     <!-- 3 -->
+            <simple>${exchangeProperty.store-key}</simple>
+        </setHeader>
+
+        <setHeader name="CamelAwsS3Key">                                     <!-- 3 -->
+            <simple>${exchangeProperty.store-key}</simple>
+        </setHeader>
+    
+        <setHeader name="CamelAwsS3ContentType">                             <!-- 3 -->
+            <simple>application/pdf</simple>
+        </setHeader>
+    
+        <toD uri="aws2-s3:pdf.bucket"/>                                      <!-- 4 -->
+        <log message="PDF stored"/>
+    </route>
+----
+
+In the route above:
+
+<1> The `from` element defines the `direct:store-pdf` entrypoint the main processor invokes.
+<2> The property `store-key` defines the naming convention for all transcripts stored in S3.
++
+[NOTE]
+====
+Camel's `simple` expression language is very handy and includes many out-of-the-box functions. In this step, the function `${date:now:pattern}` returns the current timestamp with the given pattern provided.
+====
+<3> To store an object in S3, the following headers need to be defined:
+- its file name, set with the property `store-key`.
+- its S3 key, also set with the property `store-key`.
+- its content type, in this case `application/pdf`
+<4> The Camel component `aws2-s3` is used to push the document to the S3 bucket `pdf.bucket`.
+
+{empty} +
+
+When the transcript is stored in S3, the main route obtains an access URL from the storage system to share with the customer. +
+The last of the Camel routes you need to complete implements that task, follow to the next section. 
+
+{empty} +
+
+==== Implement the `share-transcript` route
+
+This Camel route prepares the payload and invokes the S3 subsystem to store the PDF document in an S3 bucket.
+
+In the same XML file, copy and paste the following snippet:
+
+[source,xml,role=copy]
+----
+<!-- -->
+    <route id="share-transcript">
+        <from uri="direct:share-transcript"/>                                       <!-- 1 -->
+
+        <log message="context is: ${exchangeProperty.context}"/>                    <!-- 2 -->
+
+        <setBody>
+            <simple>${exchangeProperty.context}</simple>                            <!-- 3 -->
+        </setBody>
+
+        <to uri="direct:recycle-context"/>                                          <!-- 4 -->
+
+        <log message="AMQP to send out: ${body}"/>
+
+        <toD uri="amqp:topic:support.${exchangeProperty.source}?connectionFactory=#myFactory"/>  <!-- 5 -->
+    </route>
+----
+
+In the route above:
+
+<1> The `from` element defines the `direct:share-transcript` entrypoint the main processor invokes.
+<2> A log statement helps visually trace the execution.
+<3> The session context is placed in the body in preparation for the next step [4].
++
+[NOTE]
+====
+The aggregator kept the `context` in a property, to help the process communicate back with the customer.
+====
++
+[NOTE]
+====
+The `body` represents in Camel the main payload object to work with. For instance, if you call an HTTP endpoint, Camel uses the body as the POST data to send.
+====
+<4> An internal call to the route `recycle-context` (provided) renews the context in preparation to send a message back to the customer.
++
+[NOTE]
+====
+- Recycling the context saves us from creating and populating a full new JSON document. Recycling the context only involves updating a couple of fields.
+- For simplicity, the recycling processing has already been implemented for you and is included in your project folder.
+====
+
+
+You're done with the implementation part.
+
+{empty} +
+
+
+=== Deploy and test your code
+
+With the Camel K client `kamel` you can deploy your integrations with one command. Camel K will take care of collecting all your sources, containerizing them and deploying an instance.
+
+Let's deply your code .
+
+. From your terminal, execute the following command:
++
+[source,bash,role=copy,subs=]
+----
+./deploy.sh<br>
+----
++
+NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
++
+{empty} +
+
+. From Slack or Globex
+.. Open the Chat view
+.. Send a message, for example `Hello, can someone assist please?`
++
+You should see in Discord a new channel `slack-%user_name%` or `globex-%user_name%` created.
++
+{empty} +
+
+. From Discord
+.. Click on the newly created channel `slack/globex-%user_name%` to display the messages.
+.. Type a message, for example `How can I help you today?` and send it.
++
+{empty} +
+
+. You should see the agent's message sent from Discord appear in the Slack/Globex chat view. 
+
+. Send some more messages back and forth.
+
+. To close the session, from Discord, right-click and delete the channel.
+
+. In Slack/Globex, you should see a notification informing the session has ended.
+
+. You should also see a notification including the shared PDF URL.
+
+PENDING
+
+{empty} +
+
+TESTS
+
+[source,xml,role=copy,subs="+macros"]
+----
+    <route id="share-transcript">
+    </route>
+pass:[<br>]
+----
+
+[source,bash,role=copy,subs="+macros"]
+----
+touch macros-quotes.jslt
+pass:[<br>]
+----
+
+[source,bash,role=copy,subs=macros+]
+----
+touch macros-no-quotes.jslt
+pass:[<br>]
+----
+
+[source,bash,role=copy,subs=none]
+----
+touch none.jslt
+
+----
+
+[source,bash,role=copy,subs=none]
+----
+touch none-pass.jslt
+pass:[<br>]
+----
+
+[source,bash,role=copy,subs=replacements+]
+----
+touch none-rep1.jslt<br>
+----
+
+
+[source,bash,role=copy,subs=replacements]
+----
+touch none-rep2.jslt
+<br>
+----
+
+[source,bash,role=copy,subs="+macros"]
+----
+touch response.jslt pass:[<br>]
+----
 
 === section
