@@ -1449,9 +1449,10 @@ Select from your project tree:
 
                 <log message="aggregation done: ${body}"/>                             <!-- 9 --> 
 
-                <setProperty name="source">                                            <!-- 10 --> 
+<!-- 10 --> 
+                <!--setProperty name="source">                                            
                     <simple>${header.source}</simple>
-                </setProperty>
+                </setProperty-->
 
                 <to uri="pdf:create"/>                                                 <!-- 11 -->
                 <log message="PDF created."/>
