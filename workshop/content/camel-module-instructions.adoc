@@ -5,6 +5,12 @@
 :sectnums:
 :experimental:
 
+:camelfolder: /projects/workshop-devspaces/workshop/module-camel/lab
+
+:slackinviteurl: %slack_invite_url%
+:discordinviteurl: %discord_invite_url%
+
+
 == Quick overview of the lab exercises
 
 
@@ -116,7 +122,7 @@ You will need to open Slack in your browser to complete the work. We have prepar
 
 To join the workspace in Slack, simply follow the invite link below:
 --
-* link:https://join.slack.com/t/camel-globex/shared_invite/zt-1uqxzxrkz-9GHr8rdvB~m6gjBM~1zM3g[window="_blank"]
+* link:{slackinviteurl}[*Slack invite link*, window="_blank"]
 --
 
 {empty} +
@@ -170,12 +176,22 @@ Caching allows us to keep the context of a one-to-one conversation between the c
 
 === Implement the caching logic
 
-Which integration lessons will you learn in this section?
+.*What will I learn?*
+[%collapsible]
+======
+[NOTE]
+====
+In the content that follows you will learn the following concepts:
 
  - How to define reusable Camel routes.
  - How to manipulate JSON payloads for easier access and updates.
  - How to integrate with DataGrid to perform caching operations.
  - How to define conditional regions of code.
+====
+======
+
+TIP: Click above in *"What will I learn"* to reveal information. +
+All along the workshop you will find folded information you can reveal to know more.
 
 {empty} +
 
@@ -188,9 +204,9 @@ Your first task is to define the Camel routes responsible to interact with DataG
 . Run in your terminal the snippet below to find your working directory:
 +
 
-[source,bash,role=copy,subs=]
+[source,bash,role=copy,subs=attributes]
 ----
-cd workshop/module-camel/lab/discord/<br>
+cd {camelfolder}/discord/
 ----
 +
 NOTE: The working folder contains a `code` folder to support you on this exercise, as well as a `deploy` script to help you run it in OpenShift.
@@ -223,6 +239,7 @@ image::images/crw-open-yaml.png[align="left", width=50%]
 --
 [source,yaml,role=copy,subs=]
 ----
+#
 - from:
     uri: "direct:cache-put"             # <1>
     steps:
@@ -241,9 +258,15 @@ image::images/crw-open-yaml.png[align="left", width=50%]
           simple: ${exchangeProperty.key}
       - to:
            uri: "infinispan://default"  # <5>
+#
 ----
-You could consider the _Camel_ route above equivalent to a subroutine in any programming language. It executes the action of pushing a new entry in cache:
+You could consider the _Camel_ route above equivalent to a subroutine in any programming language. It executes the action of pushing a new entry in cache.
 
+In the route above:
+
+.Click here for details
+[%collapsible]
+======
 <1> The `from` element uses the `direct` _Camel_ component, which is a special component that allows other _Camel_ routes in the code to make internal invocations to this one.
 <2> Next, a JSON marshaller renders the payload in JSON format. This implies the route expects the payload (`body` in _Camel_ terms) to contain a Java data structure (Map). This one liner automatically converts the Java Map into JSON by using a _Camel_ DataFormat.
 <3> In preparation for the PUT operation, the `removeHeaders` instruction ensures all (star symbol) residual headers are erased beforehand.
@@ -259,6 +282,7 @@ You'll observe the setters are using a `${{{...}}}` syntax to resolve the name a
 ====
 The `infinispan` component requires no extra parameters because it has been pre-configured for you, it's secured with TLS and Scram, and points to your DataGrid instance.
 ====
+======
 --
 +
 ---
@@ -273,7 +297,7 @@ Add in your code (copy and paste) the snippet below:
 --
 [source,yaml,role=copy,subs=]
 ----
- #
+#
 - from:
     uri: "direct:cache-get"                # <1>
     steps:
@@ -292,10 +316,14 @@ Add in your code (copy and paste) the snippet below:
           steps:
           - unmarshal:                     # <6>
               json: {}
+#
 ----
 
-In a very similar fashion, the `GET` route definition:
+In a very similar fashion, the `GET` route definition performs the following actions:
 
+.Click here for details
+[%collapsible]
+======
 <1> The `from` element is defined with the `direct` component to allow other _Camel_ routes invoke it.
 <2> Removes residual headers.
 <3> Sets the operation (`GET`) and key to obtain the cache entry.
@@ -312,6 +340,7 @@ You can consider the `${exchangeProperty.key}` as a parameter the calling route 
 ====
 Un-marshalling the payload into a Java structure allows for an easier handling of the JSON data in other parts of the Camel implementation.
 ====
+======
 --
 ---
 +
@@ -324,7 +353,7 @@ Copy and paste the snippet below:
 --
 [source,yaml,role=copy,subs=]
 ----
- #
+#
 - from:
     uri: "direct:cache-remove"             # <1>
     steps:
@@ -340,8 +369,11 @@ Copy and paste the snippet below:
            uri: "infinispan://default"     # <4>
 ----
 
-In a very similar fashion, the `REMOVE` route definition:
+Similarly, the `REMOVE` route definition performs the following actions:
 
+.Click here for details
+[%collapsible]
+======
 <1> The `from` element is defined with the `direct` component to allow other _Camel_ routes invoke it.
 <2> Removes residual headers.
 <3> Sets the operation (REMOVE) and key to target.
@@ -351,6 +383,7 @@ In a very similar fashion, the `REMOVE` route definition:
 You can consider the `${exchangeProperty.key}` as a parameter the calling route needs to preset. Exchange properties are like variables you can define during the lifetime of a _Camel_ transaction.
 ====
 <4> Uses the `infinispan` component to perform the operation.
+======
 --
 +
 ---
@@ -373,12 +406,19 @@ The starting point of this task is to subscribe to the relevant address in the A
 
 ==== Create the AMQ listener
 
-Which integration lessons will you learn in this section?
+.*What will I learn?*
+[%collapsible]
+======
+[NOTE]
+====
+In the content that follows you will learn the following concepts:
 
  - How to integrate with AMQP Brokers.
  - How to invoke other Camel routes.
  - How to organise the code allow a pluggable architecture.
  - How to define a properties file.
+====
+======
 
 {empty} +
 
@@ -393,13 +433,18 @@ Open the `my.properties` file in your editor end edit the following property:
 slack.globex.channel.id=MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID
 ----
 +
-IMPORTANT: Make sure you replace `MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID` using your personal GlobexSupport channel ID from Slack. +
-For example: `slack.globex.channel.id=D03P7AH5347`
+[IMPORTANT]
+====
+Make sure you replace `MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID` using your personal GlobexSupport channel ID from Slack. +
+For example: 
+
+- `slack.globex.channel.id=D03P7AH5347`
+====
 +
 Now you can proceed with the creation of your route.
 +
 {empty} +
-+
+
 
 . In your terminal, execute the `kamel` command below to create a new source file to process AMQP events:
 +
@@ -419,6 +464,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 --
 [source,yaml,role=copy,subs=]
 ----
+#
 - from:
     uri: "amqp:topic:{{broker.amqp.topic.clients.slack}}{{slack.globex.channel.id}}"  # <1>
     parameters:
@@ -426,12 +472,17 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
     steps:
       - to:
            uri: "direct:support-request" # <3>
+#
 ----
 The route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> Subscribes to an AMQ address (using the AMQP protocol)
 <2> The component is defined with a pre-configured (provided) connection factory to secure and point the connection to the shared AMQ Broker.
 <3> And directs all events to the Camel route `support-request`.
+======
 
 This route does not perform any processing because our goal is to maintain a pluggable architecture. It means that we can define additional Camel routes fetching events from other sources and direct them to the main processing logic.
 
@@ -452,11 +503,19 @@ The section that follows helps you implement the route `direct:support-request` 
 
 The main route will process events originating in Slack (and also coming from other sources, later in the lab).
 
-Which integration lessons will you learn in this section?
+.*What will I learn?*
+[%collapsible]
+======
+[NOTE]
+====
+In the content that follows you will learn the following concepts:
 
  - How to organise the code by delegating work to other _Camel_ routes.
  - How to define and use processing variables (known in _Camel_ as _Exchange_ properties).
  - How to use _Camel_'s simple language expression to set values.
+====
+======
+
 
 {empty} +
 
@@ -464,7 +523,7 @@ In the same YAML file, copy and paste the following snippet:
 
 [source,yaml,role=copy,subs=]
 ----
- #
+#
 - from:
     uri: "direct:support-request"
     steps:
@@ -482,10 +541,14 @@ In the same YAML file, copy and paste the following snippet:
           simple: ${exchangeProperty.in.get(text)}
       - to:
            uri: "direct:discord-push-message"                     # <6>
+#
 ----
 
 The route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> Un-marshals the payload into a Java Map (for easier access)
 <2> Defines a property `in` to keep the original incoming data.
 +
@@ -502,6 +565,8 @@ Cache entries are created, used and deleted during the lifetime of a support ses
 <4> Sets a property with the target _Discord_ channel where to send the message
 <5> Sets the text message to be sent to _Discord_
 <6> Delegates the message delivery to the route `discord-push-message`
+======
+
 
 {empty} +
 
@@ -535,11 +600,18 @@ In the sequence diagram above you'll see that:
 
 All the pieces are in place, you have the cache interaction resolved, you have the logic to create new support channels in Discord. The final step is to send the actual customer message to Discord so that an agent can respond.
 
-Which integration lessons will you learn in this section?
+.*What will I learn?*
+[%collapsible]
+======
+[NOTE]
+====
+In the content that follows you will learn the following concepts:
 
  - How to easily prepare and call APIs using Camel.
  - How to dynamically evaluate at runtime the target endpoint 
  - How to push events to Kafka using Camel.
+====
+======
 
 {empty} +
 
@@ -553,7 +625,7 @@ Still in the same YAML file, copy and paste the following snippet:
 
 [source,yaml,role=copy,subs=]
 ----
- #
+#
 - from:
     uri: "direct:discord-push-message"      # <1>
     steps:
@@ -582,6 +654,9 @@ Still in the same YAML file, copy and paste the following snippet:
 
 The route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
 <2> Keeps a copy of the customer message (used later).
 <3> Removes residual headers.
@@ -611,6 +686,7 @@ Every customer/agent interaction is streamed to Kafka. Later in the lab you'll u
 ====
 The `kafka` component requires no extra parameters because it has been pre-configured for you, it's secured with TLS and Scram, and points to the shared environment's Kafka cluster.
 ====
+======
 
 {empty} +
 
@@ -620,9 +696,9 @@ The `kafka` component requires no extra parameters because it has been pre-confi
 
 You will need to open Discord in your browser to complete the work. We have prepared a Discord server dedicated to the workshop to make things easy.
 
-To join the workspace in Discord, simply follow the invite link below:
+To join the Discord server, simply follow the invite link below:
 --
-* link:https://discord.gg/QpVvJPhHw3[window="_blank"]
+* link:{discordinviteurl}[*Discord invite link*, window="_blank"]
 --
 
 {empty} +
@@ -650,15 +726,32 @@ Let's run your code in `dev` mode to validate the flow works as expected.
 NOTE: The `dev.sh` scripts runs a `kamel run` command with the flag `--dev` mode indicating to run in development mode. +
 It also defines all the necessary support resources and parameters to run your integration.
 +
+[WARNING]
+====
+If the `dev.sh` command shows errors, you might have missed a step following the instructions or done some other human error. +
+If so, try again using our code by running the command:
+
+[source,bash,role=copy,subs=]
+----
+./safe-dev.sh<br>
+----
+====
++
 {empty} +
 
 . From Slack, send a message... +
 You should see in Discord a new Channel created and the message from Slack displayed.
++
+[WARNING]
+====
+If you see no message in Discord you might have misconfigured your Slack channel ID in the `my.properties` configuration file. Review the instructions and try again. The configuration property should look similar to:
+
+- `slack.globex.channel.id=D03P7AH5347`
+====
 
 PENDING
 
-When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance.
-+
+IMPORTANT: When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance.
 
 {empty} +
 
@@ -690,14 +783,21 @@ The websocket listener described above is responsible to pick up agent messages 
 
 In essence, our route needs to obtain from cache the context for this particular customer/agent conversation, prepare the JSON data containing the agent's answer, and send it to the AMQ broker. The Slack integration will consume the event and deliver it to the customer.
 
-Which new integration lessons will you learn in this section?
+.*What will I learn?*
+[%collapsible]
+======
+[NOTE]
+====
+In the content that follows you will learn the following concepts:
 
  - How to perform simple changes on JSON data.
  - How to push events via AMQP to the Broker.
+====
+======
 
-{empty} +
+IMPORTANT: Ensure you've stopped your `dev` instance from the test in the previous section. If not stopped yet, from your terminal press `Ctrl`+`C` to stop it.
 
-. Ensure you've stopped your `dev` instance from the test in the previous section. If not stopped yet, from your terminal press `Ctrl`+`C` to stop it.
+Start your implementation:
 
 . From your terminal, execute the `kamel` command below to create a new source file to process Discord events:
 +
@@ -717,6 +817,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 --
 [source,yaml,role=copy,subs=]
 ----
+#
 - from:
     uri: "direct:process-agent-message"                       # <1>
     steps:
@@ -759,11 +860,14 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
         otherwise:                                                           # <10>
           steps:
           - log: "no cache entry, ignoring message from user: ${exchangeProperty.agent}"
-
+#
 ----
 
 The route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
 <2> Keeps necessary values (as properties) from Discord's event.
 +
@@ -810,13 +914,13 @@ The `amqp` component requires no extra parameters because it has been pre-config
 - Note the Kafka topic defined uses your `NAMESPACE`, again to prevent clashes with other students since you all share the same Kafka cluster.
 - The `kafka` component requires no extra parameters because it has been pre-configured for you, it's secured with TLS and Scram, and points to the shared environment's Kafka cluster.
 ====
-
 <10> Lastly, when a cache entry does not exist, we ignore it.
 +
 [NOTE]
 ====
 This is necessary in our lab to prevent other students from interfering with your tests. In a real-world implementation, you would perform the check anyway for robust error handling.
 ====
+======
 --
 +
 
@@ -837,7 +941,7 @@ Include in the same YAML file (copy and paste) the snippet below:
 
 [source,yaml,role=copy,subs=]
 ----
- #
+#
 - from:
     uri: "direct:process-channel-closure"
     steps:
@@ -899,8 +1003,11 @@ Include in the same YAML file (copy and paste) the snippet below:
           - log: no cache entry, ignoring message
 ----
 
-You will observe the route above is almost identical to the previous one. Let's simply summarize below the differences.
+You will observe the route above is almost identical to the previous one. Let's simply summarize below the differences:
 
+.Click here for details
+[%collapsible]
+======
 <1> It also fetches from the cache system the customer/agent context. Only this time the channel identifier sits in a different field (`.d.id`) in the Discord JSON event.
 <2> It recycles the cache payload, only this time using an automated closing message.
 <3> It sends the closing event via AMQP, and proceeds [4] & [5] to delete the two cache entries relevant to this conversation:
@@ -920,6 +1027,7 @@ the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP addres
 <6> Finally, it prepares body and headers to send two closure Kafka events [7] & [8].
 <7> The first event to Kafka contains the context information, sent to the conversation topic.
 <8> The second one is signal event, a notification that allows other applications to react.
+======
 
 {empty} +
 
@@ -937,13 +1045,32 @@ Let's deply your code .
 +
 [source,bash,role=copy,subs=]
 ----
-./deploy.sh<br>
+./deploy.sh
 ----
 +
 NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
 +
 {empty} +
 
+. You can inspect the logs by running the following command:
++
+[source,bash,role=copy,subs=]
+----
+./kamel log discord
+----
+
+[WARNING]
+====
+If you encounter errors or unexpected results, you might have missed a step following the instructions or done some other human error. +
+If so, try again using our code by running the command:
+
+[source,bash,role=copy,subs=]
+----
+./safe-deploy.sh<br>
+----
+====
+
+[start=3]
 . From Discord
 .. Click on the newly created channel `slack-%user_name%` to display the messages.
 .. Type a message, for example `How can I help you with?` and send it.
@@ -1007,13 +1134,17 @@ PENDING IMAGE.
 
 ==== Code the Camel route
 
-. First of all, close in your editor all the open files/tabs to ensure your IDE is clean.
+IMPORTANT: If your terminal is busy showing logs from your previous exercise, or some other task, ensure you press `Ctrl`+`C` to stop it.
+
+IMPORTANT: Close in your editor all open files/tabs to ensure your IDE is clean.
+
+Start your implementation:
 
 . Run in your terminal the snippet below to set the working directory for this task:
 +
-[source,bash,role=copy,subs=]
+[source,bash,role=copy,subs=attributes]
 ----
-cd ../globex-support/<br>
+cd {camelfolder}/globex-support/
 ----
 +
 NOTE: The working folder contains a `code` folder to support you on this exercise, as well as a `deploy` script to help you run it in OpenShift.
@@ -1044,11 +1175,13 @@ Select from your project tree:
 --
 [source,java,role=copy,subs=]
 ----
+//
       from("platform-http:/support/message")                      // <1>
         .setProperty("clientid", simple("${env.NAMESPACE}"))      // <2>
         .convertBodyTo(String.class)                              // <3>
         .to("jslt:request.jslt?allowContextMapAll=true")          // <4>
         .toD("amqp:topic:{{broker.amqp.topic.clients}}${env.NAMESPACE}?disableReplyTo=true&connectionFactory=#myFactory");  // <5>
+//
 ----
 
 [NOTE]
@@ -1058,6 +1191,9 @@ Observe how the route above is defined with a Java based DSL using the fluent bu
 
 In the route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> The `from` element uses the _Camel_ component `platform-http`, which wires the runtime's HTTP listener to capture all the incoming requests to the given `support/message` path.
 +
 [NOTE]
@@ -1087,6 +1223,7 @@ The JSLT transformer is a powerful JSON to JSON data mapping tool. JSLT is inspi
 ====
 the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP address using the environment's `NAMESPACE` variable.
 ====
+======
 --
 
 {empty} +
@@ -1128,11 +1265,15 @@ NOTE: You'll notice the JSLT feels like natural JSON, except it includes express
 
 The JSLT definition above:
 
+.Click here for details
+[%collapsible]
+======
 <1> Directly maps the fields `user` and `text` (as is).
 <2> Defines a `source` node with:
 <3> the field `name` set to a static value `globex`.
 <4> the field `uname` (unique name) as a concatenation of the string `globex.` with the dynamic value obtained from the property `clientid`, previously evaluated in the Camel route.
 <5> the field `room` mapped with the incoming `sessionid` field.
+======
 --
 +
 [NOTE]
@@ -1172,10 +1313,14 @@ Include in the same Java file (copy and paste) the snippet below:
         .convertBodyTo(String.class)                       // <2>
         .to("jslt:response.jslt?allowContextMapAll=true")  // <3>
         .to("{{client.callback.url}}");                    // <4>
+//
 ----
 
 In the route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> The `from` element uses the _Camel_ component `direct` to allow the AMQP listener (provided) to handover events consumed from the AMQ broker.
 <2> In preparation for the transformation that follows we convert the incoming payload into a `String`.
 +
@@ -1187,6 +1332,8 @@ The JSLT transformer (next step) requires a `String` input, however the `amqp` c
 <3> The JSON input is transformed using a JSLT stylesheet (`response.jslt`), to map its values from the common data model to Globex's specific model.
 
 <4> Finally, the mapped JSON payload is sent via HTTP to Globex's callback URL, configured in the properties file.
+======
+
 
 {empty} +
 
@@ -1222,6 +1369,9 @@ touch response.jslt<br>
 
 The JSLT definition above:
 
+.Click here for details
+[%collapsible]
+======
 <1> Directly maps the fields `agent` and `text` (as is).
 <2> Sets the `sessionid` with the source `room`.
 +
@@ -1241,6 +1391,7 @@ the `sessionid` represents the internal Globex customer session identifier. Glob
 ====
 Later in the lab, you'll work to generate the value mapped in this definition.
 ====
+======
 --
 
 {empty} +
@@ -1263,6 +1414,27 @@ NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all th
 +
 {empty} +
 
+
+
+. You can inspect the logs by running the following command:
++
+[source,bash,role=copy,subs=]
+----
+./kamel log globex-support
+----
+
+[WARNING]
+====
+If you encounter errors or unexpected results, you might have missed a step following the instructions or done some other human error. +
+If so, try again using our code by running the command:
+
+[source,bash,role=copy,subs=]
+----
+./safe-deploy.sh<br>
+----
+====
+
+[start=3]
 . From Globex
 .. Open the Chat window
 .. Send a message, for example `Hello, can someone assist please?`
@@ -1343,9 +1515,13 @@ There are 3 Camel routes for you to complete:
 
 {empty} +
 
+
+.*What will I learn?*
+[%collapsible]
+======
 [NOTE]
 ====
-Which new integration lessons will you learn in this section?
+In the content that follows you will learn the following concepts:
 
  - How to perform execution loops using Camel's DSL.
  - How to use Camel's content enricher (EIP).
@@ -1353,6 +1529,7 @@ Which new integration lessons will you learn in this section?
  - How to generate PDF documents.
  - How to store data in S3 buckets.
 ====
+======
 
 {empty} +
 
@@ -1372,13 +1549,17 @@ Because the topic name above is dynamic (different per user), we've provided the
 
 All you need to do is to implement the `direct:process` route.
 
-. First of all, ensure you close in your editor all the open files/tabs from the previous exercise to clean up your IDE.
+IMPORTANT: If your terminal is busy showing logs from your previous exercise, or some other task, ensure you press `Ctrl`+`C` to stop it.
+
+IMPORTANT: Close in your editor all open files/tabs to ensure your IDE is clean.
+
+Start your implementation:
 
 . Run in your terminal the snippet below to set the working directory for this task:
 +
-[source,bash,role=copy,subs=]
+[source,bash,role=copy,subs=attributes]
 ----
-cd ../transcript/<br>
+cd {camelfolder}/transcript/
 ----
 +
 NOTE: The working folder contains a `code` folder to support you on this exercise, as well as a `deploy` script to help you run it in OpenShift.
@@ -1400,7 +1581,7 @@ NOTE: We're choosing the XML DSL this time, so that you have a taste of all majo
 +
 Select from your project tree:
 +
-* workshop -> module-camel -> lab -> globex-support -> transcript.java
+* workshop -> module-camel -> lab -> globex-support -> transcript.xml
 +
 {empty} +
 +
@@ -1409,6 +1590,7 @@ Select from your project tree:
 --
 [source,xml,role=copy]
 ----
+<!---->
     <route id="process">
         <from uri="direct:process"/>                                                  <!-- 1 -->
 
@@ -1449,23 +1631,19 @@ Select from your project tree:
 
                 <log message="aggregation done: ${body}"/>                             <!-- 9 --> 
 
-<!-- 10 --> 
-                <!--setProperty name="source">                                            
-                    <simple>${header.source}</simple>
-                </setProperty-->
-
-                <to uri="pdf:create"/>                                                 <!-- 11 -->
+                <to uri="pdf:create"/>                                                 <!-- 10 -->
                 <log message="PDF created."/>
 
-                <to uri="direct:store-pdf"/>                                           <!-- 12 -->
-                <to uri="direct:get-shared-url"/>                                      <!-- 13 -->
-                <to uri="direct:share-transcript"/>                                    <!-- 14 -->
+                <to uri="direct:store-pdf"/>                                           <!-- 11 -->
+                <to uri="direct:get-shared-url"/>                                      <!-- 12 -->
+                <to uri="direct:share-transcript"/>                                    <!-- 13 -->
             </aggregate>
         </loop>
 
         <log message="KAFKA processor done"/>
 
     </route>
+<!---->
 ----
 
 [NOTE]
@@ -1475,6 +1653,9 @@ As you can observe the XML DSL reads similar to the YAML and Java DSLs. XML is m
 
 In the route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> The `from` element defines the `direct:process` entrypoint where the Camel Kafka consumer will direct the incoming events.
 <2> Next, a property (processing variable) keeps the value (from the body) that uniquely identifies the full customer/agent conversation which originates from the Discord channel ID created for the session.
 <3> A log statement helps tracing the execution.
@@ -1504,11 +1685,11 @@ Camel's `<aggregate>` is an implementation of the link:https://www.enterpriseint
 The key `completionPredicate` is a parameter that controls when the aggregation finishes, and when it does, it wraps the result and triggers the execution to process it (steps [9] to [13]).
 ====
 <9> A log statement helps visualise when the result processing of an aggregation begins.
-<10> TODO: REWORK CODE AND REMOVE
-<11> Using Camel's PDF component, the aggregated result (full conversation) gets rendered in a PDF document.
-<12> Calls a route `store-pdf` (to be implemented) responsible to push the document to an S3 bucket.
-<13> Calls a route `get-shared-url` (provided) in order to obtain (from the Storage system) a direct URL to access the document that can be shared with the customer.
-<14> Calls a route `share-transcript` (to be implemented) that sends a message to the customer sharing the document's URL.
+<10> Using Camel's PDF component, the aggregated result (full conversation) gets rendered in a PDF document.
+<11> Calls a route `store-pdf` (to be implemented) responsible to push the document to an S3 bucket.
+<12> Calls a route `get-shared-url` (provided) in order to obtain (from the Storage system) a direct URL to access the document that can be shared with the customer.
+<13> Calls a route `share-transcript` (to be implemented) that sends a message to the customer sharing the document's URL.
+======
 --
 
 {empty} +
@@ -1548,10 +1729,14 @@ In the same XML file, copy and paste the following snippet:
         <toD uri="aws2-s3:pdf.bucket"/>                                      <!-- 4 -->
         <log message="PDF stored"/>
     </route>
+<!---->
 ----
 
 In the route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> The `from` element defines the `direct:store-pdf` entrypoint the main processor invokes.
 <2> The property `store-key` defines the naming convention for all transcripts stored in S3.
 +
@@ -1564,6 +1749,7 @@ Camel's `simple` expression language is very handy and includes many out-of-the-
 - its S3 key, also set with the property `store-key`.
 - its content type, in this case `application/pdf`
 <4> The Camel component `aws2-s3` is used to push the document to the S3 bucket `pdf.bucket`.
+======
 
 {empty} +
 
@@ -1580,7 +1766,7 @@ In the same XML file, copy and paste the following snippet:
 
 [source,xml,role=copy]
 ----
-<!-- -->
+<!---->
     <route id="share-transcript">
         <from uri="direct:share-transcript"/>                                       <!-- 1 -->
 
@@ -1596,10 +1782,14 @@ In the same XML file, copy and paste the following snippet:
 
         <toD uri="amqp:topic:support.${exchangeProperty.source}?connectionFactory=#myFactory"/>  <!-- 5 -->
     </route>
+<!---->
 ----
 
 In the route above:
 
+.Click here for details
+[%collapsible]
+======
 <1> The `from` element defines the `direct:share-transcript` entrypoint the main processor invokes.
 <2> A log statement helps visually trace the execution.
 <3> The session context is placed in the body in preparation for the next step [4].
@@ -1620,7 +1810,18 @@ The `body` represents in Camel the main payload object to work with. For instanc
 - Recycling the context saves us from creating and populating a full new JSON document. Recycling the context only involves updating a couple of fields.
 - For simplicity, the recycling processing has already been implemented for you and is included in your project folder.
 ====
-
+<5> Sends the shared URL over AMQP to the AMQ Broker.
++
+[NOTE]
+====
+the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP address using the `source` property.
+====
++
+[NOTE]
+====
+The `amqp` component requires no extra parameters because it has been pre-configured for you, it's secured with TLS and Scram, and points to the shared environment's AMQ Broker.
+====
+======
 
 You're done with the implementation part.
 
@@ -1644,6 +1845,26 @@ NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all th
 +
 {empty} +
 
+
+. You can inspect the logs by running the following command:
++
+[source,bash,role=copy,subs=]
+----
+./kamel log transcript
+----
+
+[WARNING]
+====
+If you encounter errors or unexpected results, you might have missed a step following the instructions or done some other human error. +
+If so, try again using our code by running the command:
+
+[source,bash,role=copy,subs=]
+----
+./safe-deploy.sh<br>
+----
+====
+
+[start=3]
 . From Slack or Globex
 .. Open the Chat view
 .. Send a message, for example `Hello, can someone assist please?`
