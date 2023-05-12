@@ -14,9 +14,33 @@
 == Quick overview of the lab exercises
 
 
+
+{empty} +
+
+The animation below illustrates the 3 main integration systems you will deliver along the module.
+
+image::./images/camel/lab-tasks-animation.gif[align="center", width=90%]
+
+{empty} +
+
+You'll notice the architecture above contains 4 Camel applications.
+
+- To simplify the lab, the Slack integration is provided and already deployed in the environment. You only need to focus on the applications below.
+
+- As per the animation above:
+. The Discord integration represents the first system to build.
+. The Globex integration represents the second one to build.
+. The third one to build, persists and shares a transcript.
+
+{empty} +
+
 == Prepare your Development environment
 
-You are going to use OpenShift Dev Spaces for a number of activities. OpenShift Dev Spaces uses Kubernetes and containers to provide a consistent, secure, and zero-configuration development environment, accessible from a browser window.
+To implement the integrations you are going to use OpenShift Dev Spaces. Dev Spaces provides a browser based development environment that includes the lab's project, an editor for coding, and a terminal from where you can test and deploy your work in OpenShift.
+
+image::./images/camel/devspaces-workflow.jpg[align="center", width=90%]
+
+OpenShift Dev Spaces uses Kubernetes and containers to provide a consistent, secure, and zero-configuration development environment, accessible from a browser window.
 
 * In a browser window, navigate to the browser tab pointing to the Developer perspective of the OpenShift cluster. If you don't have a browser tab open on the console, navigate to %openshift_cluster_console%[OpenShift Console^, window=_console]. If needed login with your username and password (%user_name%/%user_password%).
 
@@ -93,18 +117,20 @@ Now using project "globex-camel-%user_name%" on server "%openshift_api_internal%
 +
 image::images/apim/apim-terminal-setup.png[]
 
-=== Scratchpad
-As you work through this Contract First APIs module, there are a few variables and URLs that are needed throughout this activity. To make things easier and manageable we've setup a scratchpad within Devspaces. You can fill this scrachpad up with information needed as you are guided below so that you can progress through this activity faster.
-
 {empty} +
+
 
 == Enable the Slack to Discord interaction
 
 As previously described, the Slack integration is already in place and users can already post questions on the _GlobexSupport_ app which are channelled and available in the AMQ Broker.
 
-In this first implementation activity you need to enable the end-to-end data flow between Slack and Discord. Events can already travel half the way up to the broker (AMQ), but the second stage, from the Broker to Discord, is still pending.
+In this first implementation activity you need to enable the end-to-end data flow between Slack and Discord (marked 1 in the diagram below).
 
-{line}
+image::./images/camel/overview-lab-1.jpg[align="center", width=90%]
+
+Events can already travel half the way up to the broker (AMQ), but the second stage, from the Broker to Discord, is still pending.
+
+{empty} +
 
 === How Customers interact with Agents
 
@@ -125,34 +151,58 @@ To join the workspace in Slack, simply follow the invite link below:
 * link:{slackinviteurl}[*Slack invite link*, window="_blank"]
 --
 
+CAUTION: The workspace is open to the public, please be mindful of your actions, don't abuse the space.
+
 {empty} +
 
 Then, follow the steps below to complete preparations:
 
 . Slack will prompt you to login, choose your preferred login option.
-. Once in, ensure you add the GlobexSupport app:
++
+Once onboard, you should see the following:
++
+image::./images/camel/slack-onboard.jpg[align="left", width=50%]
++
+Marked in red, you should see you're in the _CamelGlobex_ _Slack_ workspace.
++
+{empty} +
+
+. Then, ensure you add the GlobexSupport app:
 .. From the left panel, choose:
 +
 --
 kbd:[▾] Apps -> kbd:[+] Add apps
 --
++
+image::./images/camel/slack-add-app.jpg[align="left", width=40%]
++
 .. Then, select from the menu the `GlobexSupport` app.
 +
-You should see in your left panel the app visible:
+image::./images/camel/slack-add-globex.jpg[align="left", width=40%]
 +
---
-kbd:[▾] Apps +
-kbd:[Ⓖ] GlobexSupport +
-kbd:[+] Add apps +
---
+You should see in your left panel the app visible:
+// +
+// --
+// kbd:[▾] Apps +
+// kbd:[Ⓖ] GlobexSupport +
+// kbd:[+] Add apps +
+// --
++
+image::./images/camel/slack-app-globex-visible.jpg[align="left", width=40%]
+
 
 . Right click the app: kbd:[Ⓖ] GlobexSupport +
 and select the option:
 - View app details
++
+image::./images/camel/slack-app-view-details.jpg[align="left", width=50%]
 
 
 . A window pops up. +
 At the very bottom, copy your personal GlobexSupport `Channel ID`.
++
+image::./images/camel/slack-app-channel-id-copy.jpg[align="left", width=50%]
+
 
 . Keep the ID somewhere safe (your scratch-pad), as you'll need it to configure _Camel_.
 
@@ -164,9 +214,13 @@ You're all set to continue
 
 === The role of Caching
 
-Conversations are synchronous by nature, when you ask a question, you wait for a response. In systems architectures, synchronous interactions are easier to implement, but are more resource costly. Synchronous calls may be thread-blocking, and under utilise the infrastructure during heavy traffic loads, possibly causing bottlenecks.
+Typical API interactions are of synchronous nature, a client sends a request and waits for a response. In systems architectures, synchronous exchanges are easier to implement, but are more resource costly. 
 
-Because event-driven architectures are asynchronous (no waiting to do), they optimise performance, but has to be said, at the cost of higher complexity. Caching is a strategy (among others) to assist the event-driven approach and offer an elegant implementation.
+NOTE: Synchronous calls may be thread-blocking, and under utilise the infrastructure during heavy traffic loads, possibly causing bottlenecks.
+
+Our use case however involves human conversations which may flow in any arbitrary order. An event-driven approach fits better.
+
+Because event-driven architectures are a-synchronous (no waiting to do), they optimise performance (no thread blocking), at the cost however of increased complexity. Caching is a strategy (among others) to assist the event-driven approach and offer an elegant implementation.
 
 In our use case, we need to propagate Slack messages to Discord, and vice-versa. However, we're dealing here with private interactions between customers and agents, and we need to maintain separate conversations in parallel and prevent interferences between users. In contrast, when a single room is used for all participants, all messages depart and land in static channels.
 
@@ -197,9 +251,11 @@ All along the workshop you will find folded information you can reveal to know m
 
 Our cache technology is _Red Hat Datagrid_, which is based on the open source project _Infinispan_. Your environment should contain a dedicated instance of _DataGrid_ in the `globex-camel-userX` namespace.
 
-Your Discord integration, implemented with Camel, requires access to DataGrid to push, fetch, and remove cache entries, in order to work out Slack/Discord users pairings while delivering messages back and forth.
+Your Discord integration, implemented with Camel, requires access to _Red Hat's DataGrid_ (cache system) to push, fetch, and remove cache entries, in order to work out _Slack/Discord_ users pairings while delivering messages back and forth.
 
-Your first task is to define the Camel routes responsible to interact with DataGrid.
+image::./images/camel/cache-role.jpg[align="center", width=50%]
+
+Your first task is to define the _Camel_ routes responsible to interact with DataGrid.
 
 . Run in your terminal the snippet below to find your working directory:
 +
@@ -701,10 +757,20 @@ To join the Discord server, simply follow the invite link below:
 * link:{discordinviteurl}[*Discord invite link*, window="_blank"]
 --
 
+CAUTION: The server is open to the public, please be mindful of your actions, don't abuse the space.
+
+
 {empty} +
 
-PENDING EXTRA DESCRIPTION
+Once onboard, you should see the following:
 
+image::./images/camel/discord-onboard.jpg[align="left", width=50%]
+
+- Marked in red (1), you should see you're in the _CamelGlobex_ _Discord_ server.
+- Marked in red (2), you should the channel folder that will contain all customer conversations.
+
+CAUTION: You may already see customer channels under `CLIENTS` created by other students in the room. +
+Please do not send messages in other student's channels to prevent interferences. 
 
 {empty} +
 
@@ -761,6 +827,9 @@ You've completed one directional flow to deliver customer messages from Slack to
 
 As previously pointed out, Camel's collection of components does not include one for Discord. There are various ways in which messages can be fetched from Discord, but to preserve our loyalty to our event-driven principles, the true way forward is to follow Discord's documented protocol using a Websocket integration.
 
+image::./images/camel/overview-lab-1.jpg[align="center", width=90%]
+
+
 {empty} +
 
 === Overview of the websocket connection with Discord
@@ -769,7 +838,7 @@ By establishing a websocket connection, we enable Discord to push data to our li
 
 Using the websocket component in Camel, we can configure it to point to the Discord server. Then, a series of interactions need to occur between Discord and Camel before the connection is considered fully established. The diagram below illustrates the initiation sequence.
 
-PENDING IMAGE
+image::./images/camel/discord-websocket.jpg[align="center", width=50%]
 
 In summary, Discord will send a series of signals, but all in all, Camel needs to send an identification message and run a periodic routine to send regular heartbeats that allows Discord to know our system is alive.
 
@@ -1094,6 +1163,10 @@ All the work done so far has enabled bi-directional communication between custom
 
 Your next task will be to complete and deploy a Camel K integration that connects our Globex Web portal with the support service. The Globex Web portal has a chat widget from where customers can also contact support agents for assistance.
 
+image::./images/camel/overview-lab-2.jpg[align="center", width=90%]
+
+{empty} +
+
 One approach to be consistent with our event-driven approach, is to decouple both flow directions as follows:
 
 - Camel will expose an API to accept customer messages to agents
@@ -1116,7 +1189,7 @@ This implies that instead of applying platform specific data transformations (eg
 
 The illustration below describes data exchanges via AMQ:
 
-PENDING ILLUSTRATION
+image::./images/camel/common-data-model.jpg[align="center", width=90%]
 
 In the diagram above we can see how Slack is already integrated, via AMQ, to Discord. The common data model easily helps us integrate Globex with the platform.
 
@@ -1128,7 +1201,7 @@ Your first task in this section is to define the Camel route that will expose an
 
 The flow is relatively simple, all is required is listen for HTTP requests, process them, and push AMQP events the shared AMQ Broker, left to right in the diagram below:
 
-PENDING IMAGE.
+image::./images/camel/globex-request-flow.jpg[align="center", width=60%]
 
 {empty} +
 
@@ -1290,7 +1363,7 @@ You have now the processing flow ready to move events from Globex (customers) to
 
 Again, the flow is very straightforward, it just needs to consume AMQP events from the shared AMQ Broker in the environment and push them via HTTP to our local Globex instance, right to left in the diagram below:
 
-PENDING IMAGE
+image::./images/camel/globex-response-flow.jpg[align="center", width=60%]
 
 Because the AMQ Broker in this workshop, used to exchange events between customers/agents, is shared with other students, we just need to ensure isolation is preserved between all the AMQ consumers/producers (from all students). 
 
@@ -1462,15 +1535,17 @@ PENDING
 
 == Persist and Share a Session Transcript 
 
-Use persistence to provide storage capabilities and services to the Globex support platform.
+The last piece in the workshop's architecture is an integration that uses storage to persist the conversation of every customer/agent session and shares a transcript. The diagram below illustrates the data flows that it enables.
 
-All the lab stages you have completed so far have focussed on interconnecting independent instant messaging platforms. This lab however simulates the need to respond to government regulations (or policies alike) to meet legal and business data archival requirements.
+image::./images/camel/overview-lab-3.jpg[align="center", width=90%]
+
+All the Camel systems you have completed so far have focussed on interconnecting distinct instant messaging platforms. This lab however simulates the need to respond to government regulations (or policies alike) to meet legal and business data archival requirements.
 
 Adding Kafka in the architecture was a strategical decision. Any type of message broker would also qualify, but we chose Kafka because of its unique ability to replay data streams.
 
 The plan is to replay and process data streams from channel conversations and transfer them to a storage layer dedicated to meet the data retention requirements.
 
-DIAGRAM PENDING
+image::./images/camel/transcript-kafka-s3.jpg[align="center", width=70%]
 
 In the diagram above we see a number of instant messaging platforms interacting together via Kafka. The depicted _Camel_ process represents the new integration to develop responsible to replay streams and push conversations to the storage system.
 
@@ -1487,17 +1562,21 @@ This orchestrated flow of events is not easy to follow and remember during the c
 
 Do not despair, the following sequence diagram should help you to see it all, crystal clear. The illustration below shows the entire processing logic relevant to the integration to build in this last stage of the learning module.
 
-PENDING DIAGRAM
+image::./images/camel/transcript-seq-diagram.jpg[align="center", width=60%]
 
 The above sequence diagram represents a full interaction between a customer and the support agent, from the moment the customer contacts Globex support until the customer feels satisfied and the session closes.
 
 In the diagram:
 
+.Click here for details
+[%collapsible]
+======
 . You can see all the chat messages being recorded in Kafka, including the end-of-session signal to mark the end of the conversation. 
 . Camel receives the end-of-session signal, and triggers a stream replay to collect and process the information.
 . When all the messages have been collected and aggregated, it generates a PDF document that includes the full conversation transcript.
 . Then, Camel pushes the document to an S3 bucket to archive the conversation.
 . Finally, it obtains from the storage system a shared URL and sends it via chat to the customer.
+======
 
 Since all of the above happens in real time, that is, when the agent closes the session, the customer instantly receives the shared URL to access the transcript as part of the session closure.
 
