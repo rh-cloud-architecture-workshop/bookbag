@@ -19,7 +19,13 @@
 
 The animation below illustrates the 3 main integration systems you will deliver along the module.
 
-image::./images/camel/lab-tasks-animation.gif[align="center", width=90%]
+// image::./images/camel/lab-tasks-animation.gif[align="center", width=90%]
+
+++++
+<p align="center">
+	<img src="./images/camel/lab-tasks-animation.gif" style="width:90%;border-style: none;">
+</p>
+++++
 
 {empty} +
 
@@ -38,7 +44,13 @@ You'll notice the architecture above contains 4 Camel applications.
 
 To implement the integrations you are going to use OpenShift Dev Spaces. Dev Spaces provides a browser based development environment that includes the lab's project, an editor for coding, and a terminal from where you can test and deploy your work in OpenShift.
 
-image::./images/camel/devspaces-workflow.jpg[align="center", width=90%]
+// image::./images/camel/devspaces-workflow.jpg[align="center", width=90%]
+
+++++
+<p align="center">
+	<img src="./images/camel/devspaces-workflow.jpg" style="width:90%;border-style: none;">
+</p>
+++++
 
 OpenShift Dev Spaces uses Kubernetes and containers to provide a consistent, secure, and zero-configuration development environment, accessible from a browser window.
 
@@ -46,7 +58,12 @@ OpenShift Dev Spaces uses Kubernetes and containers to provide a consistent, sec
 
 * On the top menu of the console, click on the image:images/openshift-application-menu.png[] icon, and in the drop-down box, select *Red Hat OpenShift Dev Spaces*.
 +
-image::images/openshift-application-menu-2.png[]
+++++
+<img src="./images/openshift-application-menu-2.png" style="width:100%;border-style: none;">
+++++
++
+{empty} +
+// image::images/openshift-application-menu-2.png[]
 
 * Login in with your OpenShift credentials (%user_name%/%user_password%). If this is the first time you access Dev Spaces, you have to authorize Dev Spaces to access your account. In the _Authorize Access_ window click on *Allow selected permissions*. 
 +
@@ -54,27 +71,56 @@ image::images/devspace-auth-access.png[width=70%]
 
 * You are directed to the Dev Spaces overview page, which shows the workspaces you have access to. You should see a single workspace, called *cloud-architecture-workshop*. The workspace needs a couple of seconds to start up.
 +
-image::images/devspaces-workspace-starting.png[]
+++++
+<img src="./images/devspaces-workspace-starting.png" style="width:100%;border-style: none;">
+++++
++
+{empty} +
+// image::images/devspaces-workspace-starting.png[]
 
 * Click on the *Open* link of the workspace.
 +
-image::images/devspaces-workspace-started-1.png[]
+++++
+<img src="./images/devspaces-workspace-started-1.png" style="width:100%;border-style: none;">
+++++
++
+{empty} +
+// image::images/devspaces-workspace-started-1.png[]
 
 * This opens the workspace, which will look pretty familiar if you are used to work with VS Code. Before opening the workspace, a pop-up might appear asking if you trust the contents of the workspace. Click *Yes, I trust the authors* to continue.
 +
-image::images/devspaces-trust-contents.png[]
-
-* The workspace contains all the resources you are going to use during the workshop. In the project explorer on the left of the workspace, navigate to the *workshop/module-apim* folder
+++++
+<img src="./images/devspaces-trust-contents.png" style="width:50%;border-style: none;">
+++++
 +
-image::images/apim/apim-devspaces.png[] 
+{empty} +
+// image::images/devspaces-trust-contents.png[]
 
-* You can deploy various resources needed in this workshop to the OpenShift cluster directly from Dev Spaces. To do so, you will need accessto the built-in Terminal. Click on the image:images/devspaces-menu.png[] icon on the top of the left menu, and select *Terminal/New Terminal* from the drop-down menu.
+* The workspace contains all the resources you are going to use during the workshop. In the project explorer on the left of the workspace, navigate to the folder:
+- `workshop/module-camel/lab`
 +
-image::images/apim/apim-devspaces-menu-new-terminal.png[]
+++++
+<img src="./images/camel/devspaces-project-tree.jpg" style="width:100%;border-style: none;">
+++++
++
+{empty} +
+// image::images/apim/apim-devspaces.png[] 
+
+* Open the built-in Terminal. Click on the [1] image:images/devspaces-menu.png[] icon on the top of the left menu, and select [2] *Terminal /* [3] *New Terminal* from the drop-down menu.
++
+++++
+<img src="./images/camel/devspaces-open-terminal.jpg" style="width:40%;border-style: none;">
+++++
+// image::images/apim/apim-devspaces-menu-new-terminal.png[]
 
 * This opens a terminal in the bottom half of the workspace.
 +
-image::images/apim/apim-devspaces-menu-terminal.png[]
+++++
+<img src="./images/camel/devspaces-view-terminal.jpg" style="width:100%;border-style: none;">
+++++
++
+{empty} +
+// image::images/apim/apim-devspaces-menu-terminal.png[]
 
 * The OpenShift Dev Spaces environment has access to a plethora of command line tools, including *oc*, the OpenShift  command line interface. Through OpenShift Dev Spaces you are automatically logged in into the OpenShift cluster. You can verify this with the command *oc whoami*.
 +
@@ -113,9 +159,11 @@ oc project globex-camel-%user_name%
 ----
 Now using project "globex-camel-%user_name%" on server "%openshift_api_internal%".
 ----
-
 +
-image::images/apim/apim-terminal-setup.png[]
+++++
+<img src="./images/camel/devspaces-login-project.jpg" style="width:60%;border-style: none;">
+++++
+// image::images/apim/apim-terminal-setup.png[]
 
 {empty} +
 
@@ -126,7 +174,13 @@ As previously described, the Slack integration is already in place and users can
 
 In this first implementation activity you need to enable the end-to-end data flow between Slack and Discord (marked 1 in the diagram below).
 
-image::./images/camel/overview-lab-1.jpg[align="center", width=90%]
+// image::./images/camel/overview-lab-1.jpg[align="center", width=90%]
+
+++++
+<p align="center">
+	<img src="./images/camel/overview-lab-1.jpg" style="width:90%;border-style: none;">
+</p>
+++++
 
 Events can already travel half the way up to the broker (AMQ), but the second stage, from the Broker to Discord, is still pending.
 
@@ -161,7 +215,9 @@ Then, follow the steps below to complete preparations:
 +
 Once onboard, you should see the following:
 +
-image::./images/camel/slack-onboard.jpg[align="left", width=50%]
+++++
+<img src="./images/camel/slack-onboard.jpg" style="width:25%;border-style: none;">
+++++
 +
 Marked in red, you should see you're in the _CamelGlobex_ _Slack_ workspace.
 +
@@ -174,11 +230,15 @@ Marked in red, you should see you're in the _CamelGlobex_ _Slack_ workspace.
 kbd:[▾] Apps -> kbd:[+] Add apps
 --
 +
-image::./images/camel/slack-add-app.jpg[align="left", width=40%]
+++++
+<img src="./images/camel/slack-add-app.jpg" style="width:30%;border-style: none;">
+++++
 +
 .. Then, select from the menu the `GlobexSupport` app.
 +
-image::./images/camel/slack-add-globex.jpg[align="left", width=40%]
+++++
+<img src="./images/camel/slack-add-globex.jpg" style="width:30%;border-style: none;">
+++++
 +
 You should see in your left panel the app visible:
 // +
@@ -188,21 +248,24 @@ You should see in your left panel the app visible:
 // kbd:[+] Add apps +
 // --
 +
-image::./images/camel/slack-app-globex-visible.jpg[align="left", width=40%]
+++++
+<img src="./images/camel/slack-app-globex-visible.jpg" style="width:30%;border-style: none;">
+++++
 
-
-. Right click the app: kbd:[Ⓖ] GlobexSupport +
+. Right click the app: kbd:[Ⓖ] *GlobexSupport* +
 and select the option:
 - View app details
 +
-image::./images/camel/slack-app-view-details.jpg[align="left", width=50%]
-
+++++
+<img src="./images/camel/slack-app-view-details.jpg" style="width:40%;border-style: none;">
+++++
 
 . A window pops up. +
 At the very bottom, copy your personal GlobexSupport `Channel ID`.
 +
-image::./images/camel/slack-app-channel-id-copy.jpg[align="left", width=50%]
-
+++++
+<img src="./images/camel/slack-app-channel-id-copy.jpg" style="width:40%;border-style: none;">
+++++
 
 . Keep the ID somewhere safe (your scratch-pad), as you'll need it to configure _Camel_.
 
@@ -247,13 +310,19 @@ In the content that follows you will learn the following concepts:
 TIP: Click above in *"What will I learn"* to reveal information. +
 All along the workshop you will find folded information you can reveal to know more.
 
-{empty} +
+// {empty} +
 
 Our cache technology is _Red Hat Datagrid_, which is based on the open source project _Infinispan_. Your environment should contain a dedicated instance of _DataGrid_ in the `globex-camel-userX` namespace.
 
 Your Discord integration, implemented with Camel, requires access to _Red Hat's DataGrid_ (cache system) to push, fetch, and remove cache entries, in order to work out _Slack/Discord_ users pairings while delivering messages back and forth.
 
-image::./images/camel/cache-role.jpg[align="center", width=50%]
+// image::./images/camel/cache-role.jpg[align="center", width=30%]
+
+++++
+<p align="center">
+	<img src="./images/camel/cache-role.jpg" style="width:40%;border-style: none;">
+</p>
+++++
 
 Your first task is to define the _Camel_ routes responsible to interact with DataGrid.
 
@@ -282,15 +351,22 @@ NOTE: Camel supports various DSLs (Domain Specific Language). The main ones are 
 
 . Open the `routes-cache.yaml` file in your editor.
 +
-Select from your project tree:
+--
+. Select from your project tree:
 +
 * workshop -> module-camel -> lab -> discord -> routes-cache.yaml
 +
-image::images/crw-open-yaml.png[align="left", width=50%]
+. You'll see how the file opens in the editor.
+. Delete the example route (full `from` definition) in `routes-cache`
+
+++++
+<img src="./images/camel/cache-open-yaml.jpg" style="width:60%;border-style: none;">
+++++
+--
 +
 {empty} +
-+
-. Delete the example route (full `from` definition) in `routes-cache` and replace with the following snippet:
+
+. And replace the deleted route with the following snippet that defines the `PUT` (in cache) operation:
 +
 --
 [source,yaml,role=copy,subs=]
@@ -316,6 +392,7 @@ image::images/crw-open-yaml.png[align="left", width=50%]
            uri: "infinispan://default"  # <5>
 #
 ----
+
 You could consider the _Camel_ route above equivalent to a subroutine in any programming language. It executes the action of pushing a new entry in cache.
 
 In the route above:
@@ -340,13 +417,12 @@ The `infinispan` component requires no extra parameters because it has been pre-
 ====
 ======
 --
-+
 ---
 +
 {empty} +
-+
-. The route above implemented the `PUT` operation. +
-Let's define the `GET` operation with the definition below.
+
+[start=5]
+. Let's implement the `GET` operation.
 +
 Add in your code (copy and paste) the snippet below:
 +
@@ -476,7 +552,7 @@ In the content that follows you will learn the following concepts:
 ====
 ======
 
-{empty} +
+// {empty} +
 
 . Configure your listener
 +
@@ -573,8 +649,6 @@ In the content that follows you will learn the following concepts:
 ======
 
 
-{empty} +
-
 In the same YAML file, copy and paste the following snippet:
 
 [source,yaml,role=copy,subs=]
@@ -669,7 +743,6 @@ In the content that follows you will learn the following concepts:
 ====
 ======
 
-{empty} +
 
 Apache Camel has many connectors (components in _Camel_ terms) available out-of-the-box, but one for Discord doesn't exist (yet). This gap however does not stop you in any way from integrating with Discord, and in fact, you have many options for adopting an approach.
 
@@ -764,7 +837,9 @@ CAUTION: The server is open to the public, please be mindful of your actions, do
 
 Once onboard, you should see the following:
 
-image::./images/camel/discord-onboard.jpg[align="left", width=50%]
+++++
+<img src="./images/camel/discord-onboard.jpg" style="width:30%;border-style: none;">
+++++
 
 - Marked in red (1), you should see you're in the _CamelGlobex_ _Discord_ server.
 - Marked in red (2), you should the channel folder that will contain all customer conversations.
@@ -778,7 +853,7 @@ Please do not send messages in other student's channels to prevent interferences
 
 You have completed the processing flow from customers (in Slack) to agents (in Discord). The returning flow is still pending to implement, but you can already test what you have implemented so far.
 
-Camel K features a special running mode called `development` mode, which allows the developer to run/test the code in Kubernetes and make live code updates on the fly, as if he was working locally. Camel K deploys a test instance that is removed when you stop it.
+Camel K features a special running mode called `development` mode (known as -_dev mode_-), which allows the developer to run/test the code in Kubernetes and make live code updates on the fly, as if he was working locally. Camel K deploys a test instance that is removed when you stop it.
 
 Let's run your code in `dev` mode to validate the flow works as expected.
 
@@ -791,6 +866,14 @@ Let's run your code in `dev` mode to validate the flow works as expected.
 +
 NOTE: The `dev.sh` scripts runs a `kamel run` command with the flag `--dev` mode indicating to run in development mode. +
 It also defines all the necessary support resources and parameters to run your integration.
++
+You should see in your terminal a log output similar to:
++
+++++
+<img src="./images/camel/discord-dev-terminal-output.jpg" style="width:80%;border-style: none;">
+++++
++
+{empty} +
 +
 [WARNING]
 ====
@@ -827,8 +910,13 @@ You've completed one directional flow to deliver customer messages from Slack to
 
 As previously pointed out, Camel's collection of components does not include one for Discord. There are various ways in which messages can be fetched from Discord, but to preserve our loyalty to our event-driven principles, the true way forward is to follow Discord's documented protocol using a Websocket integration.
 
-image::./images/camel/overview-lab-1.jpg[align="center", width=90%]
+// image::./images/camel/overview-lab-1.jpg[align="center", width=90%]
 
+++++
+<p align="center">
+	<img src="./images/camel/overview-lab-1.jpg" style="width:90%;border-style: none;">
+</p>
+++++
 
 {empty} +
 
@@ -838,7 +926,13 @@ By establishing a websocket connection, we enable Discord to push data to our li
 
 Using the websocket component in Camel, we can configure it to point to the Discord server. Then, a series of interactions need to occur between Discord and Camel before the connection is considered fully established. The diagram below illustrates the initiation sequence.
 
-image::./images/camel/discord-websocket.jpg[align="center", width=50%]
+// image::./images/camel/discord-websocket.jpg[align="center", width=50%]
+
+++++
+<p align="center">
+	<img src="./images/camel/discord-websocket.jpg" style="width:50%;border-style: none;">
+</p>
+++++
 
 In summary, Discord will send a series of signals, but all in all, Camel needs to send an identification message and run a periodic routine to send regular heartbeats that allows Discord to know our system is alive.
 
@@ -1163,7 +1257,13 @@ All the work done so far has enabled bi-directional communication between custom
 
 Your next task will be to complete and deploy a Camel K integration that connects our Globex Web portal with the support service. The Globex Web portal has a chat widget from where customers can also contact support agents for assistance.
 
-image::./images/camel/overview-lab-2.jpg[align="center", width=90%]
+// image::./images/camel/overview-lab-2.jpg[align="center", width=90%]
+
+++++
+<p align="center">
+	<img src="./images/camel/overview-lab-2.jpg" style="width:90%;border-style: none;">
+</p>
+++++
 
 {empty} +
 
@@ -1189,7 +1289,13 @@ This implies that instead of applying platform specific data transformations (eg
 
 The illustration below describes data exchanges via AMQ:
 
-image::./images/camel/common-data-model.jpg[align="center", width=90%]
+// image::./images/camel/common-data-model.jpg[align="center", width=90%]
+
+++++
+<p align="center">
+	<img src="./images/camel/common-data-model.jpg" style="width:90%;border-style: none;">
+</p>
+++++
 
 In the diagram above we can see how Slack is already integrated, via AMQ, to Discord. The common data model easily helps us integrate Globex with the platform.
 
@@ -1201,7 +1307,13 @@ Your first task in this section is to define the Camel route that will expose an
 
 The flow is relatively simple, all is required is listen for HTTP requests, process them, and push AMQP events the shared AMQ Broker, left to right in the diagram below:
 
-image::./images/camel/globex-request-flow.jpg[align="center", width=60%]
+// image::./images/camel/globex-request-flow.jpg[align="center", width=60%]
+
+++++
+<p align="center">
+	<img src="./images/camel/globex-request-flow.jpg" style="width:65%;border-style: none;">
+</p>
+++++
 
 {empty} +
 
@@ -1363,7 +1475,13 @@ You have now the processing flow ready to move events from Globex (customers) to
 
 Again, the flow is very straightforward, it just needs to consume AMQP events from the shared AMQ Broker in the environment and push them via HTTP to our local Globex instance, right to left in the diagram below:
 
-image::./images/camel/globex-response-flow.jpg[align="center", width=60%]
+// image::./images/camel/globex-response-flow.jpg[align="center", width=60%]
+
+++++
+<p align="center">
+	<img src="./images/camel/globex-response-flow.jpg" style="width:65%;border-style: none;">
+</p>
+++++
 
 Because the AMQ Broker in this workshop, used to exchange events between customers/agents, is shared with other students, we just need to ensure isolation is preserved between all the AMQ consumers/producers (from all students). 
 
@@ -1537,7 +1655,13 @@ PENDING
 
 The last piece in the workshop's architecture is an integration that uses storage to persist the conversation of every customer/agent session and shares a transcript. The diagram below illustrates the data flows that it enables.
 
-image::./images/camel/overview-lab-3.jpg[align="center", width=90%]
+// image::./images/camel/overview-lab-3.jpg[align="center", width=90%]
+
+++++
+<p align="center">
+	<img src="./images/camel/overview-lab-3.jpg" style="width:90%;border-style: none;">
+</p>
+++++
 
 All the Camel systems you have completed so far have focussed on interconnecting distinct instant messaging platforms. This lab however simulates the need to respond to government regulations (or policies alike) to meet legal and business data archival requirements.
 
@@ -1545,7 +1669,13 @@ Adding Kafka in the architecture was a strategical decision. Any type of message
 
 The plan is to replay and process data streams from channel conversations and transfer them to a storage layer dedicated to meet the data retention requirements.
 
-image::./images/camel/transcript-kafka-s3.jpg[align="center", width=70%]
+// image::./images/camel/transcript-kafka-s3.jpg[align="center", width=70%]
+
+++++
+<p align="center">
+	<img src="./images/camel/transcript-kafka-s3.jpg" style="width:60%;border-style: none;">
+</p>
+++++
 
 In the diagram above we see a number of instant messaging platforms interacting together via Kafka. The depicted _Camel_ process represents the new integration to develop responsible to replay streams and push conversations to the storage system.
 
@@ -1562,7 +1692,13 @@ This orchestrated flow of events is not easy to follow and remember during the c
 
 Do not despair, the following sequence diagram should help you to see it all, crystal clear. The illustration below shows the entire processing logic relevant to the integration to build in this last stage of the learning module.
 
-image::./images/camel/transcript-seq-diagram.jpg[align="center", width=60%]
+// image::./images/camel/transcript-seq-diagram.jpg[align="center", width=60%]
+
+++++
+<p align="center">
+	<img src="./images/camel/transcript-seq-diagram.jpg" style="width:50%;border-style: none;">
+</p>
+++++
 
 The above sequence diagram represents a full interaction between a customer and the support agent, from the moment the customer contacts Globex support until the customer feels satisfied and the session closes.
 

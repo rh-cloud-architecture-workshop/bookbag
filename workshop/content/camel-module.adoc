@@ -6,18 +6,63 @@ In this module you will participate to complete the implementation of a multi-ch
 
 As an added initiative to the digital transformation, Globex wants to implement a new, all digital, support service where customers can get instant help from a team of support agents. The goal is to build a pluggable event-driven architecture that allows multiple communication channels and services to integrate with ease to the platform.
 
-image::./images/camel/intro-arch-1.jpg[align="center", width=100%]
+// image::./images/camel/intro-arch-1.jpg[align="center", width=100%]
 
-You will be involved in the new hub's first implementation iteration (by completing all the module steps). You will integrate two distinct customer facing platforms (left in the diagram) with the agent's channel (right in the diagram).
+++++
+<p align="center">
+	<img src="./images/camel/intro-arch-1.jpg" style="width:80%;border-style: none;">
+</p>
+++++
+
+You will be involved in the new hub's first implementation iteration (by completing all the module exercises). You will integrate two distinct customer facing platforms (left in the diagram, Slack and Globex), with the agent's channel (right in the diagram, Discord).
 
 Customers (left) will choose contacting Globex via its Web portal or via its public space in Slack, available on-line (using a browser), or by installing the app on their devices. Slack is a very popular and widely adopted messaging platform for businesses.
 
 At the other end of the line, the team of agents (right) providing support services for Globex will use Discord as their communication platform. Discord is a well known chat platform, very popular among gamers, but increasingly embraced by enterprises to connect internal teams but also for external interactions with customers as a way to maintain close contact.
 
-[pending] image here
+{empty} +
 
-This module showcases how to integrate the service with some of the most popular messaging platforms (Slack & Discord), including Globex's in-house customer communication interface (Web chat widget), using a collection of capabilities all included in Red Hat Application Foundation.
+== Module exercises
 
+As per the picture below, this module is divided in 3 main activities:
+
+++++
+<p align="center">
+	<img src="./images/camel/intro-lab-overview.jpg" style="width:80%;border-style: none;">
+</p>
+++++
+
+. The first one integrates Slack with Discord. +
+Because the traffic is bidirectional, you'll need to
+
+- Move messages from customers (in Slack) to agents (in Discord)
+- Move messages from agents (in Discord) to customers (in Slack)
+
+. The second activity, that showcases the platform's open architecture, plugs in the Globex portal (chat), thus automatically enabling the Globex/Discord message flow. 
+
+. The third activity collects the conversation history (transcript), persists it in storage (S3 buckets) and shares access with customers.
+
+{empty} +
+
+
+== Full architecture overview
+
+The complete architecture diagram below illustrates all the technologies at play providing a pluggable and scalable platform.
+
+++++
+<p align="center">
+	<img src="./images/camel/full-architecture.jpg" style="width:80%;border-style: none;">
+</p>
+++++
+
+The diagram above is divided in 2 blocks:
+
+- A shared namespace providing pre-built and pre-deployed elements.
+- A user namespace (your workspace in OpenShift), where you will work to complete all the Camel integrations (3 as described previously).
+
+The diagram also shows how the architecture was conceived to easily plugin new systems (represented with the question mark *?*). One such example (fictional) is the SpringBoot application (green hexagon in the diagram). You will indeed work to integrate the Globex portal to the platform.
+
+{empty} +
 
 == Technical Capabilities
 
@@ -34,43 +79,49 @@ The key capabilities you will use in this module are:
 S3 in this workshop is served using Minio for simplicity. Full featured on-premise storage capabilities are provided by OpenShift Data Foundation.
 ====
 
-== Module exercises
+{empty} +
 
-As per the picture below, this module is divided in 3 main activities:
+=== What is Red Hat build of Apache Camel K?
 
-image::./images/camel/intro-lab-overview.jpg[align="center", width=100%]
+NOTE: Camel K will be your master weapon in this learning module. It'll serve you to link sources and targets and process data exchanges.
 
-. The first one integrates Slack with Discord. +
-Because the traffic is bidirectional, you'll need to
+Camel K is a subproject of Apache Camel, known as the swiss-army knife of integration. Apache Camel is the most popular open source community project aimed at solving all things integration.
 
-- Move messages from customers (in Slack) to agents (in Discord)
-- Move messages from agents (in Discord) to customers (in Slack)
-
-. The second activity, that showcases the platform's open architecture, plugs in the Globex portal (chat), thus automatically enabling the Globex/Discord message flow. 
-
-. The third activity collects the conversation history (transcript), persists it in storage (S3 buckets) and shares access with customers.
+Camel K simplifies working with Kubernetes environments so you can get your integrations up and running in a container quickly.
 
 {empty} +
 
-== What is Red Hat build of Apache Camel K?
+=== What is Red Hat AMQ Broker?
 
-TODO
+NOTE: AMQ Broker will be your core message broker. It enables event-driven interactions between all your Camel integrations. 
 
-[NOTE]
-====
-A random note
-====
+AMQ Broker is a pure-Java multiprotocol message broker. It's built on an efficient, asynchronous core with a fast native journal for message persistence and the option of shared-nothing state replication for high availability.
+
+{empty} +
+
+=== What is Red Hat AMQ Data Grid?
+
+NOTE: Data Grid will be your core context caching capability, to keep the keys to chat-rooms, while conversations (between customers and agents) are alive. 
+
+Data Grid is an in-memory, distributed, NoSQL datastore solution. Your applications can access, process, and analyze data at in-memory speed to deliver a superior user experience.
+
+{empty} +
+
+=== What is Red Hat AMQ Streams?
+
+NOTE: AMQ Streams (Kafka) will be your core event stream platform where customer/agents sessions (the streams) will be stored (for later replays).
+
+AMQ Streams is an event streaming platform that aggregate events over time (streams). This allows applications to replay the streams for various purposes, for example, data analysis or to discover patterns, among others. 
+
+{empty} +
+
+=== What is Red Hat OpenShift Data Foundation?
+
+NOTE: You will use S3 storage in this learning module as your core capability, for regulatory archival requirements, to keep record of Globex's support activities. 
+
+OpenShift Data Foundation is a data management solution that provides higher level data services and persistent storage for Red Hat OpenShift. It provides File, Block and Object Storage, with builtin Data Protection and Disaster Recovery.
+
+Applications can function and interact with data in a simplified, consistent and scalable manner.
 
 
-== What is Red Hat AMQ Broker?
 
-== What is Red Hat AMQ Streams?
-
-== What is Red Hat AMQ DataGrid?
-
-== What is Red Hat OpenShift Data Foundation?
-
-
-== Full architecture overview
-
-image::./images/camel/full-architecture.jpg[align="center", width=100%]
