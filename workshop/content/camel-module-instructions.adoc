@@ -371,6 +371,20 @@ NOTE: Camel supports various DSLs (Domain Specific Language). The main ones are 
 
 . And replace the deleted route with the following snippet that defines the `PUT` (in cache) operation:
 +
+[TIP]
+====
+To copy/paste entire code blocks, follow these steps:
+
+. Click on the yellow code block.
+. The code will be highlighted (ready in the clipboard).
+. From your editor, paste the code block in your source code file.
+. The source file will then show the code.
+====
++
+++++
+<img src="./images/camel/tip-copy-paste.jpg" style="width:100%;border-style: none;">
+++++
++
 --
 [source,yaml,role=copy,subs=]
 ----
@@ -395,6 +409,8 @@ NOTE: Camel supports various DSLs (Domain Specific Language). The main ones are 
            uri: "infinispan://default"  # <5>
 #
 ----
+
+TIP: There is no need to save changes, _DevSpaces_ auto-saves file changes automatically.
 
 You could consider the _Camel_ route above equivalent to a subroutine in any programming language. It executes the action of pushing a new entry in cache.
 
@@ -597,7 +613,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 . Delete the example route (full `from` definition)
 +
 ++++
-<img src="./images/camel/code-delete-default-yaml.jpg" style="width:60%;border-style: none;">
+<img src="./images/camel/code-delete-default-yaml.jpg" style="width:40%;border-style: none;">
 ++++
 
 . Replace (the delete route) with the following snippet:
@@ -1026,7 +1042,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 . Delete the example route (full `from` definition)
 +
 ++++
-<img src="./images/camel/code-delete-default-yaml.jpg" style="width:60%;border-style: none;">
+<img src="./images/camel/code-delete-default-yaml.jpg" style="width:40%;border-style: none;">
 ++++
 
 . Replace (the deleted route) with the following snippet:
@@ -1412,8 +1428,10 @@ Select from your project tree:
 . Delete the sample Camel route in `routesglobex`.
 +
 ++++
-<img src="./images/camel/code-delete-default-java.jpg" style="width:60%;border-style: none;">
+<img src="./images/camel/code-delete-default-java.jpg" style="width:40%;border-style: none;">
 ++++
++
+{empty} +
 
 . And replace with the following one:
 +
@@ -1863,7 +1881,7 @@ Select from your project tree:
 . Delete the sample Camel route in `transcript.xml` 
 +
 ++++
-<img src="./images/camel/code-delete-default-xml.jpg" style="width:60%;border-style: none;">
+<img src="./images/camel/code-delete-default-xml.jpg" style="width:40%;border-style: none;">
 ++++
 +
 {empty} +
