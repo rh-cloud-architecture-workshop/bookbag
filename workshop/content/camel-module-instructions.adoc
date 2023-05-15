@@ -738,15 +738,20 @@ This route needs to perform a series of actions. Among those, it crucially needs
 
 To speed up with the lab, this Camel route is already provided. Here we're just doing an overview of the logic implementation.
 
-PENDING SEQUENCE DIAGRAM
+++++
+<p align="center">
+	<img src="./images/camel/cache-seq-diagram.jpg" style="width:50%;border-style: none;">
+</p>
+++++
 
 In the sequence diagram above you'll see that:
 
 1. It attempts to obtain a cache entry
 1. If it doesn't exist +
-    .. It creates a new channel in Discord (new customer/agent interaction.
-    .. It creates new cache entries to keep Slack and Discord context data.
-1. It returns the cache entry data 
+    .. It creates a new channel in Discord (new customer/agent interaction).
+    .. It prepares the context data.
+    .. Then, it creates new cache entries to keep Slack and Discord context data.
+1. It returns with the context information. 
 
 {empty} +
 
