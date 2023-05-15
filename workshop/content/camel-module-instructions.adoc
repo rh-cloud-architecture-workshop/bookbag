@@ -594,7 +594,13 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 
 . Open the `routes-from-amq.yaml` file in your editor.
 
-. Delete the example route (full `from` definition) and replace with the following snippet:
+. Delete the example route (full `from` definition)
++
+++++
+<img src="./images/camel/code-delete-default-yaml.jpg" style="width:60%;border-style: none;">
+++++
+
+. Replace (the delete route) with the following snippet:
 +
 --
 [source,yaml,role=copy,subs=]
@@ -941,7 +947,7 @@ If you see no message in Discord you might have misconfigured your Slack channel
 
 {empty} +
 
-IMPORTANT: When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance.+
+IMPORTANT: When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance. +
 When you do so, you'll notice the Discord pod shutdowns and is no longer visible from your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 
 {empty} +
@@ -1017,7 +1023,13 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 
 . Open the `routes-from-discord-main.yaml` file in your editor.
 
-. Copy and paste the following snippet:
+. Delete the example route (full `from` definition)
++
+++++
+<img src="./images/camel/code-delete-default-yaml.jpg" style="width:60%;border-style: none;">
+++++
+
+. Replace (the deleted route) with the following snippet:
 +
 --
 [source,yaml,role=copy,subs=]
@@ -1397,7 +1409,13 @@ Select from your project tree:
 +
 {empty} +
 +
-. Delete the sample Camel route in `routesglobex` and replace with the following one:
+. Delete the sample Camel route in `routesglobex`.
++
+++++
+<img src="./images/camel/code-delete-default-java.jpg" style="width:60%;border-style: none;">
+++++
+
+. And replace with the following one:
 +
 --
 [source,java,role=copy,subs=]
@@ -1842,7 +1860,15 @@ Select from your project tree:
 +
 {empty} +
 +
-. Delete the sample Camel route in `transcript.xml` and replace with the following one:
+. Delete the sample Camel route in `transcript.xml` 
++
+++++
+<img src="./images/camel/code-delete-default-xml.jpg" style="width:60%;border-style: none;">
+++++
++
+{empty} +
+
+. And replace with the following one:
 +
 --
 [source,xml,role=copy]
