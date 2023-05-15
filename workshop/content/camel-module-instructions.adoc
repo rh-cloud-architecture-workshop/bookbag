@@ -740,7 +740,7 @@ To speed up with the lab, this Camel route is already provided. Here we're just 
 
 ++++
 <p align="center">
-	<img src="./images/camel/cache-seq-diagram.jpg" style="width:50%;border-style: none;">
+	<img src="./images/camel/cache-seq-diagram.jpg" style="width:40%;border-style: none;">
 </p>
 ++++
 
@@ -751,7 +751,7 @@ In the sequence diagram above you'll see that:
     .. It creates a new channel in Discord (new customer/agent interaction).
     .. It prepares the context data.
     .. Then, it creates new cache entries to keep Slack and Discord context data.
-1. It returns with the context information. 
+1. It returns, with the context information. 
 
 {empty} +
 
@@ -957,6 +957,8 @@ You should see a new channel created with your user name:
 ++++
 <img src="./images/camel/discord-dev-test.jpg" style="width:80%;border-style: none;">
 ++++
++
+If you see the message in Discord as above shown, then you've successfully completed this first exercise.
 +
 [WARNING]
 ====
@@ -1288,6 +1290,12 @@ Let's deply your code .
 +
 NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
 +
+.Output
+----
+discord (main) $ ./deploy.sh
+No IntegrationPlatform resource in globex-camel-%user_name% namespace
+Integration "discord" created
+----
 {empty} +
 
 . You can inspect the logs by running the following command:
@@ -1309,20 +1317,43 @@ If so, try again using our code by running the command:
 ====
 
 [start=3]
-. From Discord
+. From Discord...
 .. Click on the newly created channel `slack-%user_name%` to display the messages.
-.. Type a message, for example `How can I help you with?` and send it.
+.. Type a message, for example:
 +
+--
+* `My name is Bruno, how can I help you today?`
+--
++
+and send it.
+. From Slack...
++
+You should see the agent's message sent from Discord appear in the CamelGlobex app.
+
+. Exchange a few more messages to simulate a conversation.
+
+. Then, from Discord, to close the session, follow these steps, as per the illustration below:
++
+--
+. Right click on the channel `slack-%user_name%`
+. Click `Delete Channel`
+. Confirm your action to delete the channel.
+--
++
+++++
+<img src="./images/camel/discord-deploy-test-end-to-end.jpg" style="width:100%;border-style: none;">
+++++
+
+
+. In Slack, as above on the right hand side, you should see a notification informing the session has ended.
+
 {empty} +
 
-. You should see the agent's message sent from Discord appear in the Slack CamelGlobex app. 
+Well done, you've completed the full integration, both ways, between Slack and Discord.
 
-. From Discord, right-click and delete the channel to close the session.
+This time, the `deploy.sh` command made the Camel K operator to fully deploy your code, which you can see running in a pod from the link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
+-- 
 
-. In Slack, you should see a notification informing the session has ended.
-{empty} +
-
-PENDING
 
 {empty} +
 
