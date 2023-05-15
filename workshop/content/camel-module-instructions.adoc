@@ -13,6 +13,7 @@
 
 :topologyviewurl: %openshift_cluster_console%/topology/ns/globex-camel-user1?view=graph
 
+:globexweburl: https://globex-web-globex-camel-%user_name%.%openshift_subdomain%/home
 
 == Quick overview of the lab exercises
 
@@ -920,6 +921,8 @@ If so, try again using our code by running the command:
 +
 You'll notice that running your code in DEV mode triggers _Camel K_'s operator to deploy a new pod in your user namespace.
 +
+NOTE: The Camel K operator automates the process of creating, building, deploying, and operating integration flows in Kubernetes environments.
++
 --
 * Open the console by clicking link:{topologyviewurl}[*this _Topology_ view link*, window="_blank"].
 --
@@ -1344,16 +1347,26 @@ You should see the agent's message sent from Discord appear in the CamelGlobex a
 <img src="./images/camel/discord-deploy-test-end-to-end.jpg" style="width:100%;border-style: none;">
 ++++
 
-
 . In Slack, as above on the right hand side, you should see a notification informing the session has ended.
 
 {empty} +
 
 Well done, you've completed the full integration, both ways, between Slack and Discord.
 
-This time, the `deploy.sh` command made the Camel K operator to fully deploy your code, which you can see running in a pod from the link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
--- 
+In contrast with running in DEV mode, the `deploy.sh` command made the _Camel K_ operator to fully deploy your code in an OpenShift pod named _Discord_, which you can see running from the link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 
+You can also use the `kamel` client from your terminal to obtain information about your deployed Camel K instances:
+
+[source,bash,role=copy,subs=]
+----
+./kamel get
+----
+.Output
+----
+No IntegrationPlatform resource in globex-camel-%user_name% namespace
+NAME    PHASE   KIT
+discord Running globex-camel-%user_name%/kit-chcc8ts5v3ov25mqg460
+----
 
 {empty} +
 
@@ -1717,8 +1730,14 @@ Let's deply your code .
 +
 NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
 +
+.Output
+----
+globex-support (main) $ ./deploy.sh
+No IntegrationPlatform resource in globex-camel-%user_name% namespace
+Integration "globex-support" created
+----
++
 {empty} +
-
 
 
 . You can inspect the logs by running the following command:
@@ -1740,8 +1759,25 @@ If so, try again using our code by running the command:
 ====
 
 [start=3]
-. From Globex
+. From Globex...
++
+NOTE: The Globex Web application has been pre-deployed in your user namespace so that you can easily open it and use it to test your exercise.
+
 .. Open the Chat window
++
+You can open the Globex Wep portal following link:{globexweburl}[*this direct link*, window="_blank"].
++
+Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
++
+++++
+<img src="./images/camel/globex-open-portal.jpg" style="width:40%;border-style: none;">
+++++
+
+.. When the web portal opens, click `Login` in the upper-right corner of the screen:
++
+++++
+<img src="./images/camel/globex-login.jpg" style="width:100%;border-style: none;">
+++++
 .. Send a message, for example `Hello, can someone assist please?`
 +
 You should see in Discord a new channel `slack-%user_name%` created.
