@@ -2319,7 +2319,7 @@ If so, try again using our code by running the command:
 
 [start=3]
 . Using Slack (for example) and Discord...
-.. initiate and simulate a customer/agent conversation, as done in previous exercises.
+.. Initiate and simulate a customer/agent conversation, as done in previous exercises.
 
 .. Then, to close the session, from Discord, right-click and delete the channel.
 +
@@ -2337,6 +2337,27 @@ NOTE: Deleting the channel should kick-off the transcript process.
 ++++
 <img src="./images/camel/transcript-test.jpg" style="width:100%;border-style: none;">
 ++++
+
+
+Well done, you have successfully created a Camel application to store and share transcripts for support sessions, compliant with government regulations, attached to the _Multichannel Platform_.
+
+The `deploy.sh` command made the _Camel K_ operator run your code in an OpenShift pod named _transcript_, which you can see in your environment, if you open your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
+
+You can also use the `kamel` client from your terminal to obtain information about all of your deployed Camel K instances:
+
+[source,bash,role=copy,subs=]
+----
+./kamel get
+----
+.Output
+----
+transcript (main) $ kamel get
+No IntegrationPlatform resource in globex-camel-user1 namespace
+NAME            PHASE   KIT
+discord         Running globex-camel-user1/kit-chcc8ts5v3ov25mqg460
+globex-support  Running globex-camel-user1/kit-chccj045v3ov25mqg470
+transcript      Running globex-camel-user1/kit-chdltr45v3oq6up8l3sg
+----
 
 {empty} +
 
