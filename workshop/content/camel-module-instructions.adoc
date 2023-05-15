@@ -1778,27 +1778,96 @@ Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_bla
 ++++
 <img src="./images/camel/globex-login.jpg" style="width:100%;border-style: none;">
 ++++
-.. Send a message, for example `Hello, can someone assist please?`
+
+.. Enter the following credentials:
 +
-You should see in Discord a new channel `slack-%user_name%` created.
+--
+* `asilva` / `openshift`
+--
++
+++++
+<img src="./images/camel/globex-signin.jpg" style="width:50%;border-style: none;">
+++++
 +
 {empty} +
 
-. From Discord
+.. Once in, open a support chat session by clicking one of these two options:
++
+++++
+<img src="./images/camel/globex-open-chat.jpg" style="width:100%;border-style: none;">
+++++
+
+.. From the chat window:
++
+--
+. Type in a test message.
+. Click the 'Send' button (or press Enter).
+--
++
+++++
+<img src="./images/camel/globex-customer-question.jpg" style="width:100%;border-style: none;">
+++++
+
+// Send a message, for example `Hello, can someone assist please?`
+// +
+// You should see in Discord a new channel `slack-%user_name%` created.
+// +
+// {empty} +
+
+[start=4]
+. From Discord...
+.. You should see in Discord a new channel `globex-%user_name%` created.
+
 .. Click on the newly created channel `globex-%user_name%` to display the messages.
-.. Type a message, for example `How can I help you with?` and send it.
+.. Type a message, for example:
 +
+--
+* `My name is Bruno, how can I help you today?`
+--
++
+and send it.
+. Back from Globex...
++
+You should see the agent's message sent from Discord appear in the chat session window.
+
+. Exchange a few more messages to simulate a conversation.
+
+. Then, from Discord, to close the session, follow these steps, as per the illustration below:
++
+--
+. Right click on the channel `globex-%user_name%`
+. Click `Delete Channel`
+. Confirm your action to delete the channel.
+--
++
+++++
+<img src="./images/camel/globex-deploy-test-end-to-end.jpg" style="width:100%;border-style: none;">
+++++
+
+. In Globex, as above on the right hand side, you should see a notification informing the session has ended.
+
 {empty} +
 
-. You should see the agent's message sent from Discord appear in the Globex chat window. 
+Well done, you have successfully integrated the Globex Web application into the _Multichannel Platform_.
 
-. From Discord, right-click and delete the channel to close the session.
+The `deploy.sh` command made the _Camel K_ operator fully deploy your code in an OpenShift pod named _globex-support_, which you can see running from the link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 
-. In Globex, you should see a notification informing the session has ended.
+You can also use the `kamel` client from your terminal to obtain information about your deployed Camel K instances:
 
-PENDING
+[source,bash,role=copy,subs=]
+----
+./kamel get
+----
+.Output
+----
+No IntegrationPlatform resource in globex-camel-%user_name% namespace
+NAME            PHASE   KIT
+discord         Running globex-camel-%user_name%/kit-chcc8ts5v3ov25mqg460
+globex-support  Running globex-camel-%user_name%/kit-chccj045v3ov25mqg470
+----
 
 {empty} +
+
 
 
 == Persist and Share a Session Transcript 
