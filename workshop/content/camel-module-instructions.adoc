@@ -955,6 +955,11 @@ You should see a new channel created with your user name:
 +
 --
 . Click on the new channel
++
+CAUTION: You may see channels under `CLIENTS` belonging to other students in the room. +
+To prevent interferences, please ensure you select the newly created channel marked with your user name.
+
+
 . You should see displayed the message sent from Slack:
 +
 ++++
@@ -1339,6 +1344,9 @@ You should see the agent's message sent from Discord appear in the CamelGlobex a
 +
 --
 . Right click on the channel `slack-%user_name%`
++
+CAUTION: You may see channels under `CLIENTS` belonging to other students in the room. +
+To prevent interferences, please ensure you select the channel with your user name.
 . Click `Delete Channel`
 . Confirm your action to delete the channel.
 --
@@ -1786,7 +1794,7 @@ Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_bla
 --
 +
 ++++
-<img src="./images/camel/globex-signin.jpg" style="width:50%;border-style: none;">
+<img src="./images/camel/globex-signin.jpg" style="width:40%;border-style: none;">
 ++++
 +
 {empty} +
@@ -1808,17 +1816,16 @@ Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_bla
 <img src="./images/camel/globex-customer-question.jpg" style="width:100%;border-style: none;">
 ++++
 
-// Send a message, for example `Hello, can someone assist please?`
-// +
-// You should see in Discord a new channel `slack-%user_name%` created.
-// +
-// {empty} +
-
 [start=4]
 . From Discord...
-.. You should see in Discord a new channel `globex-%user_name%` created.
+.. You should see a new channel `globex-%user_name%` created.
++
+CAUTION: You may see channels under `CLIENTS` belonging to other students in the room. +
+To prevent interferences, please ensure you select the channel with your user name.
+
 
 .. Click on the newly created channel `globex-%user_name%` to display the messages.
+
 .. Type a message, for example:
 +
 --
@@ -1828,7 +1835,7 @@ Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_bla
 and send it.
 . Back from Globex...
 +
-You should see the agent's message sent from Discord appear in the chat session window.
+You should see the agent's message sent from Discord appear in your chat session window.
 
 . Exchange a few more messages to simulate a conversation.
 
@@ -1898,18 +1905,15 @@ The plan is to replay and process data streams from channel conversations and tr
 
 In the diagram above we see a number of instant messaging platforms interacting together via Kafka. The depicted _Camel_ process represents the new integration to develop responsible to replay streams and push conversations to the storage system.
 
-PENDING MORE?
-
 {empty} +
-
 
 === Understand the Transcript Logic
 
-You saw how, from time to time when events flowing between customers to agents, the processing logic was pushing events to Kafka to keep record of each one of the interactions between the two actors. Also, when the support session concludes, there's logic to send a signal to mark the end of the conversation (end of stream).
+You saw, in some parts of the code, the processing logic pushing events to Kafka to keep record of each one of the interactions between the two actors (customers and agents). Also, when the support session closes, there's logic to send a signal (via Kafka) to mark the end of the conversation (end of stream).
 
 This orchestrated flow of events is not easy to follow and remember during the course of the workshop. However, in order to complete the implementation you're about to work on, you really need to understand how the chat session was recorded in Kafka, and the order in which the new process needs to execute.
 
-Do not despair, the following sequence diagram should help you to see it all, crystal clear. The illustration below shows the entire processing logic relevant to the integration to build in this last stage of the learning module.
+Do not despair, the following sequence diagram should help you to see it all, crystal clear. The illustration below shows the entire processing logic relevant to the integration you're about to build in this last stage of the learning module.
 
 // image::./images/camel/transcript-seq-diagram.jpg[align="center", width=60%]
 
@@ -2285,6 +2289,12 @@ Let's deply your code .
 +
 NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
 +
+.Output
+----
+transcript (main) $ ./deploy.sh
+No IntegrationPlatform resource in globex-camel-%user_name% namespace
+Integration "transcript" created
+----
 {empty} +
 
 
@@ -2306,83 +2316,87 @@ If so, try again using our code by running the command:
 ----
 ====
 
+
 [start=3]
-. From Slack or Globex
-.. Open the Chat view
-.. Send a message, for example `Hello, can someone assist please?`
+. Using Slack (for example) and Discord...
+.. initiate and simulate a customer/agent conversation, as done in previous exercises.
+
+.. Then, to close the session, from Discord, right-click and delete the channel.
 +
-You should see in Discord a new channel `slack-%user_name%` or `globex-%user_name%` created.
+NOTE: Deleting the channel should kick-off the transcript process.
 +
-{empty} +
+{empty}
 
-. From Discord
-.. Click on the newly created channel `slack/globex-%user_name%` to display the messages.
-.. Type a message, for example `How can I help you today?` and send it.
+. Finally, in Slack/Globex, you should see a notification informing the session has ended, plus a link to your transcript, as shown in the picture below:
 +
-{empty} +
-
-. You should see the agent's message sent from Discord appear in the Slack/Globex chat view. 
-
-. Send some more messages back and forth.
-
-. To close the session, from Discord, right-click and delete the channel.
-
-. In Slack/Globex, you should see a notification informing the session has ended.
-
-. You should also see a notification including the shared PDF URL.
-
-PENDING
+--
+. Confirm to delete the channel in Discord.
+. From Slack/Globex, click on the PDF transcript link.
+--
++
+++++
+<img src="./images/camel/transcript-test.jpg" style="width:100%;border-style: none;">
+++++
 
 {empty} +
 
-TESTS
+And your done !!
 
-[source,xml,role=copy,subs="+macros"]
-----
-    <route id="share-transcript">
-    </route>
-pass:[<br>]
-----
+{empty} +
 
-[source,bash,role=copy,subs="+macros"]
-----
-touch macros-quotes.jslt
-pass:[<br>]
-----
+== Congratulations
 
-[source,bash,role=copy,subs=macros+]
-----
-touch macros-no-quotes.jslt
-pass:[<br>]
-----
-
-[source,bash,role=copy,subs=none]
-----
-touch none.jslt
-
-----
-
-[source,bash,role=copy,subs=none]
-----
-touch none-pass.jslt
-pass:[<br>]
-----
-
-[source,bash,role=copy,subs=replacements+]
-----
-touch none-rep1.jslt<br>
-----
+With this you have completed the Camel workshop module! 
 
 
-[source,bash,role=copy,subs=replacements]
-----
-touch none-rep2.jslt
-<br>
-----
+{empty} +
 
-[source,bash,role=copy,subs="+macros"]
-----
-touch response.jslt pass:[<br>]
-----
+// TESTS
 
-=== section
+// [source,xml,role=copy,subs="+macros"]
+// ----
+//     <route id="share-transcript">
+//     </route>
+// pass:[<br>]
+// ----
+
+// [source,bash,role=copy,subs="+macros"]
+// ----
+// touch macros-quotes.jslt
+// pass:[<br>]
+// ----
+
+// [source,bash,role=copy,subs=macros+]
+// ----
+// touch macros-no-quotes.jslt
+// pass:[<br>]
+// ----
+
+// [source,bash,role=copy,subs=none]
+// ----
+// touch none.jslt
+
+// ----
+
+// [source,bash,role=copy,subs=none]
+// ----
+// touch none-pass.jslt
+// pass:[<br>]
+// ----
+
+// [source,bash,role=copy,subs=replacements+]
+// ----
+// touch none-rep1.jslt<br>
+// ----
+
+
+// [source,bash,role=copy,subs=replacements]
+// ----
+// touch none-rep2.jslt
+// <br>
+// ----
+
+// [source,bash,role=copy,subs="+macros"]
+// ----
+// touch response.jslt pass:[<br>]
+// ----
