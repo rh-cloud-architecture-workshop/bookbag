@@ -1,6 +1,7 @@
 :icons: font 
 
 :toc: 
+// :sectlinks:
 
 :sectnums:
 :experimental:
@@ -9,6 +10,8 @@
 
 :slackinviteurl: %slack_invite_url%
 :discordinviteurl: %discord_invite_url%
+
+:topologyviewurl: %openshift_cluster_console%/topology/ns/globex-camel-user1?view=graph
 
 
 == Quick overview of the lab exercises
@@ -554,7 +557,7 @@ In the content that follows you will learn the following concepts:
 
 // {empty} +
 
-. Configure your listener
+. Configure your listener [[configure_slack_channel]]
 +
 The AMQ listener you're about to implement needs to consume from your dedicated address which is unique to avoid collisions with traffic from other students. You need to use your personal GlobexSupport Slack channel ID to configure your integration.
 +
@@ -873,8 +876,6 @@ You should see in your terminal a log output similar to:
 <img src="./images/camel/discord-dev-terminal-output.jpg" style="width:80%;border-style: none;">
 ++++
 +
-{empty} +
-+
 [WARNING]
 ====
 If the `dev.sh` command shows errors, you might have missed a step following the instructions or done some other human error. +
@@ -888,19 +889,60 @@ If so, try again using our code by running the command:
 +
 {empty} +
 
-. From Slack, send a message... +
-You should see in Discord a new Channel created and the message from Slack displayed.
+. Observe your Topology view in OpenShift
++
+You'll notice that running your code in DEV mode triggers _Camel K_'s operator to deploy a new pod in your user namespace.
++
+--
+* Open the console by clicking link:{topologyviewurl}[*this _Topology_ view link*, window="_blank"].
+--
++
+You should find, as per the picture below, marked in red, the _Discord_ pod running your _Camel K_ code in DEV mode.
++
+++++
+<img src="./images/camel/topology-discord-dev.jpg" style="width:100%;border-style: none;">
+++++
++
+NOTE: You'll also see other pre-deployed pods to assist you in this learning module (running DataGrid, Minio (S3), and others).
++
+{empty} +
+
+. From Slack, send a message...
++
+As per the picture below, [1] select the GlobexSupport app in your Slack window, [2] type in a test message, and [3], click the 'Send' button (or press Enter).
++
+++++
+<img src="./images/camel/slack-dev-test.jpg" style="width:80%;border-style: none;">
+++++
+
+. From Discord...
++
+--
+You should see a new channel created with your user name:
+
+- `slack-%user_name%` 
+--
++
+--
+. Click on the new channel
+. You should see displayed the message sent from Slack:
++
+++++
+<img src="./images/camel/discord-dev-test.jpg" style="width:80%;border-style: none;">
+++++
 +
 [WARNING]
 ====
-If you see no message in Discord you might have misconfigured your Slack channel ID in the `my.properties` configuration file. Review the instructions and try again. The configuration property should look similar to:
+If you see no message in Discord you might have misconfigured your Slack channel ID in the `my.properties` configuration file. Review the link:#configure_slack_channel[instructions here] and try again. The configuration property should look similar to:
 
 - `slack.globex.channel.id=D03P7AH5347`
 ====
+--
 
-PENDING
+{empty} +
 
-IMPORTANT: When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance.
+IMPORTANT: When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance.+
+When you do so, you'll notice the Discord pod shutdowns and is no longer visible from your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 
 {empty} +
 
