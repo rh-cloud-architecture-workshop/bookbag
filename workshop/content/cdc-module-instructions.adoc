@@ -203,7 +203,7 @@ The _order-aggregator_ uses Kafka Streams to calculate the total value of an ord
 * Joins the LineItem events with the Order events by Order ID. This produces a new stream of events which contain both the Order and the LineItem.
 * Groups the joined stream by Order id
 * Aggregates the joined stream to produce a stream of _AggregatedOrder_ events. The aggregation function adds the value of each individual line item to the total order value.
-* Publishes the aggregated order events in a Kafka topic. 
+* Publishes the aggregated order events in a Kafka topic, in this case the *globex.order-aggregated* topic. 
 
 In case you want to see how this looks like in code, click on the link below:
 
@@ -253,6 +253,18 @@ In case you want to see how this looks like in code, click on the link below:
         return topology;
 ----
 ====
+
+You can see the result of the streaming processing iby inspecting the contents of  the *globex.order-aggregated* topic in Kafdrop.
+
+* Open the browser tab pointing to the Kafdrop UI. If you did close the tab, open a new tab and navigate to %kafdrop_url%. 
+
+* Open the *globex.order-aggregated* topic, and verify that the topic contains several messages (the exact number depends on how many orders were created in the previous paragraph).
++
+image::images/kafdrop-order-aggregated-topic.png[]
+
+* Drill down into the partition and expand the contents a message. You should see JSON structure which contains the order ID, the customer ID, the order creation date and the total value of the order.
++
+image::images/kafdrop-order-aggregated-topic-2.png[]
 
 == Build and deploy integrations with Camel K
 
