@@ -1,19 +1,88 @@
+++++
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+++++
+
 == Introduction
 Welcome to the Cloud Architecture Workshop.
 
 The workshop consists of several modules, which are independent of each other. You can choose which modules you want to take, and in which order you go through them.
 
-=== Build new functionality with Change Data Capture +
-In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.
+== Get started
+Before diving into a particular module, we recommend that you go through the workshop introduction module, to explore the technical and functional environment for this workshop.
 
-=== Launch new channels using Contract-First approach +
-In this module you discover how Contract First Approach provides the right framework to acclerate launching new channels in a secure way.
 
-=== Build  a service network to connect disparate services  +
-In this module you discover how to build a service network to connect disparate services using a secured layer 7 service network.
 
-=== Building a multi-channel support service for Globex customers  +
-In this module you will implement a pluggable multi-channel support service for Globex customers, integrating Globex Web, Slack and Discord.
+++++
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Introduction to the Cloud Architecture Workshop.</h5>
+        <p class="card-text">This chapter explains the technical and functional environment for this workshop, with a walkthrough of the existing implementation.</p>
+        <a href="/workshop/workshop-introduction" class="card-link">Introduction</a>        
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Build new functionality with Change Data Capture</h5>
+        <p class="card-text">
+            In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.
+        </p>
+        <a href="/workshop/cdc-module" class="card-link">Introduction</a>
+        <a href="/workshop/cdc-module-instructions" class="card-link">Instructions</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Launch new channels using Contract-First approach</h5>
+        <p class="card-text">In this module you discover how Contract First Approach provides the right framework to acclerate launching new channels in a secure way.</p>
+        <a href="/workshop/apim-module" class="card-link">Introduction</a>
+        <a href="/workshop/apim-module-instructions" class="card-link">Instructions</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Build a service network to connect disparate services</h5>
+        <p class="card-text">
+            In this module you discover how to build a service network to connect disparate services using a secured layer 7 service network.
+        </p>
+        <a href="/workshop/skupper-module" class="card-link">Introduction</a>
+        <a href="/workshop/skupper-module-instructions" class="card-link">Instructions</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Building a multi-channel support service for Globex customers</h5>
+        <p class="card-text">
+            In this module you will implement a pluggable multi-channel support service for Globex customers, integrating Globex Web, Slack and Discord.
+        </p>
+        <a href="/workshop/camel-module" class="card-link">Introduction</a>
+        <a href="/workshop/camel-module-instructions" class="card-link">Instructions</a>
+      </div>
+    </div>
+  </div>
+  
+</div>
+++++
+
 
 
 == Get started
