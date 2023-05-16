@@ -284,7 +284,7 @@ image::images/devspaces-workspace-order-connector.png[]
 +
 [source,bash,role=copy]
 ----
-kamel run -n globex-cdc-%user_name% workshop/module-cdc/order-connector/cashback-order-connector.yaml
+kamel run -n globex-cdc-%user_name% workshop/module-cdc/order-connector/cashback-order-connector.yaml --trait container.limit-memory=250Mi
 ----
 +
 .Output
@@ -362,7 +362,7 @@ In a nutshell, messages are consumed from the Kafka topic and marshalled into a 
 +
 [source,bash,role=copy]
 ----
-kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.groovy
+kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.groovy -trait container.limit-memory=512Mi
 ----
 +
 .Output
