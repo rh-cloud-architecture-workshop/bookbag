@@ -116,7 +116,7 @@ The *globex.recommendation-product-score-aggregated-changelog* topic contains me
 +
 image::images/kafdrop-globex-tracking-recommendation.png[]
 
-* In your browser window, go to the tab pointing to the Globex we application. Navigate to the home page. You should see some items in the list of featured products, corresponding to the list of products you liked.
+* In your browser window, go to the tab pointing to the Globex web application. Navigate to the home page. You should see some items in the list of featured products, corresponding to the list of products you liked.
 +
 image::images/globex-home-page-featured.png[]
 
