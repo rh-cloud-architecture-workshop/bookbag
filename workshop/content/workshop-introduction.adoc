@@ -29,13 +29,14 @@ image::images/globex-deployment-2.png[]
 
 == Technical environment
 
-* OpenShift cluster: all the activities for this workshop will be done on a OpenShift cluster. +
+* OpenShift cluster: all the activities for this workshop will be done on a shared OpenShift cluster. +
 The connection details for the OpenShift cluster:
 ** OpenShift Console: %openshift_cluster_console%
 ** Username: *%user_name%*
 ** Password: *%user_password%*
 
-TODO: add additional information
+* We leverage OpenShift Gitops (aka ArgoCD) to manage the deployment of the lab assets, in a hub and spoke model: a central ArgoCD instance which manages common assets and namespace-scoped ArgoCD instances which manage the per-user assets. In total ArgoCD manages 350 applications per cluster, which represent more than 2500 pods. +
+If you are interested to know more about this setup, do not hesitate to come to talk to the workshop instructors.
 
 == Walkthrough of the Globex web application
 
