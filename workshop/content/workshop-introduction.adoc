@@ -51,7 +51,7 @@ image::images/openshift-console-developer-view-projects.png[]
 * The Globex web application is deployed in the *globex-%user_name%* namespace. Click on *Topology* in the menu on the left and then click on the *globex-%user_name%* link to open the topology view of the namespace. The Topology view gives you a graphical representation of the different resources deployed in the namespace.
 +
 image::images/openshift-console-developer-select-topology.png[]
-* In the *Topology View* of the Developer Perspective, expect to see something like this(rearrange the topology as you see fit):
+* In the *Topology View* of the Developer Perspective, expect to see something like this (rearrange the topology as you see fit):
 +
 image::images/openshift-console-topology-view.png[]
 +
@@ -107,7 +107,7 @@ image::images/kafdrop-globex-tracking.png[]
 +
 image::images/kafdrop-globex-tracking-partition.png[]
 +
-This opens a view to the individual messages in the topic. In this case, the body of each message consists of a JSON structure of the a user activity event from the Globex web application.
+This opens a view to the individual messages in the topic. In this case, the body of each message consists of a JSON structure of a user activity event from the Globex web application.
 +
 image::images/kafdrop-globex-tracking-message.png[]
 
