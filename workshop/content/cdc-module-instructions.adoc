@@ -179,7 +179,7 @@ image::images/openshift-console-developer-select-namespace.png[]
 +
 image::images/openshift-console-open-url-4.png[]
 ** This opens a Swagger UI page showing the REST API of the simulator. +
-Click on the *POST* link, and then on the *Try it out* link on the right. From the *Examples* drop down, select *random customers* to create orders for random customers. Feel free to change the numbers of orders you want to simulate (the default is 5).
+Click on the *POST* link, and then on the *Try it out* link on the right. From the *Examples* drop down, select *random customers* to create orders for random customers. Feel free to change the numbers of orders you want to simulate (the default is 50).
 +
 image::images/order-simulator-random-customer.png[]
 ** Click *Execute* to execute the REST call to the simulator.
@@ -438,7 +438,7 @@ image::images/openshift-console-topology-cashback-service.png[]
 +
 image::images/cashback-service-ui.png[]
 
-* You should see some customers with a cashback greater than $0. If you don't see any, please simulate some orders as detailed earlier in this chapter. +
+* You should see some customers with a cashback greater than $0. You might need to advance through several pages if you don't see any cusyomers with a cashback value grater than 0$. If you still don't see any, please simulate some orders as detailed earlier in this chapter. +
 Click on a cashback with value greater then $0. You should see the list of orders leading to the cashback.
 +
 image::images/cashback-service-ui-2.png[]
