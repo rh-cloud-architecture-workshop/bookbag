@@ -117,7 +117,7 @@ image::images/kafdrop-debezium-topic-customers-1.png[]
 
 * A Debezium change event has a well-defined structure. Take particular note of the following elements:
 ** *before*: the state of the record before the transaction. As the change events correspond to newly read records, there is no previous state. 
-** *after*: the state of the record after the transaction. This is a JSON representation of the current state of the record in the database, in JSON format (every column in the table becomes a JSON field).
+** *after*: the state of the record after the transaction. This is a JSON representation of the current state of the record in the database (every column in the table becomes a JSON field).
 ** *op*: The operation that leads to the change event. Possible values are '*c*' for _create_, '*u*' for _update_, '*d*' for _delete_ and '*r*' for _read_. As the records in the *customer* already existed when the Debezium connector was deployed, the operation is '*r*'.
 
 * The Globex application database does not contain any order information at the moment, so the *globex.updates.public.orders* and *globex.updates.public.line_item* topics are empty. You can verify this through the Kafdrop UI. +
@@ -187,7 +187,7 @@ image::images/order-simulator-random-customer.png[]
 
 == Streaming processing of events with Kafka Streams
 
-Debezium produces a stream of data change events in one ore more Kafka topics. In some cases the data in these topics need to be transformed, combined or aggregated before they can be consumed by target services.
+Debezium produces a stream of data change events in one or more Kafka topics. In some cases the data in these topics need to be transformed, combined or aggregated before they can be consumed by target services.
 
 In our use case for instance, the cashback service is interested in the total value of an order, not necessarily the value of each individual line item. However, The _orders_ table in the Globex retail database does not contain the total value. So we need to somehow combine the data change events streams from the _orders_ table with the stream of the _line_items_ table to obtain the total value for each order.
 
@@ -195,13 +195,13 @@ This is where stream processing libraries or frameworks come in. Libraries like 
 
 The processing logic of a Kafka Streams application is defined in a _topology_, which forms a graph of stream processors, where each processor represents a processing step in the processing topology. Kafka Streams comes with a Domain Specific Language (DSL) to define the topology in Java.
 
-If your familiar with SQL, a topology is quite similar to a set of SQL queries, but then applied on a stream of data rather then on static tables.
+If you are familiar with SQL, a topology is quite similar to a set of SQL queries, but then applied on a stream of data rather then on static tables.
 
-The _order-aggregator_ uses Kafka Streams to calculate the total value of an order out of the data change events of the _orders_ and _line_items_ tables. The topology does the following:
+The _order-aggregator_ service uses Kafka Streams to calculate the total value of an order out of the data change events of the _orders_ and _line_items_ tables. The topology does the following:
 
 * Consumes from the *globex.updates.public.orders* and *globex.updates.public.line_item* topics.
 * Joins the LineItem events with the Order events by Order ID. This produces a new stream of events which contain both the Order and the LineItem.
-* Groups the joined stream by Order id
+* Groups the joined stream by Order ID
 * Aggregates the joined stream to produce a stream of _AggregatedOrder_ events. The aggregation function adds the value of each individual line item to the total order value.
 * Publishes the aggregated order events in a Kafka topic, in this case the *globex.order-aggregated* topic. 
 
@@ -254,7 +254,7 @@ In case you want to see how this looks like in code, click on the link below:
 ----
 ====
 
-You can see the result of the streaming processing iby inspecting the contents of  the *globex.order-aggregated* topic in Kafdrop.
+You can see the result of the streaming processing by inspecting the contents of  the *globex.order-aggregated* topic in Kafdrop.
 
 * Open the browser tab pointing to the Kafdrop UI. If you did close the tab, open a new tab and navigate to %kafdrop_url%. 
 
@@ -270,7 +270,7 @@ image::images/kafdrop-order-aggregated-topic-2.png[]
 
 Apache Camel is an open source integration framework that allows you to quickly and easily integrate various systems consuming or producing data. It is based on the well known Enterprise Integration patterns and allows you to define routing and mediation rules in a variety of domain-specific languages (such as Java, XML, Groovy, Kotlin, and YAML). It does so by providing over 300 components and connectors.
 
-Apache Camel K is a lightweight integration framework built from Apache Camel that runs natively on Kubernetes and is specifically designed for microservice and serverless architectures.
+Apache Camel K is a lightweight integration framework built from Apache Camel that runs natively on Kubernetes or OpenShift and is specifically designed for microservice and serverless architectures.
 When using Camel K you can instantly run integration code written in Camel DSL on Kubernetes or OpenShift, without having to package the code into an application and building a container image. 
 
 In this workshop we leverage Camel and Camel K to bridge between the Kafka topics which contain the customer data change events and the aggregated orders, and the _Cashback_ service.
@@ -302,8 +302,8 @@ kamel run -n globex-cdc-%user_name% workshop/module-cdc/order-connector/cashback
 .Output
 ----
 Modeline options have been loaded from source files
-Full command: kamel run -n globex-cdc-%user_name% workshop/module-cdc/order-connector/cashback-order-connector.yaml --property=file:workshop/module-cdc/order-connector/cashback-order-connector.properties --dependency=camel:http --config=secret:kafka-client-secret 
-No IntegrationPlatform resource in globex-cdc-%user_name% namespace
+Full command: kamel run -n globex--%user_name% workshop/module-cdc/order-connector/cashback-order-connector.yaml --trait container.limit-memory=250Mi --property=file:workshop/module-cdc/order-connector/cashback-order-connector.properties --dependency=camel:http --config=secret:kafka-client-secret 
+No IntegrationPlatform resource in globex-cdc--%user_name% namespace
 Integration "cashback-order-connector" created
 ----
 ** The Camel K operator starts building the integration and packages it in a container image. The first time this can take quite a while during which nothing seems to happen. +
@@ -366,7 +366,7 @@ This time the integration logic is expressed in Groovy, a dynamic language for t
 image::images/devspaces-workspace-customer-connector.png[]
 +
 Reading through the code should give you an idea what the code actually does. +
-In a nutshell, messages are consumed from the Kafka topic and marshalled into a JSON object. The payload is introspected using JSONPath to determine the nature of the change event, and set headers on the message accordingly. Finally the payload for the REST call is build and the REST endpoint called.
+In a nutshell, messages are consumed from the Kafka topic and marshalled into a JSON object. The payload is introspected using JSONPath to determine the nature of the change event, and set headers on the message accordingly. Finally the payload for the REST call is built and the REST endpoint called.
 
 * The deployment of the integration is very similar to what you did for the order integration.
 ** Go into the terminal of the Dev Spaces workspace. If you don't have an open terminal, you can open a new one by selecting the image:images/devspaces-menu.png[] icon on the top of the left menu, and selecting *Terminal/New Terminal* from the drop-down menu.
@@ -374,13 +374,13 @@ In a nutshell, messages are consumed from the Kafka topic and marshalled into a 
 +
 [source,bash,role=copy]
 ----
-kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.groovy -trait container.limit-memory=512Mi
+kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.groovy --trait container.limit-memory=512Mi
 ----
 +
 .Output
 ----
 Modeline options have been loaded from source files
-Full command: kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.groovy --dependency=camel:http --property=file:workshop/module-cdc/customer-connector/cashback-customer-connector.properties --config=secret:kafka-client-secret 
+Full command: kamel run -n globex-cdc-%user_name% workshop/module-cdc/customer-connector/cashback-customer-connector.groovy --trait container.limit-memory=512Mi --dependency=camel:http --property=file:workshop/module-cdc/customer-connector/cashback-customer-connector.properties --config=secret:kafka-client-secret 
 No IntegrationPlatform resource in globex-cdc-%user_name% namespace
 Integration "cashback-customer-connector" created
 ----
@@ -428,7 +428,7 @@ With the Debezium connector and the two Camel K integrations deployed, you have 
 
 The cashback service has a rudimentary UI that allows to verify the generated cashbacks.
 
-* In the browser window, open the tab pointing to the OpenShift console. If you don’t have a tab open to the console, open a new tab and navigate to %openshift_cluster_console%. If needed login with your username and password (%user_name%/%user_password%). Select the *Topology* view in the Developer perspective and make sure you are on the globex-cdc-%user_name% namespace.
+* In the browser window, open the tab pointing to the OpenShift console. If you don’t have a tab open to the console, open a new tab and navigate to %openshift_cluster_console%. If needed login with your username and password (%user_name%/%user_password%). Select the *Topology* view in the Developer perspective and make sure you are on the *globex-cdc-%user_name%* namespace.
 
 * In the Topology view, locate the Cashback service deployment, and click on the *Open URL* symbol next to it.
 +
