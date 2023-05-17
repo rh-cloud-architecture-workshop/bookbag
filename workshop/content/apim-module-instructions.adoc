@@ -814,6 +814,7 @@ The Mobile Application can be access via this QR Code as well as via browser
 image::https://chart.googleapis.com/chart?chs=300x300&amp;cht=qr&amp;chl=https://globex-mobile-globex-apim-{user_name}.{openshift_subdomain}[Globex Mobile,200,300]
  
 * Alternatively, launch https://globex-mobile-globex-apim-{user_name}.{openshift_subdomain}[Globex Mobile^] and login using (asilva/openshift)
+* The login process may take a few seconds. Please wait for bit :)
 +
 .User is logged in
 image::images/apim/apim-mobile-loggedin.png[width=40%]

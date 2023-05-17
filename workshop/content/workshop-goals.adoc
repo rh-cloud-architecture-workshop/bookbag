@@ -3,11 +3,9 @@
 ++++
 
 == Introduction
-Welcome to the Cloud Architecture Workshop.
+Welcome to the Cloud Architecture Workshop. The workshop consists of several modules, which are independent of each other. You can choose which modules you want to take, and in which order you go through them.
 
-The workshop consists of several modules, which are independent of each other. You can choose which modules you want to take, and in which order you go through them.
-
-== Get started
+=== Get started
 Before diving into a particular module, we recommend that you go through the workshop introduction module, to explore the technical and functional environment for this workshop.
 
 
@@ -82,10 +80,5 @@ Before diving into a particular module, we recommend that you go through the wor
   
 </div>
 ++++
-
-
-
-== Get started
-Before diving into a particular module, we recommend that you go through the workshop introduction module, to explore the technical and functional environment for this workshop.
 
 
