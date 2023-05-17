@@ -19,7 +19,7 @@ This is where Change Data Capture comes in.
 
 == Change Data Capture
 
-Change Data Capture (CDC) is well-known software pattern that refers to the process of identifying and capturing changes made to data in a database and delivering those changes in real-time to a downstream process or system, which can then react on those changes.
+Change Data Capture (CDC) is a well-known software pattern that refers to the process of identifying and capturing changes made to data in a database and delivering those changes in real-time to a downstream process or system, which can then react on those changes.
 
 Typical use cases for CDC include data replication (moving data from one data store to another), populating analytical systems and data warehouses, and data propagation to other services without coupling (one service owns the data, other services keep a local, optimized view of the data). This lab is an example of the latter use case.
 
