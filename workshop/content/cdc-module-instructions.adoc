@@ -388,7 +388,7 @@ Integration "cashback-customer-connector" created
 +
 [source,bash,role=copy]
 ----
-oc get integrationkit -n globex-cdc-%user_name%
+oc get integration -n globex-cdc-%user_name%
 ----
 +
 .Output
