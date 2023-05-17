@@ -14,7 +14,7 @@ Click on the `globex-skupper-%user_name%` link to select the namespace you are g
 +
 image::images/openshift-console-topology-skupper-aws.png[]
 
-* Expect to see two deployments: The Globex retail application frontend (called *globex-web*, and running on Node.js) and the Globex retail application itself, called *globex-store-app*. Note that the Globex retail application is scaled down to zero pods. As the database is missing, the application would start up correctly if scaled up. You will scale it up once the connection with the database running on the Azure OpenShift cluster is established.
+* Expect to see two deployments: The Globex retail application frontend (called *globex-web*, and running on Node.js) and the Globex retail application itself, called *globex-store-app*. Note that the Globex retail application is scaled down to zero pods. As the database is missing, the application would not start up correctly if scaled up. You will scale it up once the connection with the database running on the Azure OpenShift cluster is established.
 
 * You can check the state of the application by clicking on the image:images/openshift-console-open-url.png[] icon next to the Node.js deployment.
 +
@@ -108,7 +108,7 @@ skupper init --enable-console --enable-flow-collector --console-auth unsecured
 Skupper is now installed in namespace 'globex-skupper-%user_name%'.  Use 'skupper status' to get more information.
 ----
 
-* This installs 2 new components in the namespace: `skupper-service-controller` and `skupper-router`, as you can see in the Topology view:
+* This installs 2 new components in the namespace: *skupper-service-controller* and *skupper-router*, as you can see in the Topology view:
 +
 image::images/openshift-console-topology-skupper-aws-2.png[]
 
@@ -120,7 +120,7 @@ image::images/skupper-console.png[]
 
 The steps to install Service Interconnect on the OpenShift cluster on Azure are very equivalent to the ones you just performed on the AWS OpenShift cluster.
 
-* Open the browser window pointing to the OpenShift Console of the AWS OpenShift cluster. Click on the image:images/openshift-command-line-terminal-icon.png[] icon on the top menu to open a terminal window. +
+* Open the browser window pointing to the OpenShift Console of the Azure OpenShift cluster. Click on the image:images/openshift-command-line-terminal-icon.png[] icon on the top menu to open a terminal window. +
 Make sure to select the correct namespace from the drop-down box (*globex-%user_name%*) +
 Click *Start* to start and open the terminal.
 
