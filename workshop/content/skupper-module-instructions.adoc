@@ -14,7 +14,20 @@ Click on the `globex-skupper-%user_name%` link to select the namespace you are g
 +
 image::images/openshift-console-topology-skupper-aws.png[]
 
-* Expect to see two deployments: The Globex retail application frontend (running on Node.js) and the Globex retail application itself. Note that the Globex retail application is scaled down to zero pods. As the database is missing, the application would crash if scaled up. You will scale it up once the connection with the database running on the Azure OpenShift cluster is established.
+* Expect to see two deployments: The Globex retail application frontend (called *globex-web*, and running on Node.js) and the Globex retail application itself, called *globex-store-app*. Note that the Globex retail application is scaled down to zero pods. As the database is missing, the application would start up correctly if scaled up. You will scale it up once the connection with the database running on the Azure OpenShift cluster is established.
+
+* You can check the state of the application by clicking on the image:images/openshift-console-open-url.png[] icon next to the Node.js deployment.
++
+image::images/openshift-console-open-url-5.png[]
++
+This opens a new browser tab pointing to the home page of the Globex retail application.
++
+image::images/globex-home-page-skupper.png[]
+
+* Click on the *Cool Stuff Store* link in the top menu. This opens a view of the Globex store catalog. If the application would run as expected, you should see a paginated listing of products. However in this case, you will see an empty list:
++
+image::images/globex-catalog-empty.png[]
+
 
 == Deployment overview: Azure cluster
 
