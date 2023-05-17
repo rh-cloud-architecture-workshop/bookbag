@@ -1310,7 +1310,7 @@ Integration "discord" created
 +
 [source,bash,role=copy,subs=]
 ----
-./kamel log discord
+kamel log discord
 ----
 
 [WARNING]
@@ -1367,7 +1367,7 @@ You can also use the `kamel` client from your terminal to obtain information abo
 
 [source,bash,role=copy,subs=]
 ----
-./kamel get
+kamel get
 ----
 .Output
 ----
@@ -1752,7 +1752,7 @@ Integration "globex-support" created
 +
 [source,bash,role=copy,subs=]
 ----
-./kamel log globex-support
+kamel log globex-support
 ----
 
 [WARNING]
@@ -1863,7 +1863,7 @@ You can also use the `kamel` client from your terminal to obtain information abo
 
 [source,bash,role=copy,subs=]
 ----
-./kamel get
+kamel get
 ----
 .Output
 ----
@@ -2302,7 +2302,7 @@ Integration "transcript" created
 +
 [source,bash,role=copy,subs=]
 ----
-./kamel log transcript
+kamel log transcript
 ----
 
 [WARNING]
@@ -2347,7 +2347,7 @@ You can also use the `kamel` client from your terminal to obtain information abo
 
 [source,bash,role=copy,subs=]
 ----
-./kamel get
+kamel get
 ----
 .Output
 ----
