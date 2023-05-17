@@ -262,7 +262,7 @@ You can see the result of the streaming processing iby inspecting the contents o
 +
 image::images/kafdrop-order-aggregated-topic.png[]
 
-* Drill down into the partition and expand the contents a message. You should see JSON structure which contains the order ID, the customer ID, the order creation date and the total value of the order.
+* Drill down into the partition and expand the contents of a message. You should see a JSON structure which contains the order ID, the customer ID, the order creation date and the total value of the order.
 +
 image::images/kafdrop-order-aggregated-topic-2.png[]
 
