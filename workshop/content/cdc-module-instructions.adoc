@@ -1,9 +1,5 @@
 :icons: font
 
-== Deploy the Cashback service
-
-TODO: deploy the solution through BackStage
-
 == Deployment Overview
 
 The architecture of the Cashback service looks as follows:
@@ -450,6 +446,9 @@ image::images/cashback-service-ui-2.png[]
 ** In the logs of the Camel K order connector, check that the aggregated order is sent to the Cashback service.
 ** In the Cashback service UI, locate the customer you created the order for, and check that it appears in the Cashback list.  
 
-== Conclusion
+== Congratulations
 
-TODO: conclusion
+Congratulations! With this you have completed the *Change Data Capture* module! You successfully leveraged Change Data Capture to create change event streams, and consume these streams to power new services and functionality. 
+
+Please close all but this Instructions browser tab to avoid proliferation of browser tabs which can make working on other modules difficult. +
+Click on the *Home* button below to go back to the Landing page, and choose your next module.
