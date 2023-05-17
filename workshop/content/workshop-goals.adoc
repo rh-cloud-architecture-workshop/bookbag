@@ -16,7 +16,8 @@ Before diving into a particular module, we recommend that you go through the wor
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Introduction to the Cloud Architecture Workshop.</h5>
-        <p class="card-text">This chapter explains the technical and functional environment for this workshop, with a walkthrough of the existing implementation.</p>
+        <p class="card-text">This chapter explains the technical and functional environment for this workshop, with a walkthrough of the existing implementation.<br>
+        <b>#recommended #overview #hands-on #explore</b></p>
         <a href="/workshop/workshop-introduction" class="card-link">Introduction</a>        
       </div>
     </div>
@@ -26,7 +27,8 @@ Before diving into a particular module, we recommend that you go through the wor
       <div class="card-body">
         <h5 class="card-title">Build new functionality with Change Data Capture</h5>
         <p class="card-text">
-            In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.
+            In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.<br>
+        <b>#CDC #Kafka #Debezium #Camel-K #Devspaces #hands-on</b>
         </p>
         <a href="/workshop/cdc-module" class="card-link">Introduction</a>
         <a href="/workshop/cdc-module-instructions" class="card-link">Instructions</a>
@@ -42,7 +44,8 @@ Before diving into a particular module, we recommend that you go through the wor
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Launch new channels using Contract-First approach</h5>
-        <p class="card-text">In this module you discover how Contract First Approach provides the right framework to acclerate launching new channels in a secure way.</p>
+        <p class="card-text">In this module you discover how Contract First Approach provides the right framework to acclerate launching new channels in a secure way.<br>
+        <b>#API-Management #Keycloak #OIDC #Apicurio #Service-Registry #3Scale #Devspaces #hands-on</b></p>
         <a href="/workshop/apim-module" class="card-link">Introduction</a>
         <a href="/workshop/apim-module-instructions" class="card-link">Instructions</a>
       </div>
@@ -53,7 +56,8 @@ Before diving into a particular module, we recommend that you go through the wor
       <div class="card-body">
         <h5 class="card-title">Build a service network to connect disparate services</h5>
         <p class="card-text">
-            In this module you discover how to build a service network to connect disparate services using a secured layer 7 service network.
+            In this module you discover how to build a service network to connect disparate services using a secured layer 7 service network.<br>
+        <b>#Skupper #Service-Interconnect #Application-Connectivity #hands-on</b>
         </p>
         <a href="/workshop/skupper-module" class="card-link">Introduction</a>
         <a href="/workshop/skupper-module-instructions" class="card-link">Instructions</a>
@@ -70,7 +74,8 @@ Before diving into a particular module, we recommend that you go through the wor
       <div class="card-body">
         <h5 class="card-title">Building a multi-channel support service for Globex customers</h5>
         <p class="card-text">
-            In this module you will implement a pluggable multi-channel support service for Globex customers, integrating Globex Web, Slack and Discord.
+            In this module you will implement a pluggable multi-channel support service for Globex customers, integrating Globex Web, Slack and Discord.<br>
+        <b>#Camel-K #AMQ-Broker #AMQ-Streams #Kafka #Data-Grid  #S3 #Data-Foundation #hands-on</b>
         </p>
         <a href="/workshop/camel-module" class="card-link">Introduction</a>
         <a href="/workshop/camel-module-instructions" class="card-link">Instructions</a>
