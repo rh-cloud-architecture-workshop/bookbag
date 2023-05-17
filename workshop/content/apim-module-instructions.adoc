@@ -56,7 +56,7 @@ You are going to use *OpenShift Dev Spaces* for a number of activities. OpenShif
 * Ensure you are logged in to OpenShift as *{user_name}* 
 
 === Instructions
-* In a browser window, navigate to the browser tab pointing to the Developer perspective of the OpenShift cluster. If you don't have a browser tab open on the console, click on {openshift_cluster_console}[OpenShift Console^, window=_console] to launch the console. If needed login with your username and password ({user_name}/{user_password}).
+* In a browser window, navigate to the browser tab pointing to the Developer perspective of the OpenShift cluster. If you don't have a browser tab open on the console, click on {openshift_cluster_console}[OpenShift Console^, window="console"] to launch the console. If needed login with your username and password ({user_name}/{user_password}).
 
 * On the top menu of the console, click on the image:images/openshift-application-menu.png[] icon, and in the drop-down box, select *Red Hat OpenShift Dev Spaces*.
 +
@@ -244,13 +244,36 @@ image::images/apim/api-design-tab.png[]
 image::images/apim/api-designer-sec-scheme.png[]
 * You are presented with the *Define the Security Scheme* page. Provide the following values in the form, and click on *Save*
 
-[cols="30%,70%"]
-|====
-| *Name* (textbox)| `openid-connect`
-| *Description* (textarea) | `OpenID Connect security scheme`
-| *Security Type* dropdown| `OpenID Connect`
-| *OpenID Connect URL* (textbox) | `\https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}/.well-known/openid-configuration`
-|====
+** Name (textbox)
++
+[source,bash,role=copy,subs="attributes"]
+----
+openid-connect
+----
+
+** Description (textarea)
++
+[source,bash,role=copy,subs="attributes"]
+----
+OpenID Connect security scheme
+----
+
+** Security Type (dropdown)
++
+[source,bash,role=copy,subs="attributes"]
+----
+OpenID Connect
+----
+
+
+** OpenID Connect URL (textbox)
++
+[source,bash,role=copy,subs="attributes"]
+----
+https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}/.well-known/openid-configuration
+----
+
+
 .API Designer: Define the Security Scheme wizard
 image::images/apim/define-security-scheme.png[width=90%]
 
@@ -310,7 +333,7 @@ image::images/apim/sr-uploaded.png[]
 * A shareable link is available to the Mobile OpenAPI specification to be used by other teams and systems.
 
 === Cleanup
-You can now close the API Designer and Service Registry browser tabs (\^‿^)
+Please close the API Designer and Service Registry browser tabs (\^‿^) to avoid too many browser tabs
 
 {empty} +
 
@@ -642,7 +665,7 @@ You can also view these objects on OpenShift console as follows
 .[.underline]#*[Click to View] View on 3scale Operator page in OpenShift console*#
 [%collapsible]
 ====
-* You can now see that the Backend, Product, ActiveDoc and Users from the 3scale OpenShift operators on {openshift_cluster_console}/k8s/ns/globex-apim-user1/clusterserviceversions[Installed Operators^, window=_console]
+* You can now see that the Backend, Product, ActiveDoc and Users from the 3scale OpenShift operators on {openshift_cluster_console}/k8s/ns/globex-apim-user1/clusterserviceversions[Installed Operators^, window="console"]
 ** Navigate to `Red Hat Integration - 3scale -> All Instances` and click on `Current namespace only`. You will see that the Product and Backend have been created.
 +
 .View Product, Backend, ActiveDoc and Users 
@@ -694,7 +717,7 @@ image::images/apim/3scale_dev_portal_signin.png[width=70%]
 +
 .Developer Portal Landing Page
 image::images/apim/3scale_dev_portal_loggedin.png[width=80%]
-* In the Applications page You are invited to *Create Application*. Click on the *Create new application* button seen against `globex-mobile-gateway-product`
+* In the Applications page you are invited to *Create Application*. Click on the *Create new application* button seen against `globex-mobile-gateway-product`
 +
 .Developer Portal: Create new application
 image::images/apim/3scale_dev_portal_applications.png[width=70%]
@@ -778,7 +801,23 @@ image::images/apim/apim_globex_mobile_deployment.png[]
 There is one last step that you need to do before trying out the Mobile App. You need to update the *Web Origin*
 
 * Navigate to click on {sso_tenant_console}/#/realms/globex-{user_name}/clients[Red Hat SSO Clients List^,window="sso"]. Login if needed with *({user_name}/{user_password})*.
++
+.Red Hat SSO Clients List for Mobile client
+image::images/apim/rh-sso-mobile-client.png[]
+
 * Click on the new Client ID that was created when you signed up for Mobile Gateway Application
++
+.[.underline]#*Where do I find this Client ID?*#
+[%collapsible]
+====
+* Navigate to the {globex_developer_portal}/admin/applications[Globex Developer Portal Applications^, window="devportal"] 
+* The client ID is displayed against the `globex-mobile-gateway-product` product.
++
+.globex-mobile deployment on OpenShift
+image::images/apim/mobile-dev-portal-clientid.png[]
+
+====
+
 * Close to the bottom of this page, you would see the *Web Origins* field. 
 * Update this field with the following value and click on *Save*
 +
@@ -862,7 +901,12 @@ The Partner Portal section is quite similar to the Mobile App but for the fact t
 
 {empty} +
 
-== Setup Partner Gateway and Partner Web App
+=== Cleanup
+You can now close all the tabs except for this Instructions and Dev Spaces browser tabs. Close all files open within Dev Spaces as well.
+
+If you choose to proceed to another module, close all but this *Instructions* browser before starting the next module. Go back to the link:workshop-goals[*Overview Page*] to choose your next module.
+
+== Setup Partner Gateway and Partner Web App (Optional)
 
 Before we start this section, close all the browser tabs except for this *Instructions tab* and *Dev Spaces* tab. This will help you navigate this section more easily.
 
@@ -898,7 +942,7 @@ curl -X POST -H "Content-type: application/json; artifactType=OPENAPI" -H "X-Reg
 +
 .Output response from Service Registry
 ----
-{"name":"Globex Partners API Gateway","description":"Globex APIs made accessible to global partners to view Globex' catalog and products","createdBy":"","createdOn":"2023-05-05T22:51:01+0000","modifiedBy":"","modifiedOn":"2023-05-05T22:51:01+0000","id":"partnerapi","version":"1","type":"OPENAPI","globalId":2,"state":"ENABLED","groupId":"globex","contentId":2,"references":[]}workshop-devspaces (main)
+{"name":"Globex Partners API Gateway","description":"Globex APIs made accessible to global partners to view Globex's catalog and products","createdBy":"","createdOn":"2023-05-05T22:51:01+0000","modifiedBy":"","modifiedOn":"2023-05-05T22:51:01+0000","id":"partnerapi","version":"1","type":"OPENAPI","globalId":2,"state":"ENABLED","groupId":"globex","contentId":2,"references":[]}workshop-devspaces (main)
 ----
 * You can view the newly created OpenAPI specification {service_registry_url}/ui/artifacts/globex/partnerapi/versions/latest[here^, window="serviceregistry"]
 ** You can close the Service Registry browser tab.
@@ -1058,7 +1102,7 @@ image::images/apim/logout.png[width=80%]
 +
 .Developer Portal Landing Page
 image::images/apim/3scale_dev_portal_loggedin.png[width=80%]
-* In the Applications page You are invited to *Create Application*. Click on the *Create new application* button seen against `globex-partner-gateway-product`
+* In the Applications page you are invited to *Create Application*. Click on the *Create new application* button seen against `globex-partner-gateway-product`
 +
 .Developer Portal: Create new application
 image::images/apim/partner_3scale_dev_portal_applications.png[width=70%]
@@ -1094,8 +1138,9 @@ image::images/apim/apim-devportal-partner-app-success.png[width=70%]
 ** *Client ID & Client Secret* - Needs to be fetched from Red Hat SSO
 ** *Token URL* - From Red Hat SSO - But available here in the instructions
 ** *Globex API Endpoint* - From Red Hat 3scale - But available here in the instructions
-* These values are part of `globex-partner-web` Deployment and are highlighted in the screenshot below
-
+* These values are part of {openshift_cluster_console}/k8s/ns/globex-apim-{user_name}/deployments/globex-partner-web/environment[globex-partner-web deployment, window="console"] and are highlighted in the screenshot below
++
+.globex-partner-web Deployment
 image::images/apim/partner-web-deployment-env.png[]
 
 
@@ -1146,6 +1191,20 @@ oc set env deployments/globex-partner-web --overwrite GLOBEX_PARTNER_GATEWAY=htt
 ----
 deployment.apps/globex-partner-web updated
 ----
++
+.[.underline]#*[Click to know] How do I verify what I just did?*#
+[%collapsible]
+====
+
+* Ensure the {openshift_cluster_console}/k8s/ns/globex-apim-{user_name}/deployments/globex-partner-web/environment[globex-partner-web deployment, window="console"] looks like this now
++
+.Partner Web Portal Deployment Values
+image::images/apim/globex-partner-web-filled.png[]
+* To check the Secret that you updated, you can navigate to {openshift_cluster_console}/k8s/ns/globex-apim-{user_name}/secrets/globex-partner-web[globex-partner-web secret^, window="console"]. Scroll down to the *Data* section, and click on *Reveal values*
++
+.Partner Web Portal Secret with SSO details
+image::images/apim/partner-web-secret.png[]
+====
 
 
 == Test Partner Web Application 
@@ -1159,11 +1218,12 @@ In the previous section, you signed up for access as a Partner Developer and gai
 image::images/apim/partner_web_portal.png[]
 * Login using username/password as *(partner/openshift)*. 
 ** It is notable that the partner users are not managed using Red Hat SSO. 
+* After logging in, the entire product list is shown in a paginated format.
+** Allow a few seconds for the catalogue to load
+* Reload this page by hitting the Browser Refresh a few times which will help us to generate some analytics.
 +
 .User logged in and can view paginated products
 image::images/apim/apim-partner-loggedin.png[width=80%]
-* After logging in, the entire product list is shown in a paginated format.
-* Reload this page by hitting the Browser Refresh a few times which will help us to generate some analytics.
 
 
 === Analytics
@@ -1181,9 +1241,10 @@ As part of this Section you setup and tested the Partner Web App.
 * In this scenario we use Client Credentials authentication, because the backend NodeJS server authenticates itself with Client ID and Credentials obtained by the Partner Developer while signing up for an Application via 3scale Developer Portal
 * The token generated by NodeJS is then exchanged with 3scale to ensure the Client ID indeed has access to that particular API
 
-//TBC more discusssion on design decisions//
-
 
 == Congratulations
-With this you have completed the Contract First API workshop module! 
-//TBC: For further reading
+With this you have completed the *Contract First API* module! 
+
+Please close all but this *Instructions browser tab* to avoid proliferation of tabs which can make working on other modules difficult. 
+
+Choose your next module by accessing link:workshop-goals[*Overview Page*] to choose your next module.
