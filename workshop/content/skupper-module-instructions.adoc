@@ -55,7 +55,7 @@ Building a Service network between the two OpenShift clusters (more precisely be
 
 The easiest way to install Red Hat Service Interconnect in a namespace on OpenShift is through the `skupper` CLI (_Skupper_ is the name of the open-source upstream project of Red Hat Service Interconnect). In this lab, the `skupper` cli is available through the OpenShift Command Line terminal, so that you don't have to install it locally on your workstation.
 
-* Open the browser window pointing to the OpenShift Console of the AWS OpenShift cluster. Click on the image:images/openshift-command-line-terminal-icon.png[] icon on the top menu to open a terminal window. +
+* Open the browser window pointing to the OpenShift Console of the *AWS* OpenShift cluster. Click on the image:images/openshift-command-line-terminal-icon.png[] icon on the top menu to open a terminal window. +
 Make sure to select the correct namespace from the drop-down box (*globex-skupper-%user_name%*)
 +
 image::images/openshift-command-line-terminal.png[]
@@ -120,7 +120,7 @@ image::images/skupper-console.png[]
 
 The steps to install Service Interconnect on the OpenShift cluster on Azure are very equivalent to the ones you just performed on the AWS OpenShift cluster.
 
-* Open the browser window pointing to the OpenShift Console of the Azure OpenShift cluster. Click on the image:images/openshift-command-line-terminal-icon.png[] icon on the top menu to open a terminal window. +
+* Open the browser window pointing to the OpenShift Console of the *Azure* OpenShift cluster. Click on the image:images/openshift-command-line-terminal-icon.png[] icon on the top menu to open a terminal window. +
 Make sure to select the correct namespace from the drop-down box (*globex-%user_name%*) +
 Click *Start* to start and open the terminal.
 
@@ -185,7 +185,7 @@ Skupper is enabled for namespace "globex-%user_name%" in interior mode. It is no
 
 To create a link between the two clusters, you create a token on one of the clusters, and then use the token to create the link on the other cluster.
 
-* Navigate to the browser tab pointing to the OpenShift Web terminal on the AWS cluster. +
+* Navigate to the browser tab pointing to the OpenShift Web terminal on the *AWS* cluster. +
 Issue the following command:
 +
 [source,bash,role=copy]
@@ -227,7 +227,7 @@ This is actually an OpenShift secret which contains a certificate. This certific
 
 * The next step is creating the link on the other cluster with the token. In a real life situation that probably requires to physically transfer the token to the other site. In this lab, you will login into the Azure cluster from the terminal on the AWS cluster to create the link.
 
-* On the browser tab with the terminal on the AWS cluster, open a second terminal tab by clicking on the image:images/openshift-command-line-terminal-icon-add.png[] icon next to the existing terminal. This opens a second terminal.
+* On the browser tab with the terminal on the *AWS* cluster, open a second terminal tab by clicking on the image:images/openshift-command-line-terminal-icon-add.png[] icon next to the existing terminal. This opens a second terminal.
 
 * On this second terminal, point to another context for the `oc` CLI:
 +
@@ -329,7 +329,7 @@ You have established a secure link between the two clusters, and exposed the `gl
 
 There a couple of ways to verify this:
 
-* In the original terminal on the AWS cluster, use `oc` to get the services deployed in the `globex-skupper-%user_name%` namespace: 
+* In the original terminal on the *AWS* cluster, use `oc` to get the services deployed in the `globex-skupper-%user_name%` namespace: 
 +
 [source,bash,role=copy]
 ----
@@ -350,7 +350,7 @@ workspace207858d3e7d2450b-service   ClusterIP   172.30.2.112     <none>        4
 +
 The `globex-db` service is the proxy service created by exposing the `globex-db` deployment in the Azure cluster over the service network.
 
-* You can also check out the `globex-db` service through the OpenShift console. Navigate to the browser tab pointing to the Developer perspective of the OpenShift console of AWS cluster. +
+* You can also check out the `globex-db` service through the OpenShift console. Navigate to the browser tab pointing to the Developer perspective of the OpenShift console of the AWS cluster. +
 On the left menu, select *Project*, and in the *Inventory* list click on *Services*.
 +
 image::images/openshift-console-project-services.png[]
@@ -374,7 +374,7 @@ At this point you can verify that the service network is actually working as exp
 +
 image::images/openshift-console-deployment.png[]
 
-* To scale the deployment to a pod, click on the image:images/openshift-console-scale-up-icon.png[] icon next to the empty circle representing the deployment.
+* To scale the deployment to 1 pod, click on the image:images/openshift-console-scale-up-icon.png[] icon next to the empty circle representing the deployment.
 
 * After a while, the circle becomes dark blue, indicating a successful deployment. The `globex-store-app` application has 1 pod which successfully connected to the database over the service network.
 +
@@ -399,4 +399,4 @@ In the *Network* section, select the *Components* tab, which  shows the connecti
 +
 image::images/skupper-console-network-components.png[]
 
-Congratulations! You successfully used Red Hat Service Interconnect to build a secure service network between two services on two different OpenShift clusters and allow application to connect and communicate over the secure network.
+Congratulations! You successfully used Red Hat Service Interconnect to build a secure service network between two services on two different OpenShift clusters on two different clouds and allowed applications to connect and communicate over the secure network.
