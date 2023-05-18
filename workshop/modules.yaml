@@ -7,19 +7,19 @@ modules:
     name: Introduction to the Workshop
     exit_sign: Continue
   cdc-module:
-    name: Build new functionality with Change Data Capture - Introduction
+    name: Build new functionality with Change Data Capture - Intro
     exit_sign: Continue
   cdc-module-instructions:
     name: Build new functionality with Change Data Capture - Instructions
     exit_sign: Continue 
   apim-module:
-    name: Launch new channels with Contract-First Approach - Introduction
+    name: Launch new channels with Contract-First Approach - Intro
     exit_sign: Continue
   apim-module-instructions:
     name: Launch new channels with Contract-First Approach - Instructions
     exit_sign: Continue
   skupper-module:
-    name: Building a secure service network with Red Hat Service Interconnect - Introduction
+    name: Building a secure service network with Red Hat Service Interconnect - Intro
     exit_sign: Continue
   skupper-module-instructions:
     name: Building a secure service network with Red Hat Service Interconnect - Instructions

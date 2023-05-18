@@ -128,7 +128,7 @@ image::images/kafdrop-globex-tracking-recommendation.png[]
 image::images/globex-home-page-featured.png[]
 
 * To demonstrate that the list of featured products is calculated in real-time, you can simulate a number of user activities using a simulator deployed next to the Globex web application. +
-To use the simulator, go the the browser tab pointing to the web console of the OpenShift cluster, navigate to the Topology view of the *globex-%user_name%* namespace, and click the image:images/openshift-console-open-url.png[] symbol next to the *activity-tracking-simulator* deployment.
+To use the simulator, go the the browser tab pointing to the web console of the OpenShift cluster, navigate to the Topology view of the *globex-%user_name%* namespace, and click the image:images/openshift-console-open-url.png[] symbol next to the *activity-tracking-simulator* deployment (it will most likely be abbreviated as shown in the screenshot, hovering over the name will expand it).
 +
 image::images/openshift-console-open-url-3.png[]
 
@@ -136,7 +136,10 @@ image::images/openshift-console-open-url-3.png[]
 +
 image::images/swagger-ui-activity-tracking-simulator.png[]
 
-* Click on the *POST* link, and then on the *Try it out* link on the right. If you want, you change the number of user activities that will be generated (the default is 100). Click *Execute* to execute the REST call to the simulator.
+* Click on the *POST* link, and then on the *Try it out* link on the right. + 
++
+image::images/swagger-ui-activity-tracking-simulator-post-try.png[]
+If you want, you change the number of user activities that will be generated (the default is 100). Click *Execute* to execute the REST call to the simulator.
 +
 image::images/swagger-ui-activity-tracking-simulator-2.png[]
 
