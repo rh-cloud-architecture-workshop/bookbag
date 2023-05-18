@@ -8,10 +8,18 @@ Welcome to the Cloud Architecture Workshop. The workshop consists of several mod
 ==== Your user across all modules
 Across all modules, at some point you will have to know your assigned user and password, as well as the URL of the OpenShift console. While all of this is presented to you in the individual modules, here it is, for your convenience:
 
-** OpenShift Console: %openshift_cluster_console%
+++++
+<div class="card">
+  <div class="card-header">
+++++
+** OpenShift Console: *%openshift_cluster_console%*
 ** Username: *%user_name%*
 ** Password: *%user_password%*
-
+++++
+  </div>
+</div>
+<br>
+++++
 
 === Get started
 Before diving into a particular module, we recommend that you go through the workshop introduction module, to explore the technical and functional environment for this workshop.
@@ -29,7 +37,7 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-secondary">#overview</span>
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         <span class="badge badge-pill badge-secondary">#explore</span></p>
-        <a href="/workshop/workshop-introduction" class="card-link">Introduction</a>        
+        <a href="/workshop/workshop-introduction" class="btn btn-sm btn-info">Introduction &gt;</a>        
       </div>
     </div>
   </div>
@@ -46,8 +54,8 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Devspaces</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/cdc-module" class="card-link">Introduction</a>
-        <a href="/workshop/cdc-module-instructions" class="card-link">Instructions</a>
+        <a href="/workshop/cdc-module" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/cdc-module-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
   </div>
@@ -70,8 +78,8 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Devspaces</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/apim-module" class="card-link">Introduction</a>
-        <a href="/workshop/apim-module-instructions" class="card-link">Instructions</a>
+        <a href="/workshop/apim-module" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/apim-module-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
   </div>
@@ -86,8 +94,8 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Application-Connectivity</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/skupper-module" class="card-link">Introduction</a>
-        <a href="/workshop/skupper-module-instructions" class="card-link">Instructions</a>
+        <a href="/workshop/skupper-module" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/skupper-module-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
   </div>
@@ -111,8 +119,8 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Data-Foundation</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/camel-module" class="card-link">Introduction</a>
-        <a href="/workshop/camel-module-instructions" class="card-link">Instructions</a>
+        <a href="/workshop/camel-module" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/camel-module-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
   </div>
