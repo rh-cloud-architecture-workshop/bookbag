@@ -13,11 +13,11 @@ They are working towards launching their own *Globex Mobile App* and  partnering
 *(a) Mobile App*
 
 * Globex would like to launch a mobile application as well in addition to the retail web-site. Globex does not have the necessary expertise in mobile development, so development will have to be outsourced.
-* This means that, the mobile application will also secure access to the Globex APIs
+* This means that, the mobile application will also need secure access to the Globex APIs
 
 *(b) Partner Portal*
 
-* Retail partner aggregators would like to showcase Globex' product catalogue on their website
+* Retail partner aggregators would like to showcase Globex's product catalogue on their website
 * To allow for this access, Globex would like to expose an API to allow access to their APIs
 
 
@@ -31,7 +31,7 @@ The new requirements to expand Globex's business by adding additional channels b
 * Inter-dependencies between various teams during the dev phase can slow down the dev productivity and time to market.
 * Lack of governance and inadvertent changes to the services can lead to adverse effect on the dev teams
 
-Globex decides to adopt a *Contract First approach* before tackling the development of new services with the API contract being formalized in as OpenAPI specifications.  With *Contract-First*, all the relevant parties including the Globex cor team, internal teams, mobile teams, and 3rd party partner aggregators are on the same page before writing the first line of code.  Once a first version of the OpenAPI spec document is ready, it is pushed and managed in a service registry, which acts a the system of truth. Mocks are created for the API so as to enable parallel development streams.
+Globex decides to adopt a *Contract First approach* before tackling the development of new services with the API contract being formalized in as OpenAPI specifications.  With *Contract-First*, all the relevant parties including the Globex core team, internal teams, mobile teams, and 3rd party partner aggregators are on the same page before writing the first line of code.  Once a first version of the OpenAPI spec document is ready, it is pushed and managed in a service registry, which acts a the system of truth. Mocks are created for the API so as to enable parallel development streams.
 
 .[.underline]#*[Click to know] What is an OpenAPI?*#
 [%collapsible]
@@ -45,7 +45,7 @@ To make this a reality a number of components are brought together to realise th
 
 === Red Hat SSO
 
-Globex uses to use Red Hat SSO to provide single sign-on (SSO) capabilities to Users, Web apps and APIs. In this case, OpenID Connect is used to authenticate a user (Globex Web and Mobile users) and also allow secured access to Globex's APIs
+Globex uses Red Hat SSO to provide single sign-on (SSO) capabilities to Users, Web apps and APIs. In this case, OpenID Connect is used to authenticate a user (Globex Web and Mobile users) and also allow secured access to Globex's APIs
 
 .[.underline]#*[Click to know] What is an OpenID Connect?*#
 [%collapsible]

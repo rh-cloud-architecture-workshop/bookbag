@@ -185,7 +185,11 @@ image::images/order-simulator-random-customer.png[]
 
 Debezium produces a stream of data change events in one or more Kafka topics. In some cases the data in these topics need to be transformed, combined or aggregated before they can be consumed by target services.
 
-In our use case for instance, the cashback service is interested in the total value of an order, not necessarily the value of each individual line item. However, The _orders_ table in the Globex retail database does not contain the total value. So we need to somehow combine the data change events streams from the _orders_ table with the stream of the _line_items_ table to obtain the total value for each order.
+In our use case for instance, the cashback service is interested in the total value of an order, not necessarily the value of each individual line item. However, The _orders_ table in the Globex retail database does not contain the total value, as you can see in the entity relationship diagram.
+
+image::images/globex-db-erd-orders.png[]
+
+So we need to somehow combine the data change events streams from the _orders_ table with the stream of the _line_items_ table to obtain the total value for each order.
 
 This is where stream processing libraries or frameworks come in. Libraries like Kafka Streams or Apache Flink allow to process streams of data consumed from a Kafka cluster in a continuous fashion. The result of the processing is typically stored in topics on the Kafka cluster. Processing capabilities can be stateless or stateful. Stateless processing include data transformations, filtering, mapping and so on. Stateful operations include aggregations and joins.
 
@@ -434,7 +438,7 @@ image::images/openshift-console-topology-cashback-service.png[]
 +
 image::images/cashback-service-ui.png[]
 
-* You should see some customers with a cashback greater than $0. You might need to advance through several pages if you don't see any cusyomers with a cashback value grater than 0$. If you still don't see any, please simulate some orders as detailed earlier in this chapter. +
+* You should see some customers with a cashback greater than $0. You might need to advance through several pages if you don't see any customers with a cashback value grater than 0$. If you still don't see any, please simulate some orders as detailed earlier in this chapter. +
 Click on a cashback with value greater then $0. You should see the list of orders leading to the cashback.
 +
 image::images/cashback-service-ui-2.png[]
@@ -446,6 +450,10 @@ image::images/cashback-service-ui-2.png[]
 ** In the logs of the Camel K order connector, check that the aggregated order is sent to the Cashback service.
 ** In the Cashback service UI, locate the customer you created the order for, and check that it appears in the Cashback list.  
 
-== Conclusion
+== Congratulations
 
-TODO: conclusion
+Congratulations! With this you have completed the *Change Data Capture* module! You successfully leveraged Change Data Capture to create change event streams, and consume these streams to power new services and functionality. 
+
+Please close all but this Instructions browser tab to avoid proliferation of browser tabs which can make working on other modules difficult.
+
+Proceed to the link:workshop-goals[*Overview Page*] to choose your next module.

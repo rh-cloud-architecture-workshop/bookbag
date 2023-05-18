@@ -399,4 +399,10 @@ In the *Network* section, select the *Components* tab, which  shows the connecti
 +
 image::images/skupper-console-network-components.png[]
 
-Congratulations! You successfully used Red Hat Service Interconnect to build a secure service network between two services on two different OpenShift clusters on two different clouds and allowed applications to connect and communicate over the secure network.
+== Congratulations
+
+Congratulations! You successfully used *Red Hat Service Interconnect* to build a secure service network between two services on two different OpenShift clusters and allow application to connect and communicate over the secure network.
+
+Please close all but this Instructions browser tab to avoid proliferation of browser tabs which can make working on other modules difficult. 
+
+Proceed to the link:workshop-goals[*Overview Page*] to choose your next module.

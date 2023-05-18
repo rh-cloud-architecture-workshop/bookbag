@@ -2,33 +2,31 @@
 modules:
   workshop-goals:
     name: "Cloud Architecture Workshop: Overview and Goals"
-    exit_sign: Continue
+    exit_sign: Introduction to the Workshop
   workshop-introduction:
     name: Introduction to the Workshop
-    exit_sign: Continue
+    exit_sign: Change Data Capture Module - Introduction
   cdc-module:
-    name: Build new functionality with Change Data Capture - Intro
-    exit_sign: Continue
+    name: Build new functionality with Change Data Capture - Introduction
+    exit_sign: Change Data Capture Module - Instructions
   cdc-module-instructions:
     name: Build new functionality with Change Data Capture - Instructions
-    exit_sign: Continue 
+    exit_sign: Contract-First Approach Module - Introduction
   apim-module:
-    name: Launch new channels with Contract-First Approach - Intro
-    exit_sign: Continue
+    name: Launch new channels with Contract-First Approach - Introduction
+    exit_sign: Contract-First Approach Module Module - Instructions
   apim-module-instructions:
     name: Launch new channels with Contract-First Approach - Instructions
-    exit_sign: Continue
+    exit_sign: Secure Service Network Module - Introduction 
   skupper-module:
-    name: Building a secure service network with Red Hat Service Interconnect - Intro
-    exit_sign: Continue
+    name: Building a secure service network with Red Hat Service Interconnect - Introduction
+    exit_sign: Secure Service Network Module - Instructions 
   skupper-module-instructions:
     name: Building a secure service network with Red Hat Service Interconnect - Instructions
-    exit_sign: Continue
+    exit_sign: Multi-channel Support Service Module - Introduction
   camel-module:
-    name: Building a multi-channel support service for Globex customers - Intro
-    exit_sign: Continue
+    name: Building a multi-channel support service for Globex customers - Introduction
+    exit_sign: Multi-channel Support Service Module - Instructions
   camel-module-instructions:
     name: Building a multi-channel support service for Globex customers - Instructions
-    exit_sign: Continue
-  whats-next:
-    name: What's next?
+    
