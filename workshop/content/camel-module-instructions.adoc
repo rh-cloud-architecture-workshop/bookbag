@@ -228,11 +228,23 @@ Once onboard, you should see the following:
 <img src="./images/camel/slack-onboard.jpg" style="width:25%;border-style: none;">
 ++++
 +
-Marked in red, you should see you're in the _CamelGlobex_ _Slack_ workspace.
+Marked in red, you should see you're in the *_CamelGlobex_* _Slack_ workspace.
 +
-{empty} +
+[NOTE]
+====
+You may see a number suffix in the name instead:
 
-. Then, ensure you add the GlobexSupport app:
+- *_CamelGlobexN_* (N: number)
+====
+
+. Then, ensure you add the *_GlobexSupport_* app:
++
+[NOTE]
+====
+You may see a number suffix in the app instead:
+
+- *_CamelSupportN_* (N: number)
+====
 .. From the left panel, choose:
 +
 --
@@ -877,7 +889,17 @@ Once onboard, you should see the following:
 <img src="./images/camel/discord-onboard.jpg" style="width:30%;border-style: none;">
 ++++
 
-- Marked in red (1), you should see you're in the _CamelGlobex_ _Discord_ server.
+- Marked in red (1), you should see you're in the *_CamelGlobex_* _Discord_ server.
++
+[NOTE]
+====
+You may see a number suffix in the server name instead:
+
+- *_CamelGlobexN_* (N: number)
+====
+
+
+
 - Marked in red (2), you should the channel folder that will contain all customer conversations.
 
 CAUTION: You may already see customer channels under `CLIENTS` created by other students in the room. +
