@@ -123,7 +123,7 @@ image::images/kafdrop-expand-message.png[]
 +
 image::images/kafdrop-globex-tracking-message.png[]
 
-* If you go back to the list of topics in the Kafdrop UI (using the browser back button or clicking on the Kafdrop header) image:images/kafdrop-header-back.png[] , you will notice a number of topics of topics starting with *globex.recommendation*. Those are the topics created by the _recommendation engine_ application, which calculates a list of the most popular products based on the user activity stream. +
+* If you go back to the list of topics in the Kafdrop UI (using the browser back button or clicking on the Kafdrop header) image:images/kafdrop-header-back.png[] , you will notice a number of topics starting with *globex.recommendation*. Those are the topics created by the _recommendation engine_ application, which calculates a list of the most popular products based on the user activity stream. +
 The *globex.recommendation-product-score-aggregated-changelog* topic contains messages containing the list of most popular products, where the latest message has the current list.
 +
 image::images/kafdrop-globex-tracking-recommendation.png[]
