@@ -132,7 +132,11 @@ The SSO server is set up with a number of users corresponding to customers in th
 +
 image::images/globex-login-sso.png[]
 
-* Once logged in, you can browse through the catalog and add items to the shopping cart. To check out the cart and place an order, click on the *Cart* link in the top menu.
+* Once logged in, you can browse through the catalog and add items to the shopping cart. +
+
+**__Note:__** When adding an item to the shopping cart, there is no "close" button for that item. You can use the browser "back" button to return to the catalog. The Globex UX team has been notified and is already working on adding a "close" button ;-)
+
+To check out the cart and place an order, click on the *Cart* link in the top menu.
 +
 image::images/globex-goto-cart.png[]
 
