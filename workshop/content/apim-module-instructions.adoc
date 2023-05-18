@@ -35,9 +35,6 @@
 
 
 
-//== Deploy the Contract First Module
-
-//TODO: deploy the solution through BackStage
 
 
 == Objectives

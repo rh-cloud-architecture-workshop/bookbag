@@ -35,8 +35,15 @@ The connection details for the OpenShift cluster:
 ** Username: *%user_name%*
 ** Password: *%user_password%*
 
+
+Depending on the workshop modules you will be guided through, there are helper components such as "Kafdrop", an integrated development environment (IDE) called "OpenShift Dev Spaces", based on Eclipse Che and some more.
+All of these (including the IDE) are hosted on OpenShift, so the login to your OpenShift Console is the central entrypoint for your Developer Experience. +
+These additional components will be introduced in the following chapters and workshop modules, where applicable.
+
+
 * We leverage OpenShift Gitops (aka ArgoCD) to manage the deployment of the lab assets, in a hub and spoke model: a central ArgoCD instance which manages common assets and namespace-scoped ArgoCD instances which manage the per-user assets. In total ArgoCD manages 350 applications per cluster, which represent more than 2500 pods. +
 If you are interested to know more about this setup, do not hesitate to come to talk to the workshop instructors.
+
 
 == Walkthrough of the Globex web application
 
@@ -52,7 +59,7 @@ image::images/openshift-console-developer-view-projects.png[]
 * The Globex web application is deployed in the *globex-%user_name%* namespace. Click on *Topology* in the menu on the left and then click on the *globex-%user_name%* link to open the topology view of the namespace. The Topology view gives you a graphical representation of the different resources deployed in the namespace.
 +
 image::images/openshift-console-developer-select-topology.png[]
-* In the *Topology View* of the Developer Perspective, expect to see something like this (rearrange the topology as you see fit):
+* In the *Topology View* of the Developer Perspective, expect to see something like this (rearrange the topology as you see fit by dragging the circle symbols that represent the various resources. Please avoid creating connections via the arrows just yet):
 +
 image::images/openshift-console-topology-view.png[]
 +
@@ -110,9 +117,13 @@ image::images/kafdrop-globex-tracking-partition.png[]
 +
 This opens a view to the individual messages in the topic. In this case, the body of each message consists of a JSON structure of a user activity event from the Globex web application.
 +
+Note: Messages are listed in a collapsed format. Clicking on the small chevron to the left of the message expands the message content.
++
+image::images/kafdrop-expand-message.png[]
++
 image::images/kafdrop-globex-tracking-message.png[]
 
-* If you go back to the list of topics in the Kafdrop UI, you will notice a number of topics of topics starting with *globex.recommendation*. Those are the topics created by the _recommendation engine_ application, which calculates a list of the most popular products based on the user activity stream. +
+* If you go back to the list of topics in the Kafdrop UI (using the browser back button or clicking on the Kafdrop header) image:images/kafdrop-header-back.png[] , you will notice a number of topics starting with *globex.recommendation*. Those are the topics created by the _recommendation engine_ application, which calculates a list of the most popular products based on the user activity stream. +
 The *globex.recommendation-product-score-aggregated-changelog* topic contains messages containing the list of most popular products, where the latest message has the current list.
 +
 image::images/kafdrop-globex-tracking-recommendation.png[]
@@ -122,7 +133,7 @@ image::images/kafdrop-globex-tracking-recommendation.png[]
 image::images/globex-home-page-featured.png[]
 
 * To demonstrate that the list of featured products is calculated in real-time, you can simulate a number of user activities using a simulator deployed next to the Globex web application. +
-To use the simulator, go the the browser tab pointing to the web console of the OpenShift cluster, navigate to the Topology view of the *globex-%user_name%* namespace, and click the image:images/openshift-console-open-url.png[] symbol next to the *activity-tracking-simulator* deployment.
+To use the simulator, go the the browser tab pointing to the web console of the OpenShift cluster, navigate to the Topology view of the *globex-%user_name%* namespace, and click the image:images/openshift-console-open-url.png[] symbol next to the *activity-tracking-simulator* deployment (it will most likely be abbreviated as shown in the screenshot, hovering over the name will expand it).
 +
 image::images/openshift-console-open-url-3.png[]
 
@@ -130,7 +141,10 @@ image::images/openshift-console-open-url-3.png[]
 +
 image::images/swagger-ui-activity-tracking-simulator.png[]
 
-* Click on the *POST* link, and then on the *Try it out* link on the right. If you want, you change the number of user activities that will be generated (the default is 100). Click *Execute* to execute the REST call to the simulator.
+* Click on the *POST* link, and then on the *Try it out* link on the right. + 
++
+image::images/swagger-ui-activity-tracking-simulator-post-try.png[]
+If you want, you change the number of user activities that will be generated (the default is 100). Click *Execute* to execute the REST call to the simulator.
 +
 image::images/swagger-ui-activity-tracking-simulator-2.png[]
 
