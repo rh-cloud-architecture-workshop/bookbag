@@ -434,7 +434,7 @@ image::images/openshift-console-topology-cashback-service.png[]
 +
 image::images/cashback-service-ui.png[]
 
-* You should see some customers with a cashback greater than $0. You might need to advance through several pages if you don't see any cusyomers with a cashback value grater than 0$. If you still don't see any, please simulate some orders as detailed earlier in this chapter. +
+* You should see some customers with a cashback greater than $0. You might need to advance through several pages if you don't see any customers with a cashback value grater than 0$. If you still don't see any, please simulate some orders as detailed earlier in this chapter. +
 Click on a cashback with value greater then $0. You should see the list of orders leading to the cashback.
 +
 image::images/cashback-service-ui-2.png[]
