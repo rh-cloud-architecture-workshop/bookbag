@@ -185,7 +185,11 @@ image::images/order-simulator-random-customer.png[]
 
 Debezium produces a stream of data change events in one or more Kafka topics. In some cases the data in these topics need to be transformed, combined or aggregated before they can be consumed by target services.
 
-In our use case for instance, the cashback service is interested in the total value of an order, not necessarily the value of each individual line item. However, The _orders_ table in the Globex retail database does not contain the total value. So we need to somehow combine the data change events streams from the _orders_ table with the stream of the _line_items_ table to obtain the total value for each order.
+In our use case for instance, the cashback service is interested in the total value of an order, not necessarily the value of each individual line item. However, The _orders_ table in the Globex retail database does not contain the total value, as you can see in the entity relationship diagram.
+
+image::images/globex-db-erd-orders.png[]
+
+So we need to somehow combine the data change events streams from the _orders_ table with the stream of the _line_items_ table to obtain the total value for each order.
 
 This is where stream processing libraries or frameworks come in. Libraries like Kafka Streams or Apache Flink allow to process streams of data consumed from a Kafka cluster in a continuous fashion. The result of the processing is typically stored in topics on the Kafka cluster. Processing capabilities can be stateless or stateful. Stateless processing include data transformations, filtering, mapping and so on. Stateful operations include aggregations and joins.
 
