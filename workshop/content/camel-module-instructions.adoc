@@ -243,7 +243,7 @@ You may see a number suffix in the name instead:
 ====
 You may see a number suffix in the app instead:
 
-- *_CamelSupportN_* (N: number)
+- *_GlobexSupportN_* (N: number)
 ====
 .. From the left panel, choose:
 +
