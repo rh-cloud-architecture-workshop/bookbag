@@ -1244,4 +1244,4 @@ With this you have completed the *Contract First API* module!
 
 Please close all but this *Instructions browser tab* to avoid proliferation of tabs which can make working on other modules difficult. 
 
-Choose your next module by accessing link:workshop-goals[*Overview Page*] to choose your next module.
+Proceed to the link:workshop-goals[*Overview Page*] to choose your next module.

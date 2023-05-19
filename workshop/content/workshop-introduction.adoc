@@ -152,3 +152,7 @@ image::images/swagger-ui-activity-tracking-simulator-2.png[]
 Go the browser tab with the Globex we UI, refresh the home page, and notice how the list of featured products has changed, as it is being continuously recalculated.
 
 * This concludes the walkthrough of the Globex web application for now. The application provides more features, which you will discover while going through some of the modules of this workshop.
+
+Please close all but this *Instructions browser tab* to avoid proliferation of tabs which can make working on other modules difficult. 
+
+Proceed to the link:workshop-goals[*Overview Page*] to choose your next module.
