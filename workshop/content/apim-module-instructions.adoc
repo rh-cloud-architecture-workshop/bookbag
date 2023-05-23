@@ -156,6 +156,18 @@ We will be using OpenID Connect which is an open authentication protocol that wo
 +
 .Red Hat SSO - Logged In
 image::images/apim/apim-sso-login.png[]
+
+[WARNING]
+====
+In case you see an error stating *You don't have access to the requested resource*, you will need to logout, close the browser tab, and login again
+
+* Click on *Sign Out* and close the browser
+* Launch Red Hat SSO by clicking {sso_tenant_console}[SSO Console^,window="sso"] and login using username and password ({user_name}/{user_password}).
+* Login as *({user_name}/{user_password})*. 
+====
+
+
+
 * Here is how the *OpenID Provider Configuration* looks like
 +
 .Red Hat SSO - OpenID Provider Configuration
@@ -168,16 +180,16 @@ image::images/apim/well-know-openid-configuration.png[]
 
 | *OpenID Provider Configuration (well-known config)*: +
 This URL provides a mechanism to discover the End-User's OpenID Provider and obtain information needed to interact with it, including OpenID/OAuth endpoint locations. The following endpoints is fetched from this URL |
-\https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}/.well-known/openid-configuration 
+https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}/.well-known/openid-configuration 
 
 | *issuer*: +
 This value is needed when we need to authorize a user through single sign-on |
 
-\https://sso.{openshift_subdomain}/auth/realms/globex-{user_name} 
+https://sso.{openshift_subdomain}/auth/realms/globex-{user_name} 
 
 | *token_endpoint* : +
 clients can obtain access tokens from the server using this token endpoint and use these same tokens to access protected resources (APIs in our case) |
-\https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}/protocol/openid-connect/token
+https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}/protocol/openid-connect/token
 
 |===
 
@@ -453,7 +465,6 @@ In this workshop, since both 3scale and the Mobile Gateway run on OpenShift, 3sc
 * In the file `mobile-gateway-backend.yaml`, update the `<replace-me>` placeholder with the Service endpoint of the Globex Mobile gateway service appended with the port `:8080`. +
 +
 [source,bash,role=copy,subs="attributes"]
-.Service hostname of the Mobile Gateway API
 ----
 http://globex-mobile-gateway.globex-apim-{user_name}.svc.cluster.local:8080
 ----
@@ -486,6 +497,7 @@ image::images/apim/mobile-gateway-services.png[]
 ====
 
 * From the Terminal of Dev Space,s that should be open already, run the following command `oc whoami` to check if you are still logged in as *{user_name}* and `oc project` to see if you are in the project `globex-apim-{user_name}`
+** If you are not in `globex-apim-{user_name}`, run `oc project globex-apim-{user_name}` to login to the right namespace
 +
 [source,bash , subs="attributes"]
 .Check logged-in username and project
@@ -498,7 +510,6 @@ Using project "globex-apim-{user_name}" on server...
 * Run the following command to create a Mobile Gateway Backend in 3scale.
 +
 [source,bash,role=copy, subs="attributes"]
-.Create Mobile Gateway Backend in 3scale
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/mobile/gateway/mobile-gateway-backend.yaml -n globex-apim-{user_name}
 ----
@@ -548,7 +559,6 @@ image::images/apim/mobile-product-gateway-product-issuerendpoint.png[]
 * Execute the following command in the Terminal to create this Product for Mobile Gateway 
 +
 [source,bash,role=copy, subs="attributes"]
-.Execute command in Terminal to create Mobile Gateway on 3scale
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/mobile/gateway/mobile-gateway-product.yaml -n globex-apim-{user_name}
 ----
@@ -568,7 +578,6 @@ image::images/apim/mobile-activedoc-yaml.png[width=70%]
 * Replace the `<replace-me>` placeholder with the Service Registry OpenAPI endpoint. This is the same OpenAPI spec that you setup on Service Registry.
 +
 [source,bash,role=copy,subs="attributes"]
-.Service Registry OpenAPI Spec endpoint for Mobile Gateway
 ----
 {service_registry_url}/apis/registry/v2/groups/globex/artifacts/mobileapi
 ----
@@ -580,7 +589,6 @@ image::images/apim/mobile-activedoc-create-file.png[]
 * Create this Active Doc by running the following command in the Dev Spaces Terminal
 +
 [source,bash,role=copy,subs="attributes"]
-.Create Activedoc command
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/mobile/activedoc/create-mobile-activedoc.yaml -n globex-apim-{user_name}
 ----
@@ -598,7 +606,6 @@ For the purpose of this workshop let us run a few commands to setup these users 
 * In the *Dev Spaces Terminal* run the following command
 +
 [source,bash,role=copy,subs="attributes"]
-.Create users command
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/mobile/users/mobile-dev-setup.yaml -n globex-apim-{user_name}
 ----
@@ -739,6 +746,7 @@ image::images/apim/3scale_dev_portal_applications.png[width=70%]
 image::images/apim/apim-devportal-mobile-create-new-app-2.png[width=70%]
 * An application is created successfully. Make a note of the *Client ID* and *Client Secret*. You will be using this in the Mobile App setup. Scratchpad can be used for this as well.
 * Enter the value asterisk (*) in the **REDIRECT URL** field and click on the **Submit** button. This is to setup the right Redirect URL for OAuth using Red Hat SSO.
+** In real-life you would never mark this as (*), but provide the correct URL based on your application.
 +
 .Update REDIRECT URL in the Application creates successfully for Mobile User
 image::images/apim/apim-devportal-mobile-app-success.png[width=90%]
@@ -767,7 +775,7 @@ image::images/apim/mobile-mobgateway-env-patch.png[width=60%]
 |Field | Value
 
 | SSO_AUTHORITY | \https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}
-| SSO_REDIRECT_LOGOUT_URI | \https://globex-mobile-globex-apim-user1.{openshift_subdomain}/home
+| SSO_REDIRECT_LOGOUT_URI | \https://globex-mobile-globex-apim-{user_name}.{openshift_subdomain}/home
 |===
 +
 .Update SSO details into mobile-env-patch file
@@ -779,8 +787,8 @@ image::images/apim/mobile-full-env-patch.png[]
 * Execute this script in the Terminal by running the following command in Dev spaces' Terminal
 +
 [source,bash,role=copy,subs="attributes"]
-.Run mobile-env-patch.sh script
 ----
+oc project globex-apim-{user_name}
 sh /projects/workshop-devspaces/workshop/module-apim/mobile/mobile-env-patch.sh
 ----
 +
@@ -819,7 +827,6 @@ image::images/apim/mobile-dev-portal-clientid.png[]
 * Update this field with the following value and click on *Save*
 +
 [source,bash,role=copy, subs="attributes"]
-.Value for Web Origin
 ----
 https://globex-mobile-globex-apim-{user_name}.{openshift_subdomain}
 ----
@@ -931,7 +938,6 @@ image::images/apim/partner-sec-scheme-updated.png[]
 ** This command makes a POST to the Service Registry API to create an OpenAPI schema for Partner Gateway API.
 +
 [source,bash,role=copy, subs="attributes"]
-.POST call to create new OpenAPI on Service Registry
 ----
 curl -X POST -H "Content-type: application/json; artifactType=OPENAPI" -H "X-Registry-ArtifactId: partnerapi" -d @/projects/workshop-devspaces/workshop/module-apim/partners/activedoc/partner-activedoc-draft.json {service_registry_url}/apis/registry/v2/groups/globex/artifacts
 ----
@@ -951,7 +957,6 @@ curl -X POST -H "Content-type: application/json; artifactType=OPENAPI" -H "X-Reg
 * Substitute *"<replace-me>"* with the Service endpoint of the Globex Partner gateway service appended with the port as `:8080`. This URL is given below 
 +
 [source,bash,role=copy,subs="attributes"]
-.Service hostname of the Mobile Gateway API
 ----
 http://globex-partner-gateway.globex-apim-{user_name}.svc.cluster.local:8080
 ----
@@ -962,7 +967,6 @@ image::images/apim/partner-gateway-backend.png[width=80%]
 * Run the following command which will create a Partner Gateway Backend in 3scale.
 +
 [source,bash,role=copy, subs="attributes"]
-.create Partner Gateway Backend in 3scale
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/partners/gateway/partner-gateway-backend.yaml -n globex-apim-{user_name}
 ----
@@ -1018,7 +1022,6 @@ image::images/apim/product-gateway-product-issuerendpoint.png[]
 * Run the following command in the Dev Spaces Terminal to create the product
 +
 [source,bash,role=copy, subs="attributes"]
-.Create partner product
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/partners/gateway/partner-gateway-product.yaml -n globex-apim-{user_name}
 ----
@@ -1035,7 +1038,6 @@ image::images/apim/mobile-activedoc-yaml.png[width=70%]
 * Replace the `<replace-me>` placeholder with the Service Registry OpenAPI endpoint for Partner API show below
 +
 [source,bash,role=copy,subs="attributes"]
-.Service Registry Mobile OpenAPI endpoint
 ----
 {service_registry_url}/apis/registry/v2/groups/globex/artifacts/partnerapi
 ----
@@ -1044,7 +1046,6 @@ image::images/apim/mobile-activedoc-yaml.png[width=70%]
 * Create this Active Doc by running the following command in the Dev Spaces Terminal
 +
 [source,bash,role=copy,subs="attributes"]
-.Create Activedoc command
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/partners/activedoc/create-partner-activedoc.yaml -n globex-apim-{user_name}
 ----
@@ -1059,7 +1060,6 @@ activedoc.capabilities.3scale.net/partner-gateway-activedoc created
 * Create this Active Doc by running the following command in the Dev Spaces Terminal
 +
 [source,bash,role=copy,subs="attributes"]
-.Create Activedoc command
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/partners/users/partner-dev-setup.yaml -n globex-apim-{user_name}
 ----
@@ -1156,7 +1156,6 @@ image::images/apim/apim-devportal-partner-clientid.png[width=70%]
 * Update *Token URL* with the following value
 +
 [source,bash,role=copy,subs="attributes"]
-.update TokenURL
 ----
 https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}/protocol/openid-connect/token
 ----
@@ -1164,7 +1163,6 @@ https://sso.{openshift_subdomain}/auth/realms/globex-{user_name}/protocol/openid
 * In the *Dev Spaces Terminal* apply changes made to the *secret.yaml* by running the following command
 +
 [source,bash,role=copy,subs="attributes"]
-.Apply secret.yaml changes
 ----
 oc apply -f /projects/workshop-devspaces/workshop/module-apim/partners/partner-web/secret.yaml -n globex-apim-{user_name}
 ----
@@ -1178,7 +1176,6 @@ secret/globex-partner-web configured
 ** Execute this script in the Dev Spaces Terminal
 +
 [source,bash,role=copy,subs="attributes"]
-.Run script to update GLOBEX_PARTNER_GATEWAY
 ----
 oc set env deployments/globex-partner-web --overwrite GLOBEX_PARTNER_GATEWAY=https://globex-partner-gateway-product-3scale-{user_name}-apicast-production.{openshift_subdomain}
 ----
