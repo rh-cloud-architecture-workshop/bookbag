@@ -52,13 +52,7 @@ To build from local source (aka "binary build"):
 ----
 $ *oc start-build bookbag --follow --from-dir=.*
 ----
-+
-Build your Bookbag Image from Git (make sure you have set `GIT_REPO` in your build template!):
-+
-[source,subs="{markup-in-source}"]
-----
-$ *oc start-build bookbag --follow*
-----
+
 
 == Test Deploy of the Bookbag image
 
@@ -97,24 +91,24 @@ bookbag  bookbag-bookbag-demo.apps.ocp.example.com        bookbag   10080-tcp  e
 
 === Build image stream, push OpenShift's private registry image to quay using podman
 
+oc login --token=sha256~xxxxxx --server=https://api.cluster-xx.xx.xx.opentlc.com:6443
+
 oc process -f build-template.yaml | oc apply -f -
 
 oc start-build bookbag --follow --from-dir=.     
 
-
-
-ssh lab-user@bastion.jbp76.sandbox2538.opentlc.com
-
-oc login --token=sha256~xxxxxx --server=https://api.cluster-xx.xx.xx.opentlc.com:6443
+ssh lab-user@bastion.b57kt.sandbox2674.opentlc.com
 
 oc registry login
 
-podman pull default-route-openshift-image-registry.apps.cluster-xx.jbp76.xx.opentlc.com/cashback-user1/bookbag:latest
+docker pull default-route-openshift-image-registry.apps.cluster-vbsf7.vbsf7.sandbox2829.opentlc.com/create-bookbag/bookbag:latest
+
 
 podman login quay.io ## <you will need quay username/password>
 
 
-podman tag default-route-openshift-image-registry.apps.cluster-xx.jbp76.xx.opentlc.com/cashback-user1/bookbag:latest  quay.io/globex-recommendation/summit-connect-bookbag:rhte-2023
+docker tag default-route-openshift-image-registry.apps.cluster-vbsf7.vbsf7.sandbox2829.opentlc.com/create-bookbag/bookbag:latest quay.io/cloud-architecture-workshop/bookbag:05cafa9
 
-podman push quay.io/globex-recommendation/summit-connect-bookbag:rhte-2023
+podman push quay.io/cloud-architecture-workshop/bookbag:a06b31a
 
+podman push quay.io/cloud-architecture-workshop/bookbag:latest
