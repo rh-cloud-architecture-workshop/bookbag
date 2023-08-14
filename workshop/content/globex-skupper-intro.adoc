@@ -22,4 +22,4 @@ In the next chapter, you will be guided through setting up a service network bet
 The concept of an on-premise deployment is challenging to simulate in a lab environment. This is why we opted to have the database running on OpenShift on another cloud provider. However, Red Hat Service Interconnect is not limited to service networks between instances of OpenShift, but can equally well be leveraged to connect deployments running on premise (deployed on OpenShift or Kubernetes, on virtual machines or on bare metal) with services running in the cloud.
 ====
 
-Proceed to the link:skupper-module-instructions[instructions] for this module.
+Proceed to the link:globex-skupper-instructions[instructions] for this module.

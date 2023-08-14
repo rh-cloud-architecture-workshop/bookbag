@@ -4,12 +4,12 @@ modules:
   activate:
     - workshop-goals
     - workshop-introduction
-    - cdc-module
-    - cdc-module-instructions
-    - apim-module
-    - apim-module-instructions
-    - skupper-module
-    - skupper-module-instructions
-    - camel-module
-    - camel-module-instructions
+    - globex-cdc-intro
+    - globex-cdc-instructions
+    - globex-apim-intro
+    - globex-apim-instructions
+    - globex-skupper-intro
+    - globex-skupper-instructions
+    - globex-camel-intro
+    - globex-camel-instructions
     - whats-next

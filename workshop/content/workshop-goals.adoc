@@ -54,8 +54,8 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Devspaces</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/cdc-module" class="btn btn-sm btn-info">Introduction &gt;</a>
-        <a href="/workshop/cdc-module-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
+        <a href="/workshop/globex-cdc-into" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/globex-cdc-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
   </div>
@@ -78,8 +78,8 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Devspaces</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/apim-module" class="btn btn-sm btn-info">Introduction &gt;</a>
-        <a href="/workshop/apim-module-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
+        <a href="/workshop/globex-apim-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/globex-apim-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
   </div>
@@ -94,8 +94,8 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Application-Connectivity</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/skupper-module" class="btn btn-sm btn-info">Introduction &gt;</a>
-        <a href="/workshop/skupper-module-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
+        <a href="/workshop/globex-skupper-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/globex-skupper-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
   </div>
@@ -119,8 +119,8 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Data-Foundation</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/camel-module" class="btn btn-sm btn-info">Introduction &gt;</a>
-        <a href="/workshop/camel-module-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
+        <a href="/workshop/globex-camel-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/globex-camel-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
   </div>

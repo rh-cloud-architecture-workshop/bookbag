@@ -59,4 +59,4 @@ image::images/globex-deployment-3.png[]
 
 In the next chapter, you will be guided through the implementation and deployment of the Cashback service. Of course this entails way more than can be achieved during a workshop, so instead most components are already in place, and you will focus on a couple of key activities to deploy and run the solution.
 
-Proceed to the link:cdc-module-instructions[instructions] for this module.
+Proceed to the link:globex-cdc-instructions[instructions] for this module.
