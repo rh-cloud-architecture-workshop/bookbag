@@ -11,7 +11,7 @@
 :slackinviteurl: %slack_invite_url%
 :discordinviteurl: %discord_invite_url%
 
-:topologyviewurl: %openshift_cluster_console%/topology/ns/globex-camel-user1?view=graph
+:topologyviewurl: %openshift_cluster_console%/topology/ns/globex-camel-%user_name%?view=graph
 
 :globexweburl: https://globex-web-globex-camel-%user_name%.%openshift_subdomain%/home
 
