@@ -35,10 +35,10 @@ The animation below illustrates the 3 main integration systems you will deliver 
 
 You'll notice the architecture above contains 4 Camel applications.
 
-- To simplify the lab, the Slack integration is provided and already deployed in the environment. You only need to focus on the applications below.
+- To simplify the lab, the Rocket.Chat integration is provided and already deployed in the environment. You only need to focus on the applications below.
 
 - As per the animation above:
-. The Discord integration represents the first system to build.
+. The Matrix integration represents the first system to build.
 . The Globex integration represents the second one to build.
 . The third one to build, persists and shares a transcript.
 
@@ -109,7 +109,7 @@ image::images/devspace-auth-access.png[width=70%]
 - `workshop/module-camel/lab`
 +
 ++++
-<img src="./images/camel/devspaces-project-tree.jpg" style="width:100%;border-style: none;">
+<img src="./images/camel/devspaces-project-tree.png" style="width:100%;border-style: none;">
 ++++
 +
 {empty} +
@@ -118,14 +118,14 @@ image::images/devspace-auth-access.png[width=70%]
 * Open the built-in Terminal. Click on the [1] image:images/devspaces-menu.png[] icon on the top of the left menu, and select [2] *Terminal /* [3] *New Terminal* from the drop-down menu.
 +
 ++++
-<img src="./images/camel/devspaces-open-terminal.jpg" style="width:40%;border-style: none;">
+<img src="./images/camel/devspaces-open-terminal.png" style="width:40%;border-style: none;">
 ++++
 // image::images/apim/apim-devspaces-menu-new-terminal.png[]
 
 * This opens a terminal in the bottom half of the workspace.
 +
 ++++
-<img src="./images/camel/devspaces-view-terminal.jpg" style="width:100%;border-style: none;">
+<img src="./images/camel/devspaces-view-terminal.png" style="width:100%;border-style: none;">
 ++++
 +
 {empty} +
@@ -170,18 +170,18 @@ Now using project "globex-camel-%user_name%" on server "%openshift_api_internal%
 ----
 +
 ++++
-<img src="./images/camel/devspaces-login-project.jpg" style="width:60%;border-style: none;">
+<img src="./images/camel/devspaces-login-project.png" style="width:60%;border-style: none;">
 ++++
 // image::images/apim/apim-terminal-setup.png[]
 
 {empty} +
 
 
-== Enable the Slack to Discord interaction
+== Enable the Rocket.Chat to Matrix interaction
 
-As previously described, the Slack integration is already in place and users can already post questions on the _GlobexSupport_ app which are channelled and available in the AMQ Broker.
+As previously described, the Rocket.Chat integration is already in place and users can already post questions on the _GlobexSupport_ app which are channelled and available in the AMQ Broker.
 
-In this first implementation activity you need to enable the end-to-end data flow between Slack and Discord (marked 1 in the diagram below).
+In this first implementation activity you need to enable the end-to-end data flow between Rocket.Chat and Matrix (marked 1 in the diagram below).
 
 // image::./images/camel/overview-lab-1.jpg[align="center", width=90%]
 
@@ -191,21 +191,21 @@ In this first implementation activity you need to enable the end-to-end data flo
 </p>
 ++++
 
-Events can already travel half the way up to the broker (AMQ), but the second stage, from the Broker to Discord, is still pending.
+Events can already travel half the way up to the broker (AMQ), but the second stage, from the broker to Matrix, is still pending.
 
 {empty} +
 
 === How Customers interact with Agents
 
-Customers will choose Slack or Globex's chat widget to communicate with agents. They will do so in a private one-to-one manner.
+Customers will choose Rocket.Chat or Globex's chat widget to communicate with agents. They will do so in a private one-to-one manner.
 
-From Slack, an app (bot) called `GlobexSupport` will be available. This app looks and feels like any other Slack user you can interact with. You can send direct messages and get responses. The user can enter his question/concern, which is channelled to the agent, and wait for a response.
+From Rocket.Chat, a channel called `globex-support-%user_name%` will be available. This channel looks and feels like any other Rocket.Chat channel you can interact with. You can send direct messages and get responses. The user can enter his question/concern, which is channelled to the agent, and wait for a response.
 
-On Discord, where the agents operate, each new customer request will initiate a new conversation in a new dynamically created channel. The private channel will remain open during the life of the conversation, until the customer has been attended and the conversation can be considered closed. At that moment, the agent manually deletes the channel in Discord, and the customer is notified in Slack.
+On Matrix, where the agents operate, each new customer request will initiate a new conversation in a new dynamically created room. This room will remain open during the life of the conversation, until the customer has been attended and the conversation can be considered closed. At that moment, the agent manually leaves the room in Matrix, and the customer is notified in Rocket.Chat.
 
 {empty} +
 
-=== Onboard on the Slack platform
+=== Onboard on the Rocket.Chat platform [TODO]
 
 You will need to open Slack in your browser to complete the work. We have prepared a Slack workspace dedicated to the workshop to make things easy.
 
@@ -306,9 +306,9 @@ Our use case however involves human conversations which may flow in any arbitrar
 
 Because event-driven architectures are a-synchronous (no waiting to do), they optimise performance (no thread blocking), at the cost however of increased complexity. Caching is a strategy (among others) to assist the event-driven approach and offer an elegant implementation.
 
-In our use case, we need to propagate Slack messages to Discord, and vice-versa. However, we're dealing here with private interactions between customers and agents, and we need to maintain separate conversations in parallel and prevent interferences between users. In contrast, when a single room is used for all participants, all messages depart and land in static channels.
+In our use case, we need to propagate Rocket.Chat messages to Matrix, and vice-versa. However, we're dealing here with private interactions between customers and agents, and we need to maintain separate conversations in parallel and prevent interferences between users. In contrast, when a single channel is used for all participants, all messages depart and land in static channels.
 
-Caching allows us to keep the context of a one-to-one conversation between the customer and the agent. The context data will include information about the private chanel in Slack and the private channel in Discord.
+Caching allows us to keep the context of a one-to-one conversation between the customer and the agent. The context data will include information about the private chanel in Rocket.Chat and the private channel in Matrix.
 
 {empty} +
 
@@ -323,7 +323,7 @@ In the content that follows you will learn the following concepts:
 
  - How to define reusable Camel routes.
  - How to manipulate JSON payloads for easier access and updates.
- - How to integrate with DataGrid to perform caching operations.
+ - How to integrate with Data Grid to perform caching operations.
  - How to define conditional regions of code.
 ====
 ======
@@ -333,9 +333,9 @@ All along the workshop you will find folded information you can reveal to know m
 
 // {empty} +
 
-Our cache technology is _Red Hat Datagrid_, which is based on the open source project _Infinispan_. Your environment should contain a dedicated instance of _DataGrid_ in the `globex-camel-userX` namespace.
+Our cache technology is _Red Hat Data Grid_, which is based on the open source project _Infinispan_. Your environment should contain a dedicated instance of _Data Grid_ in the `globex-camel-%user_name%` namespace.
 
-Your Discord integration, implemented with Camel, requires access to _Red Hat's DataGrid_ (cache system) to push, fetch, and remove cache entries, in order to work out _Slack/Discord_ users pairings while delivering messages back and forth.
+Your Matrix integration, implemented with Camel, requires access to _Red Hat Data Grid_ (cache system) to push, fetch, and remove cache entries, in order to work out _Rocket.Chat/Matrix_ users pairings while delivering messages back and forth.
 
 // image::./images/camel/cache-role.jpg[align="center", width=30%]
 
@@ -345,14 +345,14 @@ Your Discord integration, implemented with Camel, requires access to _Red Hat's 
 </p>
 ++++
 
-Your first task is to define the _Camel_ routes responsible to interact with DataGrid.
+Your first task is to define the _Camel_ routes responsible to interact with Data Grid.
 
-. Run in your terminal the snippet below to find your working directory:
+. Navigate to the Dev Spaces terminal tab, and in the terminal execute the snippet below to find your working directory:
 +
 
 [source,bash,role=copy,subs=attributes]
 ----
-cd {camelfolder}/discord/
+cd {camelfolder}/matrix/
 ----
 +
 NOTE: The working folder contains a `code` folder to support you on this exercise, as well as a `deploy` script to help you run it in OpenShift.
@@ -375,13 +375,13 @@ NOTE: Camel supports various DSLs (Domain Specific Language). The main ones are 
 --
 . Select from your project tree:
 +
-* workshop -> module-camel -> lab -> discord -> routes-cache.yaml
+* workshop -> module-camel -> lab -> matrix -> routes-cache.yaml
 +
 . You'll see how the file opens in the editor.
 . Delete the example route (full `from` definition) in `routes-cache`
 
 ++++
-<img src="./images/camel/cache-open-yaml.jpg" style="width:60%;border-style: none;">
+<img src="./images/camel/cache-open-yaml.png" style="width:60%;border-style: none;">
 ++++
 --
 +
@@ -389,42 +389,33 @@ NOTE: Camel supports various DSLs (Domain Specific Language). The main ones are 
 
 . And replace the deleted route with the following snippet that defines the `PUT` (in cache) operation:
 +
-[TIP]
-====
-To copy/paste entire code blocks, follow these steps:
-
-. Click on the yellow code block.
-. The code will be highlighted (ready in the clipboard).
-. From your editor, paste the code block in your source code file.
-. The source file will then show the code.
-====
-+
-++++
-<img src="./images/camel/tip-copy-paste.jpg" style="width:100%;border-style: none;">
-++++
-+
 --
 [source,yaml,role=copy,subs=]
 ----
 #
-- from:
-    uri: "direct:cache-put"             # <1>
-    steps:
-      - marshal:                        # <2>
-          json: {}
-      - removeHeaders:                  # <3>
-          pattern: '*'
-      - setHeader:                      # <4>
-          name: ${{{cache.operation}}}
-          simple: ${{{cache.put}}}
-      - setHeader:                      # <4>
-          name: ${{{cache.value}}}
-          simple: ${body}
-      - setHeader:                      # <4>
-          name: ${{{cache.key}}}
-          simple: ${exchangeProperty.key}
-      - to:
-           uri: "infinispan://default"  # <5>
+#
+- route:
+    from:
+      uri: "direct:cache-put"             # <1>
+      steps:
+        - marshal:                        # <2>
+            json: {}
+        - convertBodyTo:                  # <2>
+            type: String
+        - removeHeaders:                  # <3>
+            pattern: '*'
+        - setHeader:                      # <4>
+            name: ${{{cache.operation}}}
+            simple: ${{{cache.put}}}
+        - setHeader:                      # <4>
+            name: ${{{cache.value}}}
+            simple: ${body}
+        - setHeader:                      # <4>
+            name: ${{{cache.key}}}
+            simple: ${exchangeProperty.key}
+        - to:
+            uri: "infinispan://default"   # <5>
+#
 #
 ----
 
@@ -438,7 +429,7 @@ In the route above:
 [%collapsible]
 ======
 <1> The `from` element uses the `direct` _Camel_ component, which is a special component that allows other _Camel_ routes in the code to make internal invocations to this one.
-<2> Next, a JSON marshaller renders the payload in JSON format. This implies the route expects the payload (`body` in _Camel_ terms) to contain a Java data structure (Map). This one liner automatically converts the Java Map into JSON by using a _Camel_ DataFormat.
+<2> Next, a JSON marshaller renders the payload in JSON format. This implies the route expects the payload (body in Camel terms) to contain a Java data structure (Map). This one liner automatically converts the Java Map into JSON by using a Camel DataFormat. It then converts the body into a String for storage into the cache.
 <3> In preparation for the PUT operation, the `removeHeaders` instruction ensures all (star symbol) residual headers are erased beforehand.
 <4> Next, the route sets the 3 headers required to invoke the cache system. These are: the type of operation (PUT), the value (the payload/body), and the key (unique key to access the data).
 +
@@ -467,24 +458,25 @@ Add in your code (copy and paste) the snippet below:
 [source,yaml,role=copy,subs=]
 ----
 #
-- from:
-    uri: "direct:cache-get"                # <1>
-    steps:
-      - removeHeaders:                     # <2>
-          pattern: '*'
-      - setHeader:                         # <3>
-          name: ${{{cache.operation}}}
-          simple: ${{{cache.get}}}
-      - setHeader:                         # <3>
-          name: ${{{cache.key}}}
-          simple: ${exchangeProperty.key}
-      - to:
-           uri: "infinispan://default"     # <4>
-      - when:
-          simple: ${body} != null          # <5>
-          steps:
-          - unmarshal:                     # <6>
-              json: {}
+- route:
+    from:
+      uri: "direct:cache-get"                # <1>
+      steps:
+        - removeHeaders:                     # <2>
+            pattern: '*'
+        - setHeader:                         # <3>
+            name: ${{{cache.operation}}}
+            simple: ${{{cache.get}}}
+        - setHeader:                         # <3>
+            name: ${{{cache.key}}}
+            simple: ${exchangeProperty.key}
+        - to:
+            uri: "infinispan://default"      # <4>
+        - when:
+            simple: ${body} != null          # <5>
+            steps:
+              - unmarshal:                   # <6>
+                  json: {}
 #
 ----
 
@@ -523,19 +515,21 @@ Copy and paste the snippet below:
 [source,yaml,role=copy,subs=]
 ----
 #
-- from:
-    uri: "direct:cache-remove"             # <1>
-    steps:
-      - removeHeaders:                     # <2>
-          pattern: '*'
-      - setHeader:                         # <3>
-          name: ${{{cache.operation}}}
-          simple: ${{{cache.remove}}}
-      - setHeader:                         # <3>
-          name: ${{{cache.key}}}
-          simple: ${exchangeProperty.key}
-      - to:
-           uri: "infinispan://default"     # <4>
+- route:
+    from:
+      uri: "direct:cache-remove"             # <1>
+      steps:
+        - removeHeaders:                     # <2>
+            pattern: '*'
+        - setHeader:                         # <3>
+            name: ${{{cache.operation}}}
+            simple: ${{{cache.remove}}}
+        - setHeader:                         # <3>
+            name: ${{{cache.key}}}
+            simple: ${exchangeProperty.key}
+        - to:
+            uri: "infinispan://default"      # <4>
+
 ----
 
 Similarly, the `REMOVE` route definition performs the following actions:
@@ -567,9 +561,9 @@ You should see now included in your `routes-cache.yaml` definition the 3 above r
 
 The interaction between customers and agents flows in two directions. The instructions that follow will help you to complete the logic that delivers events from clients to agents. Later, you will work on the reverse (agents to clients) processing direction.
 
-As indicated in the module's introduction, the integration with Slack (where clients live) is already deployed and running in the environment. Customers posting messages in the _GlobexSupport_ app in Slack will translate into events delivered to the AMQ Broker.
+As indicated in the module's introduction, the integration with Rocket.Chat (where clients live) is already deployed and running in the environment. Customers posting messages in the _globex-support-%user_name%_ channel in Rocket.Chat will translate into events delivered to the AMQ Broker.
 
-The starting point of this task is to subscribe to the relevant address in the AMQ Broker to collect the customer messages. From that point, we will complete the implementation to connect Slack and Discord end-to-end.
+The starting point of this task is to subscribe to the relevant address in the AMQ Broker to collect the customer messages. From that point, we will complete the implementation to connect Rocket.Chat and Matrix end-to-end.
 
 {empty} +
 
@@ -591,30 +585,6 @@ In the content that follows you will learn the following concepts:
 
 // {empty} +
 
-. Configure your listener [[configure_slack_channel]]
-+
-The AMQ listener you're about to implement needs to consume from your dedicated address which is unique to avoid collisions with traffic from other students. You need to use your personal GlobexSupport Slack channel ID to configure your integration.
-+
-Open the `my.properties` file in your editor end edit the following property:
-+
-[source, subs=]
-----
-slack.globex.channel.id=MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID
-----
-+
-[IMPORTANT]
-====
-Make sure you replace `MY_GLOBEX_SUPPORT_SLACK_CHANNEL_ID` using your personal GlobexSupport channel ID from Slack. +
-For example: 
-
-- `slack.globex.channel.id=D03P7AH5347`
-====
-+
-Now you can proceed with the creation of your route.
-+
-{empty} +
-
-
 . In your terminal, execute the `kamel` command below to create a new source file to process AMQP events:
 +
 [source,bash,role=copy,subs=]
@@ -631,7 +601,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 . Delete the example route (full `from` definition)
 +
 ++++
-<img src="./images/camel/code-delete-default-yaml.jpg" style="width:40%;border-style: none;">
+<img src="./images/camel/code-delete-default-yaml.png" style="width:40%;border-style: none;">
 ++++
 
 . Replace (the delete route) with the following snippet:
@@ -640,13 +610,14 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 [source,yaml,role=copy,subs=]
 ----
 #
-- from:
-    uri: "amqp:topic:{{broker.amqp.topic.clients.slack}}{{slack.globex.channel.id}}"  # <1>
-    parameters:
-      connectionFactory: "#myFactory"    # <2>
-    steps:
-      - to:
-           uri: "direct:support-request" # <3>
+- route:
+    from:
+      uri: "amqp:topic:{{broker.amqp.topic.clients.rocketchat}}{{rocketchat.channel.id}}"  # <1>
+      parameters:
+        connectionFactory: "#myFactory"    # <2>
+      steps:
+        - to:
+            uri: "direct:support-request"  # <3>
 #
 ----
 The route above:
@@ -676,7 +647,7 @@ The section that follows helps you implement the route `direct:support-request` 
 ==== Create the main processing route
 
 
-The main route will process events originating in Slack (and also coming from other sources, later in the lab).
+The main route will process events originating in Rocket.Chat (and also coming from other sources, later in the lab).
 
 .*What will I learn?*
 [%collapsible]
@@ -685,7 +656,7 @@ The main route will process events originating in Slack (and also coming from ot
 ====
 In the content that follows you will learn the following concepts:
 
- - How to organise the code by delegating work to other _Camel_ routes.
+ - How to organize the code by delegating work to other _Camel_ routes.
  - How to define and use processing variables (known in _Camel_ as _Exchange_ properties).
  - How to use _Camel_'s simple language expression to set values.
 ====
@@ -697,23 +668,27 @@ In the same YAML file, copy and paste the following snippet:
 [source,yaml,role=copy,subs=]
 ----
 #
-- from:
-    uri: "direct:support-request"
-    steps:
-      - unmarshal:                                                # <1>
-          json: {}
-      - setProperty:                                              # <2>
-          name: in
-          simple: ${body}
-      - to:
-           uri: "direct:get-cache-entry"                          # <3>
-      - setProperty:
-          name: discord-channel                                   # <4>
-          simple: ${exchangeProperty.cache.get(target).get(room)}
-      - setBody:                                                  # <5>
-          simple: ${exchangeProperty.in.get(text)}
-      - to:
-           uri: "direct:discord-push-message"                     # <6>
+- route:
+    from:
+      uri: "direct:support-request"
+      steps:
+        - unmarshal:                                                # <1>
+            json: {}
+        - setProperty:                                              # <2>
+            name: in
+            simple: ${body}
+        - to:
+            uri: "direct:get-cache-entry"                           # <3>
+        - setProperty:
+            name: matrix-room                                       # <4>
+            simple: ${exchangeProperty.cache.get(target).get(room)}
+        - setProperty:
+            name: user                                              # <5>
+            simple: ${exchangeProperty.cache.get(user)}@${exchangeProperty.cache.get(source).get(name)}
+        - setBody:                                                  # <6>
+            simple: ${exchangeProperty.in.get(text)}
+        - to:
+            uri: "direct:matrix-send-message"                       # <7>
 #
 ----
 
@@ -735,9 +710,10 @@ the `setProperty` keyword instructs _Camel_ to create a placeholder that can be 
 ====
 Cache entries are created, used and deleted during the lifetime of a support session. The logic to manage the lifecycle of cache entries is delegated to other parts of the code.
 ====
-<4> Sets a property with the target _Discord_ channel where to send the message
-<5> Sets the text message to be sent to _Discord_
-<6> Delegates the message delivery to the route `discord-push-message`
+<4> Sets a property with the target _Matrix_ room where to send the message
+<5> Sets a property with the name of the user (customer) who sends the message
+<6> Sets the text message to be sent to _Matrix_
+<7> Delegates the message delivery to the route `matrix-send-message`
 ======
 
 
@@ -746,7 +722,7 @@ Cache entries are created, used and deleted during the lifetime of a support ses
 In the next sections:
 
 - You will review the `get-cache-entry` logic the route above calls
-- And later, you will implement the route `discord-push-message` the route above also calls.
+- And later, you will implement the route `direct:matrix-send-message` the route above also calls.
 
 {empty} +
 
@@ -766,17 +742,17 @@ In the sequence diagram above you'll see that:
 
 1. It attempts to obtain a cache entry
 1. If it doesn't exist +
-    .. It creates a new channel in Discord (new customer/agent interaction).
+    .. It creates a new room in Matrix (new customer/agent interaction).
     .. It prepares the context data.
-    .. Then, it creates new cache entries to keep Slack and Discord context data.
+    .. Then, it creates new cache entries to keep Rocket.Chat and Matrix context data.
 1. It returns, with the context information. 
 
 {empty} +
 
 
-==== Implement the route pushing messages to Discord
+==== Implement the route pushing messages to Matrix
 
-All the pieces are in place, you have the cache interaction resolved, you have the logic to create new support channels in Discord. The final step is to send the actual customer message to Discord so that an agent can respond.
+All the pieces are in place, you have the cache interaction resolved, you have the logic to create new support rooms in Matrix. The final step is to send the actual customer message to Matrix so that an agent can respond.
 
 .*What will I learn?*
 [%collapsible]
@@ -792,41 +768,46 @@ In the content that follows you will learn the following concepts:
 ======
 
 
-Apache Camel has many connectors (components in _Camel_ terms) available out-of-the-box, but one for Discord doesn't exist (yet). This gap however does not stop you in any way from integrating with Discord, and in fact, you have many options for adopting an approach.
+Apache Camel has many connectors (components in _Camel_ terms) available out-of-the-box, but one for Matrix doesn't exist (yet). This gap however does not stop you in any way from integrating with Matrix, and in fact, you have many options for adopting an approach.
 
-To give you a few ideas, Apache Camel is an open framework, meaning its API allows you to extend its functionality with your own components, data-formats, transformers, etc. You could develop a new Discord component, and if feeling generous donate it to the Camel community. Another strategy is to create _Kamelets_ which are in effect components with additional intelligence, and typically address specific use cases.
+To give you a few ideas, Apache Camel is an open framework, meaning its API allows you to extend its functionality with your own components, data-formats, transformers, etc. You could develop a new Matrix component, and if feeling generous donate it to the Camel community. Another strategy is to create _Kamelets_ which are in effect components with additional intelligence, and typically address specific use cases.
 
-In our lab, our choice is tp simply invoke the API calls documented in Discord to cover our needs. Let's move ahead.
+In our lab, our choice is to simply invoke the API calls documented in Matrix to cover our needs. Let's move ahead.
 
 Still in the same YAML file, copy and paste the following snippet:
 
 [source,yaml,role=copy,subs=]
 ----
 #
-- from:
-    uri: "direct:discord-push-message"      # <1>
-    steps:
-      - setProperty:                        # <2>
-          name: kafka-body
-          simple: ${body}
-      - removeHeaders:                      # <3>
-          pattern: '*'
-      - setHeader:                          # <4>
-          name: Authorization
-          simple: Bot {{discord.token}}
-      - setHeader:                          # <4>
-          name: Content-Type
-          simple: application/json
-      - setBody:                            # <5>
-          simple: '{"content":"${body}"}'
-      - toD:
-          uri: "https://discordapp.com/api/channels/${exchangeProperty.discord-channel}/messages"     # <6>
-          parameters:
-            connectionClose: true
-      - setBody:                                           # <7>
-          simple: 'you: ${exchangeProperty.kafka-body}'
-      - toD:
-          uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.discord-channel}"  # <8>
+- route:
+    from:
+      uri: "direct:matrix-send-message"       # <1>
+      steps:
+        - setProperty:                        # <2>
+            name: kafka-body
+            simple: ${body}
+        - removeHeaders:                      # <3>
+            pattern: "*"
+        - setHeader:                          # <4>
+            name: Authorization
+            simple: Bearer {{matrix.access.token}}
+        - setHeader:                          # <4>
+            name: Content-Type
+            simple: application/json
+        - setHeader:                          # <5>
+            name: CamelHttpMethod
+            constant: PUT
+        - setBody:                            # <6>
+            simple: '{"body": "${body}", "formatted_body": "<b>${exchangeProperty.user}</b> ${body}", "format": "org.matrix.custom.html", "msgtype":"m.text"}'
+        - toD:                                # <7>
+            uri: "{{matrix.server.url}}/_matrix/client/v3/rooms/${exchangeProperty.matrix-room}/send/m.room.message/${random(999999)}"          
+        - setBody:                            # <8>
+            simple: 'you: ${exchangeProperty.kafka-body}'
+        - removeHeaders:
+            pattern: "*"
+        - toD:                                # <9>
+            uri: kafka:support.${env.NAMESPACE}.matrix${exchangeProperty.matrix-room.replace(":","-").replace("!","-")}
+
 ----
 
 The route above:
@@ -838,26 +819,21 @@ The route above:
 <2> Keeps a copy of the customer message (used later).
 <3> Removes residual headers.
 <4> Sets the HTTP headers `authorisation` and `content-type` needed for the API call.
+<5> Sets the HTTP method, which is `PUT` for sendng a message to Matrix.
+<6> Defines the JSON payload to be sent containing the customer's text.
+<7> Performs the API call using Camel's HTTP component.
 +
 [NOTE]
 ====
-You can read Discord's API documentation here.
+the call uses `toD` (Dynamic `to`) to evaluate at runtime the target HTTP path using the `matrix-room` property.
 ====
-+
-<5> Defines the JSON payload to be sent containing the customer's text.
-<6> Performs the API call using Camel's HTTP component.
-+
-[NOTE]
-====
-the call uses `toD` (Dynamic `to`) to evaluate at runtime the target HTTP path using the `discord-channel` property.
-====
-<7> Prepares a payload message to be sent to Kafka.
+<8> Prepares a payload message to be sent to Kafka.
 +
 [NOTE]
 ====
 Every customer/agent interaction is streamed to Kafka. Later in the lab you'll understand the purpose of replaying the Kafka streams.
 ====
-<8> pushes the message to Kafka.
+<9> pushes the message to Kafka.
 +
 [NOTE]
 ====
@@ -869,7 +845,7 @@ The `kafka` component requires no extra parameters because it has been pre-confi
 
 
 
-=== Onboard on the Discord platform
+=== Onboard on the Discord platform [TODO]
 
 You will need to open Discord in your browser to complete the work. We have prepared a Discord server dedicated to the workshop to make things easy.
 
@@ -909,13 +885,13 @@ Please do not send messages in other student's channels to prevent interferences
 
 === Run your code in `dev` mode
 
-You have completed the processing flow from customers (in Slack) to agents (in Discord). The returning flow is still pending to implement, but you can already test what you have implemented so far.
+You have completed the processing flow from customers (in Rocket.Chat) to agents (in Matrix). The returning flow is still pending to implement, but you can already test what you have implemented so far.
 
 Camel K features a special running mode called `development` mode (known as -_dev mode_-), which allows the developer to run/test the code in Kubernetes and make live code updates on the fly, as if he was working locally. Camel K deploys a test instance that is removed when you stop it.
 
 Let's run your code in `dev` mode to validate the flow works as expected.
 
-. From your terminal, execute the following command:
+. From your terminal in Dev Spaces, execute the following command:
 +
 [source,bash,role=copy,subs=]
 ----
@@ -928,7 +904,7 @@ It also defines all the necessary support resources and parameters to run your i
 You should see in your terminal a log output similar to:
 +
 ++++
-<img src="./images/camel/discord-dev-terminal-output.jpg" style="width:80%;border-style: none;">
+<img src="./images/camel/matrix-dev-terminal-output.png" style="width:80%;border-style: none;">
 ++++
 +
 [WARNING]
@@ -954,103 +930,73 @@ NOTE: The Camel K operator automates the process of creating, building, deployin
 * Open the console by clicking link:{topologyviewurl}[*this _Topology_ view link*, window="_blank"].
 --
 +
-You should find, as per the picture below, marked in red, the _Discord_ pod running your _Camel K_ code in DEV mode.
+You should find, as per the picture below, marked in red, the _matrix_ pod running your _Camel K_ code in DEV mode.
 +
 ++++
-<img src="./images/camel/topology-discord-dev.jpg" style="width:100%;border-style: none;">
+<img src="./images/camel/topology-matrix-dev.png" style="width:100%;border-style: none;">
 ++++
 +
 NOTE: You'll also see other pre-deployed pods to assist you in this learning module (running DataGrid, Minio (S3), and others).
 +
 {empty} +
 
-. From Slack, send a message...
+. From Rocket.Chat, send a message...
 +
-As per the picture below, [1] select the GlobexSupport app in your Slack window, [2] type in a test message, and [3], click the 'Send' button (or press Enter).
+As per the picture below, [1] select the globex-support-%user_name% channel in your Rocket.Chat window, [2] type in a test message, and [3], click the 'Send' button (or press Enter).
 +
 ++++
 <img src="./images/camel/slack-dev-test.jpg" style="width:80%;border-style: none;">
 ++++
 
-. From Discord...
+. On Element...
 +
 --
-You should see a new channel created with your user name:
+You should see a new room created with your user name:
 
-- `slack-%user_name%` 
+- `rocketchat-%user_name%` 
 --
 +
 --
-. Click on the new channel
+. Click on the new room.
+
+. You should see a dialog box asking if you want to join the room. Click *Accept*
 +
-CAUTION: You may see channels under `CLIENTS` belonging to other students in the room. +
-To prevent interferences, please ensure you select the newly created channel marked with your user name.
-
-
-. You should see displayed the message sent from Slack:
 +
 ++++
-<img src="./images/camel/discord-dev-test.jpg" style="width:80%;border-style: none;">
+<img src="./images/camel/element-dev-test-accept.png" style="width:80%;border-style: none;">
+++++ 
+
+. You should see displayed the message sent from Rocket.Chat:
++
+++++
+<img src="./images/camel/element-dev-test-message.png" style="width:80%;border-style: none;">
 ++++
 +
-If you see the message in Discord as above shown, then you've successfully completed this first exercise.
-+
-[WARNING]
-====
-If you see no message in Discord you might have misconfigured your Slack channel ID in the `my.properties` configuration file. Review the link:#configure_slack_channel[instructions here] and try again. The configuration property should look similar to:
-
-- `slack.globex.channel.id=D03P7AH5347`
-====
+If you see the message in Element as above shown, then you've successfully completed this first exercise.
 --
 
 {empty} +
 
 IMPORTANT: When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance. +
-When you do so, you'll notice the Discord pod shutdowns and is no longer visible from your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
+When you do so, you'll notice the Matrix pod shutdowns and is no longer visible from your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 
 {empty} +
 
-== Enable the Discord to Slack interaction
+== Enable the Matrix to Rocket.Chat interaction
 
-You've completed one directional flow to deliver customer messages from Slack to agents in Discord. Now, you need to transfer agent responses in Discord, back to customers in Slack.
+You've completed one directional flow to deliver customer messages from Rocket.Chat to agents in Matrix. Now, you need to transfer agent responses in Matrix, back to customers in Rocket.Chat.
 
-As previously pointed out, Camel's collection of components does not include one for Discord. There are various ways in which messages can be fetched from Discord, but to preserve our loyalty to our event-driven principles, the true way forward is to follow Discord's documented protocol using a Websocket integration.
+As previously pointed out, Camel's collection of components does not include one for Matrix. Matrix offers a feature rich client-server API. The API is built around the notion of events, which describe something that has happened on the platform, such as the creation of a room, a user joining a room etc... The `sync` method of said API synchronizes the client's state with the latest state on the server. By calling the `sync` API in a loop, the client (our Camel integration) can subscribe to events and act accordingly.
 
-// image::./images/camel/overview-lab-1.jpg[align="center", width=90%]
-
-++++
-<p align="center">
-	<img src="./images/camel/overview-lab-1.jpg" style="width:90%;border-style: none;">
-</p>
-++++
-
-{empty} +
-
-=== Overview of the websocket connection with Discord
-
-By establishing a websocket connection, we enable Discord to push data to our listener in an event-driven manner. The guidelines documented by Discord are not trivial. For simplicity, we've provided the necessary logic using Camel to open the websocket. Here we simply summarise how opening the connection works.
-
-Using the websocket component in Camel, we can configure it to point to the Discord server. Then, a series of interactions need to occur between Discord and Camel before the connection is considered fully established. The diagram below illustrates the initiation sequence.
-
-// image::./images/camel/discord-websocket.jpg[align="center", width=50%]
-
-++++
-<p align="center">
-	<img src="./images/camel/discord-websocket.jpg" style="width:50%;border-style: none;">
-</p>
-++++
-
-In summary, Discord will send a series of signals, but all in all, Camel needs to send an identification message and run a periodic routine to send regular heartbeats that allows Discord to know our system is alive.
-
-When Discord identifies our client (Camel), it'll start pushing events containing relevant information about the activity occurring in our Discord space.
+For simplicity, this part of the Matrix integration is already implemented. As mentioned, it calls the `sync` API in a loop, filters for events we are interested in (room leave events and room message events), and forwards the event to a Camel route.
 
 {empty} +
 
 === Implement the Agent to Client flow
 
-The websocket listener described above is responsible to pick up agent messages posted in Discord and direct then to Camel route you need to implement to process the event.
+The listener described above is responsible to pick up agent messages posted in Matrix and direct then to the Camel route you need to implement to process the event.
 
-In essence, our route needs to obtain from cache the context for this particular customer/agent conversation, prepare the JSON data containing the agent's answer, and send it to the AMQ broker. The Slack integration will consume the event and deliver it to the customer.
+In essence, our route needs to obtain from cache the context for this particular customer/agent conversation, prepare the JSON data containing the agent's answer, and send it to the AMQ broker. The Rocket.chat integration will consume the event and deliver it to the customer.
 
 .*What will I learn?*
 [%collapsible]
@@ -1072,19 +1018,19 @@ Start your implementation:
 +
 [source,bash,role=copy,subs=]
 ----
-kamel init routes-from-discord-main.yaml<br>
+kamel init routes-from-matrix-main.yaml<br>
 ----
 +
 NOTE: The new file has a YAML extension. Camel K automatically generates for you a skeleton using the YAML DSL (Domain Specific Language).
 +
 {empty} +
 
-. Open the `routes-from-discord-main.yaml` file in your editor.
+. Open the `routes-from-matrix-main.yaml` file in your editor.
 
 . Delete the example route (full `from` definition)
 +
 ++++
-<img src="./images/camel/code-delete-default-yaml.jpg" style="width:40%;border-style: none;">
+<img src="./images/camel/code-delete-default-yaml.png" style="width:40%;border-style: none;">
 ++++
 
 . Replace (the deleted route) with the following snippet:
@@ -1093,48 +1039,52 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 [source,yaml,role=copy,subs=]
 ----
 #
-- from:
-    uri: "direct:process-agent-message"                       # <1>
-    steps:
-    - setProperty:                                            # <2>
-        name: text
-        simple: ${body.get(d).get(content)}
-    - setProperty:                                            # <2>
-        name: agent
-        simple: ${body.get(d).get(author).get(username)}
-    - setProperty:                                            # <2>
-        name: key
-        simple: ${body.get(d).get(channel_id)}
-    - to:
-         uri: "direct:cache-get"                              # <3>
-    - choice:
-        when:
-        - simple: ${body} != null                             # <4>
-          steps:
-          - to:
-              uri: "language:simple:${body.replace(text,${exchangeProperty.text})}"  # <5>
-              parameters:
-                transform: false
-          - to:
-              uri: "language:simple:${body.put(agent,${exchangeProperty.agent})}"    # <5>
-              parameters:
-                transform: false
-          - setProperty:                                             # <6>
-              name: source
-              simple: ${body.get(source).get(uname)}
-          - marshal:                                                 # <7>
-              json: {}
-          - toD:
-              uri: "amqp:topic:support.${exchangeProperty.source}"   # <8>
-              parameters:
-                connectionFactory: "#myFactory"
-          - setBody:
-              simple: '${exchangeProperty.agent}: ${exchangeProperty.text}'  # <9>
-          - toD:
-              uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.key}"
-        otherwise:                                                           # <10>
-          steps:
-          - log: "no cache entry, ignoring message from user: ${exchangeProperty.agent}"
+- route:
+    from:
+      uri: "direct:process-agent-message"                       # <1>
+      steps:
+        - setProperty:                                          # <2>
+            name: text
+            simple: ${body.get(text)}
+        - setProperty:                                          # <2>
+            name: agent
+            simple: ${body.get(user)}
+        - setProperty:                                          # <2>
+            name: key
+            simple: ${body.get(room)}
+        - to:
+            uri: "direct:cache-get"                             # <3>
+        - choice:
+            when:
+              - simple: ${body} != null                         # <4>
+                steps:
+                  - to:
+                      uri: "language:simple:${body.replace(text,${exchangeProperty.text})}"  # <5>
+                      parameters:
+                        transform: false
+                  - to:
+                      uri: "language:simple:${body.put(agent,${exchangeProperty.agent})}"    # <5>
+                      parameters:
+                        transform: false
+                  - setProperty:                                             # <6>
+                      name: source
+                      simple: ${body.get(source).get(uname)}
+                  - marshal:                                                 # <7>
+                      json: {}
+                  - toD:
+                      uri: "amqp:topic:support.${exchangeProperty.source}"   # <8>
+                      parameters:
+                        connectionFactory: "#myFactory"
+                  - setBody:
+                      simple: '${exchangeProperty.agent}: ${exchangeProperty.text}'  # <9>
+                  - removeHeaders:
+                      pattern: "*"
+                  - toD:
+                      uri: kafka:support.${env.NAMESPACE}.matrix${exchangeProperty.key.replace(":","-").replace("!","-")}
+            otherwise:                                                               # <10>
+              steps:
+                - log: "no cache entry, ignoring message from user: ${exchangeProperty.agent}"
+
 #
 ----
 
@@ -1144,20 +1094,20 @@ The route above:
 [%collapsible]
 ======
 <1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
-<2> Keeps necessary values (as properties) from Discord's event.
+<2> Keeps necessary values (as properties) from Matrix's event.
 +
 [NOTE]
 ====
-The Discord JSON event has already been un-marshalled for you.
+The Matrix JSON event has already been un-marshalled for you.
 ====
 <3> Fetches from the cache system the customer/agent context
 +
 [NOTE]
 ====
-We use _Discord_'s `channel_id` as our key to fetch the cache entry.
+We use _Matrix_'s `room key`` as our key to fetch the cache entry.
 ====
 +
-<4> Evalueates if the cache entry exists with a `choice`.
+<4> Evaluates if the cache entry exists with a `choice`.
 * if true, it executes [5] to [9]
 * if false, it executes the `otherwise` block [10]
 <5> When true, the cache payload is recycled, it updates the text field to contain the agent's answer and also injects the agent's name.
@@ -1201,14 +1151,14 @@ This is necessary in our lab to prevent other students from interfering with you
 
 {empty} +
 
-=== Implement the channel closure.
+=== Implement the room leave event.
 
 A crucial phase of the customer/agent interaction is when both parts agree on closing the conversation. At that point the expected sequence of actions is the following:
 
-- The agent manually deletes the channel in Discord
+- The agent manually leaves the room in Matrix
 - The customer receives a notification indicating the conversation has been closed.
 
-When the agent deletes the channel, Discord fires an event notifying its closure, which our websocket picks up and directs to a route called `process-channel-closure`
+When the agent leaves the room, Matrix fires a _room leave_ event, which our listener picks up and directs to a route called `process-room-leave-event`
 
 Let's implement the logic required which is very similar to our previously defined route
 
@@ -1217,65 +1167,73 @@ Include in the same YAML file (copy and paste) the snippet below:
 [source,yaml,role=copy,subs=]
 ----
 #
-- from:
-    uri: "direct:process-channel-closure"
-    steps:
-    - setProperty:
-        name: key
-        simple: ${body.get(d).get(id)}
-    - to:
-         uri: "direct:cache-get"   # <1>
-    - choice:
-        when:
-        - simple: ${body} != null
-          steps:
-          - to:
-              uri: "language:simple:${body.replace(text, 'your session ended, conversation is now closed.')}"      # <2>
-              parameters:
-                transform: false
-          - to:
-              uri: "language:simple:${body.put(agent,'support')}"    # <2>
-              parameters:
-                transform: false
-          - setProperty:
-              name: source
-              simple: ${body.get(source).get(uname)}
-          - setProperty:
-              name: key-slack
-              simple: ${body.get(source).get(room)}
-          - marshal:
-              json: {}
-          - setProperty:
-              name: context
-              simple: ${body}
-          - toD:
-              uri: "amqp:topic:support.${exchangeProperty.source}"   # <3>
-              parameters:
-                connectionFactory: "#myFactory"
-          - to:
-              uri: "direct:cache-remove"                             # <4>
-          - setProperty:
-              name: kafka-client
-              simple: ${exchangeProperty.key}
-          - setProperty:
-              name: key
-              simple: ${exchangeProperty.key-slack}
-          - to:
-              uri: "direct:cache-remove"                             # <5>
-          - setBody:                                                 # <6>
-              simple: done
-          - setHeader:
-              name: context
-              simple: ${exchangeProperty.context}                    # <6>
-          - toD:
-              uri: "kafka:support.${env.NAMESPACE}.${exchangeProperty.kafka-client}"  # <7>
-          - setBody:
-              simple: ${exchangeProperty.kafka-client}
-          - toD:
-              uri: "kafka:support.${env.NAMESPACE}.closed"           # <8>
-        otherwise:
-          steps:
-          - log: no cache entry, ignoring message
+- route:
+    from: 
+      uri: "direct:process-room-leave-event"
+      steps:
+        - log:
+            message: ${body}
+        - setProperty:
+            name: key
+            simple: ${body.get(room)}
+        - setProperty:
+            name: agent
+            simple: ${body.get(user)}
+        - to:
+            uri: "direct:cache-get"   # <1>
+        - choice:
+            when:
+              - simple: ${body} != null
+                steps:
+                  - to:
+                      uri: "language:simple:${body.replace(text,'your session ended, conversation is now closed.')}"      # <2>
+                      parameters:
+                        transform: false
+                  - to:
+                      uri: "language:simple:${body.put(agent,'support')}"    # <2>
+                      parameters:
+                        transform: false
+                  - setProperty:
+                      name: source
+                      simple: ${body.get(source).get(uname)}
+                  - setProperty:
+                      name: key-rocketchat
+                      simple: ${body.get(source).get(room)}-${body.get(user)}
+                  - setProperty:
+                      name: kafka-client
+                      simple: matrix${body.get(target).get(room).replace(":","-").replace("!","-")}
+                  - marshal:
+                      json: {}
+                  - setProperty:
+                      name: context
+                      simple: ${bodyAs(String)}
+                  - toD:
+                      uri: "amqp:topic:support.${exchangeProperty.source}"    # <3>
+                      parameters:
+                        connectionFactory: "#myFactory"
+                  - to:
+                      uri: "direct:cache-remove"                              # <4>
+                  - setProperty:
+                      name: key
+                      simple: ${exchangeProperty.key-rocketchat}
+                  - to:
+                      uri: "direct:cache-remove"                              # <5>
+                  - setBody:
+                      simple: done                                            # <6>
+                  - removeHeaders:
+                      pattern: "*"
+                  - setHeader:
+                      name: context
+                      simple: ${exchangeProperty.context}                     # <6>
+                  - toD:
+                      uri: kafka:support.${env.NAMESPACE}.${exchangeProperty.kafka-client}     # <7>
+                  - setBody:
+                      simple: ${exchangeProperty.kafka-client}
+                  - toD: 
+                      uri: "kafka:support.${env.NAMESPACE}.closed"                             # <8>
+            otherwise:
+              steps:
+              - log: no cache entry, ignoring message
 ----
 
 You will observe the route above is almost identical to the previous one. Let's simply summarize below the differences:
@@ -1283,21 +1241,20 @@ You will observe the route above is almost identical to the previous one. Let's 
 .Click here for details
 [%collapsible]
 ======
-<1> It also fetches from the cache system the customer/agent context. Only this time the channel identifier sits in a different field (`.d.id`) in the Discord JSON event.
-<2> It recycles the cache payload, only this time using an automated closing message.
+<1> It also fetches from the cache system the customer/agent context.
 <3> It sends the closing event via AMQP, and proceeds [4] & [5] to delete the two cache entries relevant to this conversation:
 +
 [NOTE]
 ====
-Reminder: each customer/agent session owns 2 cache entries. One uses the source key, handy on customer-to-agent processing, and the second uses Discord's channel ID, handy for agent-to-customer processing.
+Reminder: each customer/agent session owns 2 cache entries. One uses the source key, handy on customer-to-agent processing, and the second uses Matrix's room key, handy for agent-to-customer processing.
 ====
 +
 [NOTE]
 ====
 the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP address using the `source` property.
 ====
-<4> It deletes the cache entry with source identifier (Slack or other).
-<5> It deletes the cache entry with target identifier (Discord).
+<4> It deletes the cache entry with source identifier (Rocket.Chat).
+<5> It deletes the cache entry with target identifier (Natrix).
 +
 <6> Finally, it prepares body and headers to send two closure Kafka events [7] & [8].
 <7> The first event to Kafka contains the context information, sent to the conversation topic.
@@ -1306,7 +1263,7 @@ the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP addres
 
 {empty} +
 
-You have completed the return processing flow from agents (in Discord) to customers (in Slack). Next, deploy your integration in OpenShift and send some messages to validate it.
+You have completed the return processing flow from agents (in Matrix) to customers (in Rocket.Chat). Next, deploy your integration in OpenShift and send some messages to validate it.
 
 {empty} +
 
@@ -1314,7 +1271,7 @@ You have completed the return processing flow from agents (in Discord) to custom
 
 With the Camel K client `kamel` you can deploy your integrations with one command. Camel K will take care of collecting all your sources, containerizing them and deploying an instance.
 
-Let's deply your code .
+Let's deploy your code .
 
 . From your terminal, execute the following command:
 +
@@ -1327,9 +1284,9 @@ NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all th
 +
 .Output
 ----
-discord (main) $ ./deploy.sh
+matrix (main) $ ./deploy.sh
 No IntegrationPlatform resource in globex-camel-%user_name% namespace
-Integration "discord" created
+Integration "matrix" created
 ----
 {empty} +
 
@@ -1337,7 +1294,7 @@ Integration "discord" created
 +
 [source,bash,role=copy,subs=]
 ----
-kamel log discord
+kamel log matrix
 ----
 
 [WARNING]
@@ -1352,8 +1309,8 @@ If so, try again using our code by running the command:
 ====
 
 [start=3]
-. From Discord...
-.. Click on the newly created channel `slack-%user_name%` to display the messages.
+. From Matrix...
+.. Click on the newly created channel `rocketchat-%user_name%` to display the messages.
 .. Type a message, for example:
 +
 --
@@ -1361,34 +1318,32 @@ If so, try again using our code by running the command:
 --
 +
 and send it.
-. From Slack...
+. From Rocket.Chat...
 +
-You should see the agent's message sent from Discord appear in the CamelGlobex app.
+You should see the agent's message sent from Matrix appear in the Rocket.Chat channel.
 
 . Exchange a few more messages to simulate a conversation.
 
-. Then, from Discord, to close the session, follow these steps, as per the illustration below:
+. Then, from Matrix, to close the session, follow these steps, as per the illustration below:
 +
 --
-. Right click on the channel `slack-%user_name%`
+. Right click on the room `rocketchat-%user_name%`
 +
-CAUTION: You may see channels under `CLIENTS` belonging to other students in the room. +
-To prevent interferences, please ensure you select the channel with your user name.
-. Click `Delete Channel`
-. Confirm your action to delete the channel.
+. Click `Leave`
+. Confirm your action to leave the room.
 --
 +
 ++++
-<img src="./images/camel/discord-deploy-test-end-to-end.jpg" style="width:100%;border-style: none;">
+<img src="./images/camel/matrix-deploy-test-end-to-end.png" style="width:100%;border-style: none;">
 ++++
 
-. In Slack, as above on the right hand side, you should see a notification informing the session has ended.
+. In Rocket.Chat, as above on the right hand side, you should see a notification informing the session has ended.
 
 {empty} +
 
-Well done, you've completed the full integration, both ways, between Slack and Discord.
+Well done, you've completed the full integration, both ways, between Rocket.Chat and Matrix.
 
-In contrast with running in DEV mode, the `deploy.sh` command made the _Camel K_ operator to fully deploy your code in an OpenShift pod named _Discord_, which you can see running from the link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
+In contrast with running in DEV mode, the `deploy.sh` command made the _Camel K_ operator to fully deploy your code in an OpenShift pod named _matrix_, which you can see running from the link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 
 You can also use the `kamel` client from your terminal to obtain information about your deployed Camel K instances:
 
@@ -1400,14 +1355,14 @@ kamel get
 ----
 No IntegrationPlatform resource in globex-camel-%user_name% namespace
 NAME    PHASE   KIT
-discord Running globex-camel-%user_name%/kit-chcc8ts5v3ov25mqg460
+matrix Running globex-camel-%user_name%/kit-chcc8ts5v3ov25mqg460
 ----
 
 {empty} +
 
 == Plug the Globex Web Chat
 
-All the work done so far has enabled bi-directional communication between customers and agents between Slack and Discord. Our open architecture approach allows us to easily plug in new communication channels.
+All the work done so far has enabled bi-directional communication between customers and agents between Rocket.Chat and Matrix. Our open architecture approach allows us to easily plug in new communication channels.
 
 Your next task will be to complete and deploy a Camel K integration that connects our Globex Web portal with the support service. The Globex Web portal has a chat widget from where customers can also contact support agents for assistance.
 
@@ -1437,9 +1392,9 @@ One fundamental architecture consideration is that if we want an easy to plugin 
 
 This implies that instead of applying platform specific data transformations (eg. Slack data model to Discord data model), we apply the following data transformations:
 
-- System specific to standard data model (e.g. Slack/Globex to AMQ Broker)
+- System specific to standard data model (e.g. Rocket.Chat/Globex to AMQ Broker)
 
-- Standard data model to system specific (e.g. AMQ Broker to Slack/Globex)
+- Standard data model to system specific (e.g. AMQ Broker to Rocket.Chat/Globex)
 
 The illustration below describes data exchanges via AMQ:
 
@@ -1451,7 +1406,7 @@ The illustration below describes data exchanges via AMQ:
 </p>
 ++++
 
-In the diagram above we can see how Slack is already integrated, via AMQ, to Discord. The common data model easily helps us integrate Globex with the platform.
+In the diagram above we can see how Rocket.Chat is already integrated, via AMQ, to Matrix. The common data model easily helps us integrate Globex with the platform.
 
 {empty} +
 
@@ -1598,12 +1553,12 @@ touch request.jslt<br>
 [source,json,role=copy,subs=]
 ----
 {
-    "user": .user,           // <1>
-    "text": .text,           // <1>
-    "source": {              // <2>
-    	"name" : "globex",   // <3>
-    	"uname": "globex."+$exchange.properties.clientid, // <4>
-    	"room" : .sessionid  // <5>
+  "user": .user,           // <1>
+  "text": .text,           // <1>
+  "source": {              // <2>
+  	"name" : "globex",     // <3>
+   	"uname": "globex."+$exchange.properties.clientid, // <4>
+   	"room" : .sessionid    // <5>
     }
 }
 ----
@@ -1654,14 +1609,14 @@ For simplicity, this exercise provides a Camel AMQ listener that dynamically sub
 
 [NOTE]
 ====
-If you feel curious on how this Camel AMQP consumer is implemented, open in your editor the `code/gbxlistener.java` 
+If you feel curious on how this Camel AMQP consumer is implemented, open in your editor the `code/globexlistener.java` 
 ====
 
 Include in the same Java file (copy and paste) the snippet below:
 
 [source,java,role=copy,subs=]
 ----
- //
+//
       from("direct:support-response")                      // <1>
         .convertBodyTo(String.class)                       // <2>
         .to("jslt:response.jslt?allowContextMapAll=true")  // <3>
@@ -1754,7 +1709,7 @@ Later in the lab, you'll work to generate the value mapped in this definition.
 
 With the Camel K client `kamel` you can deploy your integrations with one command. Camel K will take care of collecting all your sources, containerizing them and deploying an instance.
 
-Let's deply your code .
+Let's deploy your code .
 
 . From your terminal, execute the following command:
 +
@@ -1844,14 +1799,10 @@ Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_bla
 ++++
 
 [start=4]
-. From Discord...
-.. You should see a new channel `globex-%user_name%` created.
-+
-CAUTION: You may see channels under `CLIENTS` belonging to other students in the room. +
-To prevent interferences, please ensure you select the channel with your user name.
+. From Matrix...
+.. You should see a new room `globex-%user_name%` created.
 
-
-.. Click on the newly created channel `globex-%user_name%` to display the messages.
+.. Click on the newly created room `globex-%user_name%` and accept the invitation to join the room to display the messages.
 
 .. Type a message, for example:
 +
@@ -1866,16 +1817,17 @@ You should see the agent's message sent from Discord appear in your chat session
 
 . Exchange a few more messages to simulate a conversation.
 
-. Then, from Discord, to close the session, follow these steps, as per the illustration below:
+. Then, from Matrix, to close the session, follow these steps, as per the illustration below:
 +
 --
-. Right click on the channel `globex-%user_name%`
-. Click `Delete Channel`
-. Confirm your action to delete the channel.
+. Right click on the room `globex-%user_name%`
++
+. Click `Leave`
+. Confirm your action to leave the room.
 --
 +
 ++++
-<img src="./images/camel/globex-deploy-test-end-to-end.jpg" style="width:100%;border-style: none;">
+<img src="./images/camel/globex-deploy-test-end-to-end.png" style="width:100%;border-style: none;">
 ++++
 
 . In Globex, as above on the right hand side, you should see a notification informing the session has ended.
@@ -1896,7 +1848,7 @@ kamel get
 ----
 No IntegrationPlatform resource in globex-camel-%user_name% namespace
 NAME            PHASE   KIT
-discord         Running globex-camel-%user_name%/kit-chcc8ts5v3ov25mqg460
+matrix          Running globex-camel-%user_name%/kit-chcc8ts5v3ov25mqg460
 globex-support  Running globex-camel-%user_name%/kit-chccj045v3ov25mqg470
 ----
 
@@ -2046,14 +1998,14 @@ NOTE: We're choosing the XML DSL this time, so that you have a taste of all majo
 +
 Select from your project tree:
 +
-* workshop -> module-camel -> lab -> globex-support -> transcript.xml
+* workshop -> module-camel -> lab -> transcript -> transcript.xml
 +
 {empty} +
 +
 . Delete the sample Camel route in `transcript.xml` 
 +
 ++++
-<img src="./images/camel/code-delete-default-xml.jpg" style="width:40%;border-style: none;">
+<img src="./images/camel/code-delete-default-xml.png" style="width:40%;border-style: none;">
 ++++
 +
 {empty} +
@@ -2094,7 +2046,7 @@ Select from your project tree:
             <log message="source is: ${header.source}"/>
             <log message="got message: ${body}"/>
 
-            <aggregate strategyRef="myStrategy">                                       <!-- 8 -->
+            <aggregate aggregationStrategy="myStrategy">                              <!-- 8 -->
                 <correlationExpression>
                     <constant>true</constant>
                 </correlationExpression>
@@ -2345,24 +2297,24 @@ If so, try again using our code by running the command:
 
 
 [start=3]
-. Using Slack (for example) and Discord...
+. Using Rocket.Chat (for example) and Matrix...
 .. Initiate and simulate a customer/agent conversation, as done in previous exercises.
 
-.. Then, to close the session, from Discord, right-click and delete the channel.
+.. Then, to close the session, from Matrix, right-click and leave the room.
 +
-NOTE: Deleting the channel should kick-off the transcript process.
+NOTE: Leaving the room should kick-off the transcript process.
 +
 {empty}
 
-. Finally, in Slack/Globex, you should see a notification informing the session has ended, plus a link to your transcript, as shown in the picture below:
+. Finally, in Rocket.Chat, you should see a notification informing the session has ended, plus a link to your transcript, as shown in the picture below:
 +
 --
 . Confirm to delete the channel in Discord.
-. From Slack/Globex, click on the PDF transcript link.
+. From Rocket.Chat, click on the PDF transcript link.
 --
 +
 ++++
-<img src="./images/camel/transcript-test.jpg" style="width:100%;border-style: none;">
+<img src="./images/camel/transcript-test.png" style="width:100%;border-style: none;">
 ++++
 
 
@@ -2381,7 +2333,7 @@ kamel get
 transcript (main) $ kamel get
 No IntegrationPlatform resource in globex-camel-user1 namespace
 NAME            PHASE   KIT
-discord         Running globex-camel-user1/kit-chcc8ts5v3ov25mqg460
+matrix          Running globex-camel-user1/kit-chcc8ts5v3ov25mqg460
 globex-support  Running globex-camel-user1/kit-chccj045v3ov25mqg470
 transcript      Running globex-camel-user1/kit-chdltr45v3oq6up8l3sg
 ----

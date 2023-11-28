@@ -14,11 +14,11 @@ As an added initiative to the digital transformation, Globex wants to implement 
 </p>
 ++++
 
-You will be involved in the new hub's first implementation iteration (by completing all the module exercises). You will integrate two distinct customer facing platforms (left in the diagram, Slack and Globex), with the agent's channel (right in the diagram, Discord).
+You will be involved in the new hub's first implementation iteration (by completing all the module exercises). You will integrate two distinct customer facing platforms (left in the diagram, Rocket.Chat and Globex), with the agent's channel (right in the diagram, Matrix).
 
-Customers (left) will choose contacting Globex via its Web portal or via its public space in Slack, available on-line (using a browser), or by installing the app on their devices. Slack is a very popular and widely adopted messaging platform for businesses.
+Rocket.Chat and Matrix are open-source implementations of direct messaging platforms. While not as popular or ubiquitous as Slack or Discord, they can be installed on an OpenShift cluster and do not require registration, making them more suitable for a lab environment.
 
-At the other end of the line, the team of agents (right) providing support services for Globex will use Discord as their communication platform. Discord is a well known chat platform, very popular among gamers, but increasingly embraced by enterprises to connect internal teams but also for external interactions with customers as a way to maintain close contact.
+Customers (left) will choose contacting Globex via its Web portal or via a channel in Rocket.Chat, available on-line (using a browser). At the other end of the line, the team of agents (right) providing support services for Globex will use Matrix as their communication platform.
 
 {empty} +
 
@@ -32,13 +32,13 @@ As per the picture below, this module is divided in 3 main activities:
 </p>
 ++++
 
-. The first one integrates Slack with Discord. +
+. The first one integrates Rocket.Chat with Matrix. +
 Because the traffic is bidirectional, you'll need to
 
-- Move messages from customers (in Slack) to agents (in Discord)
-- Move messages from agents (in Discord) to customers (in Slack)
+- Move messages from customers (in Rocket.Chat) to agents (in Matrix)
+- Move messages from agents (in Matrix) to customers (in Rocket.Chat)
 
-. The second activity, that showcases the platform's open architecture, plugs in the Globex portal (chat), thus automatically enabling the Globex/Discord message flow. 
+. The second activity, that showcases the platform's open architecture, plugs in the Globex portal (chat), thus automatically enabling the Globex/Matrix message flow. 
 
 . The third activity collects the conversation history (transcript), persists it in storage (S3 buckets) and shares access with customers.
 
@@ -122,6 +122,3 @@ NOTE: You will use S3 storage in this learning module as your core capability, f
 OpenShift Data Foundation is a data management solution that provides higher level data services and persistent storage for Red Hat OpenShift. It provides File, Block and Object Storage, with builtin Data Protection and Disaster Recovery.
 
 Applications can function and interact with data in a simplified, consistent and scalable manner.
-
-
-
