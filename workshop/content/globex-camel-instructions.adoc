@@ -1014,7 +1014,7 @@ IMPORTANT: Ensure you've stopped your `dev` instance from the test in the previo
 
 Start your implementation:
 
-. From your terminal, execute the `kamel` command below to create a new source file to process Discord events:
+. From your terminal, execute the `kamel` command below to create a new source file to process Matrix events:
 +
 [source,bash,role=copy,subs=]
 ----
@@ -1334,7 +1334,7 @@ You should see the agent's message sent from Matrix appear in the Rocket.Chat ch
 --
 +
 ++++
-<img src="./images/camel/matrix-deploy-test-end-to-end.png" style="width:100%;border-style: none;">
+<img src="./images/camel/matrix-deploy-test-end-to-end-1.png" style="width:100%;border-style: none;">
 ++++
 
 . In Rocket.Chat, as above on the right hand side, you should see a notification informing the session has ended.
@@ -1390,7 +1390,7 @@ Both processing flows should be fully detached, but will coexist in the Camel K 
 
 One fundamental architecture consideration is that if we want an easy to plugin platform where other communication systems or services need to plugin with ease, a standard data model as a common interface is needed.
 
-This implies that instead of applying platform specific data transformations (eg. Slack data model to Discord data model), we apply the following data transformations:
+This implies that instead of applying platform specific data transformations (eg. Rocket.chat data model to Matrix data model), we apply the following data transformations:
 
 - System specific to standard data model (e.g. Rocket.Chat/Globex to AMQ Broker)
 
@@ -1519,7 +1519,7 @@ The JSLT transformer (next step) requires a `String` input, however the `platfor
 The JSLT transformer is a powerful JSON to JSON data mapping tool. JSLT is inspired in XSLT (XML transformer), the most powerful transformation tool for XML.
 ====
 
-<5> Finally, the adapted JSON payload is sent using the `amqp` Camel component to the AMQ Broker. From the broker, the Discord Camel K instance consumes the events and forwards them to the team of agents.
+<5> Finally, the adapted JSON payload is sent using the `amqp` Camel component to the AMQ Broker. From the broker, the Matrix Camel K instance consumes the events and forwards them to the team of agents.
 +
 [NOTE]
 ====
@@ -1813,7 +1813,7 @@ Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_bla
 and send it.
 . Back from Globex...
 +
-You should see the agent's message sent from Discord appear in your chat session window.
+You should see the agent's message sent from Matrix appear in your chat session window.
 
 . Exchange a few more messages to simulate a conversation.
 
@@ -2082,7 +2082,7 @@ In the route above:
 [%collapsible]
 ======
 <1> The `from` element defines the `direct:process` entrypoint where the Camel Kafka consumer will direct the incoming events.
-<2> Next, a property (processing variable) keeps the value (from the body) that uniquely identifies the full customer/agent conversation which originates from the Discord channel ID created for the session.
+<2> Next, a property (processing variable) keeps the value (from the body) that uniquely identifies the full customer/agent conversation which originates from the Matrix channel ID created for the session.
 <3> A log statement helps tracing the execution.
 <4> A property `continue` (defaulted value `true`) helps controlling the processing loop (see [5]).
 <5> A loop defines the processing logic to iteratively collect all the conversation Kafka events.
@@ -2309,12 +2309,12 @@ NOTE: Leaving the room should kick-off the transcript process.
 . Finally, in Rocket.Chat, you should see a notification informing the session has ended, plus a link to your transcript, as shown in the picture below:
 +
 --
-. Confirm to delete the channel in Discord.
+. Confirm to leave the channel in Matrix.
 . From Rocket.Chat, click on the PDF transcript link.
 --
 +
 ++++
-<img src="./images/camel/transcript-test.png" style="width:100%;border-style: none;">
+<img src="./images/camel/transcript-test-1.png" style="width:100%;border-style: none;">
 ++++
 
 
