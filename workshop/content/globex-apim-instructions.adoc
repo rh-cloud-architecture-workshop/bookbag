@@ -394,7 +394,7 @@ image::images/apim/client-manager-step1.png[]
 This configuration allows only Services based access using Service Accounts, and will be used by 3scale API Management system in the next steps, when mobile users sign up for access. Service accounts provide a flexible way to control API access without sharing a regular user's credentials.
 
 
-image::images/apim/client-manager-step2.png[]
+image::images/apim/client-manager-step2.png[] 
 
 * In the *Step 3* of the *Create Client* wizard, leave the fields as they are and click on the *Save* button. We will update some of these options later.
 
@@ -684,7 +684,7 @@ image::images/apim/apim-mobile-back-prod-active-users.png[]
 === Setup Globex Dev Portal
 A good developer portal is a must have to assure adoption of your API. In this section we will setup the Dev Portal so that it is ready to be used by Mobile Developers.
 
-* Navigate to `3scale's Audience ->Developer Portal -> Settings` by clicking on {3scale_tenant}/site/dns[Settings -> Domains & Access section^, window="3scale"]
+* Navigate to *3scale's Audience ->Developer Portal -> Settings* by clicking on {3scale_tenant}/site/dns[Settings -> Domains & Access section^, window="3scale"]
 * The *Developer Portal Access Code* hides the site from the world till you are ready.
 * Remove the value in the textfield below the label *Developer Portal Access Code* as shown below. Click on the *Update Account* button. This opens up the Developer Portal to public access without the need for an Access Code.
 +
@@ -987,7 +987,7 @@ backend.capabilities.3scale.net/globex-partner-gateway-backend created
 image::images/apim/partner-gateway-product.png[width=80%]
 
 * Get the value for *<client-credentials>* placeholder as described below. Or if you have copied this into Scratchpad you can use that instead.
-** Open the {sso_tenant_console}/#/realms/globex-{user_name}/clients[SSO Clients List^, window="sso"] from Keycloak.
+** Open the {sso_tenant_console}/#/globex-{user_name}/clients[SSO Clients List^, window="sso"] from Keycloak.
 ** Login if needed with *({user_name}/{user_password})*. 
 
 [WARNING]
@@ -995,7 +995,7 @@ image::images/apim/partner-gateway-product.png[width=80%]
 In case you see an error stating *You don't have access to the requested resource*, you may notice that you are logged in as a user other than *{user_name}* 
 
 * Click on *Sign Out* and close the browser
-* Reopen the {sso_tenant_console}/#/realms/globex-{user_name}/clients[Keycloak Clients List^, window="sso"]. 
+* Reopen the {sso_tenant_console}/#/globex-{user_name}/clients[Keycloak Clients List^, window="sso"]. 
 * Login as *({user_name}/{user_password})*. 
 
 
