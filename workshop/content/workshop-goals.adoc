@@ -54,7 +54,7 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-primary">#Devspaces</span> 
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         </p>
-        <a href="/workshop/globex-cdc-into" class="btn btn-sm btn-info">Introduction &gt;</a>
+        <a href="/workshop/globex-cdc-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
         <a href="/workshop/globex-cdc-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
       </div>
     </div>
