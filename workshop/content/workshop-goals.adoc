@@ -68,7 +68,7 @@ Before diving into a particular module, we recommend that you go through the wor
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Launch new channels using Contract-First approach</h5>
-        <p class="card-text">In this module you discover how Contract First Approach provides the right framework to acclerate launching new channels in a secure way.<br>
+        <p class="card-text">In this module you discover how Contract First Approach provides the right framework to accelerate launching new channels in a secure way.<br>
         <span class="badge badge-pill badge-primary">#API-Management</span> 
         <span class="badge badge-pill badge-primary">#Keycloak</span> 
         <span class="badge badge-pill badge-primary">#OIDC</span> 
