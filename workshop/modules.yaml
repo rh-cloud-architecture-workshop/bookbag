@@ -17,6 +17,12 @@ modules:
     exit_sign: Contract-First Approach Module Module - Instructions
   globex-apim-instructions:
     name: Launch new channels with Contract-First Approach - Instructions
+    exit_sign: serverless - Introduction 
+  globex-serverless-intro:
+    name: Serverless - Intro
+    exit_sign: Serverless - Instructions
+  globex-serverless-instructions:
+    name: S - Instructions
     exit_sign: Secure Service Network Module - Introduction 
   globex-skupper-intro:
     name: Building a secure service network with Red Hat Service Interconnect - Intro

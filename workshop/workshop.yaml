@@ -8,6 +8,8 @@ modules:
     - globex-cdc-instructions
     - globex-apim-intro
     - globex-apim-instructions
+    - globex-serverless-intro
+    - globex-serverless-instructions
     - globex-skupper-intro
     - globex-skupper-instructions
     - globex-camel-intro
