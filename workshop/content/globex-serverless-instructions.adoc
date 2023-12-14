@@ -13,13 +13,13 @@
 :openshift_api_internal: %openshift_api_internal%
 
 
-//:openshift_cluster_console: https://console-openshift-console.apps.cluster-jb86t.jb86t.sandbox3028.opentlc.com
-//:user_name: user1
-//:user_password: openshift
-//:devspaces_dashboard: https://devspaces.apps.cluster-jb86t.jb86t.sandbox3028.opentlc.com
-//:globex_user_password: openshift
-//:openshift_subdomain: apps.cluster-jb86t.jb86t.sandbox3028.opentlc.com
-//:openshift_api_internal: https://172.30.0.1:443" 
+:openshift_cluster_console: https://console-openshift-console.apps.cluster-tkfd2.dynamic.opentlc.com
+:user_name: user1
+:user_password: openshift
+:devspaces_dashboard: https://devspaces.apps.cluster-tkfd2.dynamic.opentlc.com
+:globex_user_password: openshift
+:openshift_subdomain: apps.cluster-tkfd2.dynamic.opentlc.com
+:openshift_api_internal: https://172.30.0.1:443" 
 
 
 == Objectives
@@ -36,24 +36,29 @@ image::images/serverless/serverless-namespace-toplogy.png[]
 
 
 
-=== Create Sink binding and Knative Sink from Product Reviews to Kafka 
+=== Step 1: Product Reviews to be sent to Kafka topic
 
-* Create Knative Sink which connects to topic: `globex.reviews`. When a Product Reviews is submitted, the immedtiate destination is the `globex.reviews` Kafka 
+* Create a Knative Sink which connects to topic: `globex.reviews`. 
+* When a Product Review is submitted from the website, the message is passed onto Kafka as a CloudEvent by a Knative Sink for Apache Kafka. The review is then products into  the `globex.reviews` Kafka topic.
 
+.[.underline]#*[Click to know]  What is a knative sink and CloudEvent?*#
+[%collapsible]
+====
+* A sink is a resource that can receive incoming events from other resources. In this case we use Knative Sink for Apache Kafka which can persist incoming CloudEvent from the `produt-reviews` Service to  a configurable Apache Kafka Topic (`globex.reviews`).
+* https://cloudevents.io[CloudEvent^] is a specification for describing event data in a common way
+====
 
-+
+* Copy the following CRD which to create a Kafka Sink to the Apache Kafka Topic (`globex.reviews`).
+
 [source,bash,role=copy,subs="attributes"]
 ----
 apiVersion: eventing.knative.dev/v1alpha1
 kind: KafkaSink
 metadata:
   name: reviews-sink
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-    argocd.argoproj.io/sync-wave: '-1'
 spec:
   bootstrapServers:
-    - kafka-kafka-bootstrap.globex-mw-#user_name#.svc.cluster.local:9092
+    - kafka-kafka-bootstrap.globex-mw-%user_name%.svc.cluster.local:9092
   topic: globex.reviews
   numPartitions: 1
   contentMode: binary
@@ -63,17 +68,6 @@ spec:
          name: kafka-secret
 
 ----
-* Review the other sinks which have been already created. 
-+
-[cols="50%,50%"]
-|===
-|*Sink name* | *Function*
-|reviews-sink | TBC
-|moderated-reviews-sink | TBC
-|denied-reviews | TBC
-|reviews-sentiment-sink | TBC
-|denied-reviews | TBC
-|===
 
 * Create Sink binding to Knative Sink from Product Reviews to Kafka 
 +
@@ -97,13 +91,21 @@ spec:
     namespace: globex-serverless-%user_name%
 ----
 
+* There are other sinks which have been already created. Review what each of these do:
++
+[cols="50%,50%"]
+|===
+|*Sink name* | *Function*
+|reviews-sink | TBC
+|moderated-reviews-sink | TBC
+|denied-reviews-sink | TBC
+|reviews-sentiment-sink | TBC
+|===
 
 === Review Knative Broker, Knative Source
 
-* Review knative broker
-Brokers are Kubernetes custom resources that define an event mesh for collecting a pool of events. Brokers provide a discoverable endpoint for event ingress, and use Triggers for event delivery. Event producers can send events to a broker by POSTing the event.
-
-
+* Create a  Knative broker
+** Brokers are Kubernetes custom resources that define an event mesh for collecting a pool of events. Brokers provide a discoverable endpoint for event ingress, and use Triggers for event delivery. Event producers can send events to a broker by POSTing the event.
 
 +
 [source,bash,role=copy,subs="attributes"]
@@ -112,40 +114,183 @@ apiVersion: eventing.knative.dev/v1
 kind: Broker
 metadata:
   name: globex-broker
-  namespace: globex-serverless-user1
-
+  namespace: globex-serverless-%user_name%
 ----
-* Review Knative source 
+* Create a Knative source 
+** The KafkaSource reads messages stored in existing Apache Kafka topics, and sends those messages as CloudEvents through HTTP to its configured sink. The KafkaSource preserves the order of the messages stored in the topic partitions. It does this by waiting for a successful response from the sink before it delivers the next message in the same partition.
 
-The KafkaSource reads messages stored in existing Apache Kafka topics, and sends those messages as CloudEvents through HTTP to its configured sink. The KafkaSource preserves the order of the messages stored in the topic partitions. It does this by waiting for a successful response from the sink before it delivers the next message in the same partition.
-
-
-** The sink section if the YAML seen below is the section which connects this source to the broker that you reviewed in the previous section.
-
-==== Knative source: Add topics to listen to from kafka
-* Let us add the topics that the Knative source should listen to - 
 +
 [source,bash,role=copy,subs="attributes"]
 ----
+apiVersion: sources.knative.dev/v1beta1
+kind: KafkaSource
+metadata:
+  name: kafka-source
+  namespace: globex-serverless-%user_name%
+spec:
+  bootstrapServers:
+    - 'kafka-kafka-bootstrap.globex-mw-%user_name%.svc.cluster.local:9092'
+  topics:
     - globex.reviews
     - reviews.moderated
     - reviews.denied
     - reviews.sentiment
+  net:
+    sasl:
+      enable: true
+      password:
+        secretKeyRef:
+          key: password
+          name: kafka-secret
+      type:
+        secretKeyRef:
+          key: sasl.mechanism
+          name: kafka-secret
+      user:
+        secretKeyRef:
+          key: user
+          name: kafka-secret
+    tls:
+      caCert: {}
+      cert: {}
+      key: {}
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: globex-broker
+      namespace: globex-serverless-%user_name%
 ----
 
+* Notice that there are 4 topics that the Knative source would listen to.Review what each of these do:
++
+[cols="50%,50%"]
+|===
+|*Sink name* | *Function*
+|globex.reviews | TBC
+|reviews.moderated | TBC
+|reviews.denied | TBC
+|reviews.sentiment | TBC
+|===
 
-image:images/serverless/knative-source-original.png[]
 
-* add the topics
+=== Create Knative services
+* What are Knative services TBC
+* There are 3 differe knative services
++
+[cols="50%,50%"]
+|===
+|*Sink name* | *Function*
+|persist-reviews | TBC
+|aiml-sentiment-reviews | TBC
+|aiml-moderate-reviews | TBC
+|===
+* You will now create one of these services `persist-reviews` while the others have been already created for you.
+* In Administrator view go to Serverless > Serving.  You will see two services already deployed
 
-image:images/serverless/knative-source-addtopics.png[]
+image::images/serverless/serverless-2knative-services.png[]
 
-* View Broker
+* Click on *Create* button, choose *Service* and paste the following YAML file, and click on *Save*
++
+[source,bash,role=copy,subs="attributes"]
+----
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: persist-reviews
+  namespace: globex-serverless-user
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+    spec:
+      containers:
+        - image: quay.io/globex-sentiment-analysis/persist-reviews:latest
+          volumeMounts:
+            - mountPath: /deployments/config
+              name: config
+              readOnly: true
+      volumes:
+        - name: config
+          secret:
+            secretName: persist-reviews
 
+----
+* Navigate back to the Topology and notice all 3 knative services
+
+image::images/serverless/3knative-service.png[]
 
 
 === Create Knative triggers
+.[.underline]#*[Click to know] What is a knative trigger?*#
+[%collapsible]
+====
+* A trigger represents a desire to subscribe to events from a specific broker.
+* A trigger receives events from the broker and delivers them to a service.
+====
 
+
+* In the topology view, Hover the mouse over `globex-broker`, grab and pull the arrow toards the persist-reviews services as show below. A popup appears to capture details about the trigger.
++
+.[.underline]#*[Click to know] See how to do perform this*#
+[%collapsible]
+====
+
+image::images/serverless/trigger.gif[width=60%]
+====
+
+* Enter the following details in the popup, and click *Save* +
+
+|===
+|*Attribute* | *Value*
+|source | review-moderated
+|type | review-moderated-event
+|===
+
+image::images/serverless/persist-review-trigger.png[width=60%]
+
+* We'll now create triggers for the other two knative services 
++
+[source,bash,role=copy,subs="attributes"]
+----
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: aiml-moderate-reviews-trigger
+  namespace: globex-serverless-%user_name%
+spec:
+  broker: globex-broker
+  filter:
+    attributes:
+      source: submit-review
+      type: submit-review-event
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: aiml-moderate-reviews
+
+---
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: aiml-sentiment-trigger
+  namespace: globex-serverless-%user_name%
+spec:
+  broker: globex-broker
+  filter:
+    attributes:
+      source: submit-review
+      type: submit-review-event
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: aiml-sentiment-reviews
+
+----
 
 === Create Sink binding and Knative Sink from Product Reviews to Kafka 
 
