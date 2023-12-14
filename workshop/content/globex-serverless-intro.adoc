@@ -1,0 +1,61 @@
+:user_name: %user_name%
+
+
+globex-serverless-intro.adoc -  WORK IN PROGRESS
+
+
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+
+In this module you discover how Contract First Approach provides the right framework to acclerate launching new channels in a secure way across internal and external teams to build microservices and APIs based systems.
+
+
+== Business context
+
+In today's fast-paced digital landscape, businesses collect vast amounts of data through customer interactions, product sales, SEO clicks, and more. However, the true value of this data lies in its ability to drive business intelligence. In this module, let's see how an event-driven architecture can leverage the capabilities of an AI/ML engine to unlock the true potential of data and transform it into valuable business intelligence.
+
+
+
+
+
+== Technical considerations
+
+
+
+=== Red Hat Knative and OpenShift Serverless
+
+Globex uses Red Hat SSO to provide single sign-on (SSO) capabilities to Users, Web apps and APIs. In this case, OpenID Connect is used to authenticate a user (Globex Web and Mobile users) and also allow secured access to Globex's APIs
+
+
+=== Knative eventsing
+
+Sinks, Sink Binding, 
+
+Knative Source, Broker, Triggers
+
+
+
+
+=== Quarkus
+
+cloud events
+
+
+
+
+=== A graphical representation of the architecture:
+
+
+
+
+== Implementation
+
+In the next chapter, you will be guided through the implementation and deployment of the Contract First Approach. Of course this entails way more than can be achieved during a workshop, so instead most components are already in place, and you will focus on a number of key activities to deploy and run the solution.
