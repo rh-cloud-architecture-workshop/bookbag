@@ -42,8 +42,6 @@ Sinks, Sink Binding,
 Knative Source, Broker, Triggers
 
 
-
-
 === Quarkus
 
 cloud events
@@ -58,4 +56,7 @@ cloud events
 
 == Implementation
 
-In the next chapter, you will be guided through the implementation and deployment of the Contract First Approach. Of course this entails way more than can be achieved during a workshop, so instead most components are already in place, and you will focus on a number of key activities to deploy and run the solution.
+== Cashback Service Implementation
+
+In the next chapter, you will be guided through the implementation and deployment of the solutio. Since this solution involves way more than what can be achieved during a workshop, a number of components are already in place. Ynd you will focus on a few of key activities which will give you a good understanding of building an event-driven application to deploy and run the solution.
+
