@@ -37,7 +37,7 @@ Before diving into a particular module, we recommend that you go through the wor
         <span class="badge badge-pill badge-secondary">#overview</span>
         <span class="badge badge-pill badge-secondary">#hands-on</span>
         <span class="badge badge-pill badge-secondary">#explore</span></p>
-        <a href="/workshop/workshop-introduction" class="btn btn-sm btn-info">Introduction &gt;</a>        
+        <a href="/workshop/workshop-intro" class="btn btn-sm btn-info">Introduction &gt;</a>        
       </div>
     </div>
   </div>

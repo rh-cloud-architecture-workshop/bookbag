@@ -3,7 +3,7 @@ modules:
   workshop-goals:
     name: "Cloud Architecture Workshop: Overview and Goals"
     exit_sign: Introduction to the Workshop
-  workshop-introduction:
+  workshop-intro:
     name: Introduction to the Workshop
     exit_sign: Change Data Capture Module - Introduction
   globex-cdc-intro:

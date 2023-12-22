@@ -3,7 +3,7 @@ name: Cloud Architecture Workshop
 modules:
   activate:
     - workshop-goals
-    - workshop-introduction
+    - workshop-intro
     - globex-cdc-intro
     - globex-cdc-instructions
     - globex-apim-intro
