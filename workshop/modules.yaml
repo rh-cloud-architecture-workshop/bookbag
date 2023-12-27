@@ -18,13 +18,13 @@ modules:
   globex-apim-instructions:
     name: Launch new channels with Contract-First Approach - Instructions
     exit_sign: Secure Service Network Module - Introduction 
-  globex-skupper:
+  globex-skupper-intro:
     name: Building a secure service network with Red Hat Service Interconnect - Intro
     exit_sign: Secure Service Network Module - Instructions 
   globex-skupper-instructions:
     name: Building a secure service network with Red Hat Service Interconnect - Instructions
     exit_sign: Multi-channel Support Service Module - Introduction
-  globex-camel:
+  globex-camel-intro:
     name: Building a multi-channel support service for Globex customers - Intro
     exit_sign: Multi-channel Support Service Module - Instructions
   globex-camel-instructions:
