@@ -365,9 +365,9 @@ In this section you will manage and secure the Mobile Gateway API endpoints so t
 * access Red Hat 3scale API Management's Developer Portal as a Mobile Developer to sign up for access of API
 
 === Red Hat build of Keycloak
-3scale integrates with Keycloak for authenticating the API requests using the OpenID Connect specification. On signing-up, External/Mobile developers  will be provided with client credentials to access to the APIs securely. This client credentials is synced between 3scale and Keycloak server using a component know an *Zync*
+3scale integrates with Keycloak for authenticating the API requests using the OpenID Connect specification. On signing-up, External/Mobile developers  will be provided with client credentials to access to the APIs securely. This client credentials is synced between 3scale and Keycloak server using a component know as *Zync*.
 
-In order to setup OpenID Connect, you will now create a special *client id* meant for *Client Credentials Management*
+In order to setup OpenID Connect, you will now create a special *client id* meant for *Client Credentials Management*.
 
 * Click to launch {sso_tenant_console}[Keycloak^, window="sso"] and login using username and password ({user_name}/{user_password}).
 * Click on *Clients* from the left-hand navigation. And, then click on the *Create client* button on the right side as shown below
@@ -684,7 +684,7 @@ image::images/apim/apim-mobile-back-prod-active-users.png[]
 === Setup Globex Dev Portal
 A good developer portal is a must have to assure adoption of your API. In this section we will setup the Dev Portal so that it is ready to be used by Mobile Developers.
 
-* Navigate to *3scale's Audience ->Developer Portal -> Settings* by clicking on {3scale_tenant}/site/dns[Settings -> Domains & Access section^, window="3scale"]
+* Navigate to *3scale's Audience -> Developer Portal -> Settings* by clicking on {3scale_tenant}/site/dns[Settings -> Domains & Access section^, window="3scale"]
 * The *Developer Portal Access Code* hides the site from the world till you are ready.
 * Remove the value in the textfield below the label *Developer Portal Access Code* as shown below. Click on the *Update Account* button. This opens up the Developer Portal to public access without the need for an Access Code.
 +
