@@ -191,7 +191,7 @@ In this first implementation activity you need to enable the end-to-end data flo
 
 ++++
 <p align="center">
-	<img src="./images/camel/overview-lab-1.jpg" style="width:90%;border-style: none;">
+	<img src="./images/camel/overview-lab-1.png" style="width:90%;border-style: none;">
 </p>
 ++++
 
@@ -1256,7 +1256,7 @@ Your next task will be to complete and deploy a Camel K integration that connect
 
 ++++
 <p align="center">
-	<img src="./images/camel/overview-lab-2.jpg" style="width:90%;border-style: none;">
+	<img src="./images/camel/overview-lab-2.png" style="width:90%;border-style: none;">
 </p>
 ++++
 
@@ -1750,7 +1750,7 @@ The last piece in the workshop's architecture is an integration that uses storag
 
 ++++
 <p align="center">
-	<img src="./images/camel/overview-lab-3.jpg" style="width:90%;border-style: none;">
+	<img src="./images/camel/overview-lab-3.png" style="width:90%;border-style: none;">
 </p>
 ++++
 
