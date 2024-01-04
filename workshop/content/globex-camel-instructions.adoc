@@ -254,7 +254,7 @@ Your Matrix integration, implemented with Camel, requires access to _Red Hat Dat
 
 ++++
 <p align="center">
-	<img src="./images/camel/cache-role.jpg" style="width:40%;border-style: none;">
+	<img src="./images/camel/cache-role.png" style="width:40%;border-style: none;">
 </p>
 ++++
 
@@ -647,7 +647,7 @@ To speed up with the lab, this Camel route is already provided. Here we're just 
 
 ++++
 <p align="center">
-	<img src="./images/camel/cache-seq-diagram.jpg" style="width:40%;border-style: none;">
+	<img src="./images/camel/cache-seq-diagram.png" style="width:40%;border-style: none;">
 </p>
 ++++
 
@@ -1220,7 +1220,7 @@ You should see the agent's message sent from Matrix appear in the Rocket.Chat ch
 --
 +
 ++++
-<img src="./images/camel/matrix-deploy-test-end-to-end-1.png" style="width:100%;border-style: none;">
+<img src="./images/camel/matrix-deploy-test-end-to-end.png" style="width:100%;border-style: none;">
 ++++
 
 . In Rocket.Chat, as above on the right hand side, you should see a notification informing the session has ended.
@@ -1288,7 +1288,7 @@ The illustration below describes data exchanges via AMQ:
 
 ++++
 <p align="center">
-	<img src="./images/camel/common-data-model.jpg" style="width:90%;border-style: none;">
+	<img src="./images/camel/common-data-model.png" style="width:90%;border-style: none;">
 </p>
 ++++
 

@@ -10,7 +10,7 @@ As an added initiative to the digital transformation, Globex wants to implement 
 
 ++++
 <p align="center">
-	<img src="./images/camel/intro-arch-1.jpg" style="width:80%;border-style: none;">
+	<img src="./images/camel/intro-arch-1.png" style="width:80%;border-style: none;">
 </p>
 ++++
 
@@ -28,7 +28,7 @@ As per the picture below, this module is divided in 3 main activities:
 
 ++++
 <p align="center">
-	<img src="./images/camel/intro-lab-overview.jpg" style="width:80%;border-style: none;">
+	<img src="./images/camel/intro-lab-overview.png" style="width:80%;border-style: none;">
 </p>
 ++++
 
@@ -51,7 +51,7 @@ The complete architecture diagram below illustrates all the technologies at play
 
 ++++
 <p align="center">
-	<img src="./images/camel/full-architecture.jpg" style="width:80%;border-style: none;">
+	<img src="./images/camel/full-architecture.png" style="width:80%;border-style: none;">
 </p>
 ++++
 
