@@ -15,6 +15,10 @@
 
 :globexweburl: https://globex-web-globex-camel-%user_name%.%openshift_subdomain%/home
 
+:rocketchaturl: https://rocketchat.%openshift_subdomain%
+
+:elementurl: https://element.%openshift_subdomain%
+
 == Quick overview of the lab exercises
 
 
@@ -187,7 +191,7 @@ In this first implementation activity you need to enable the end-to-end data flo
 
 ++++
 <p align="center">
-	<img src="./images/camel/overview-lab-1.jpg" style="width:90%;border-style: none;">
+	<img src="./images/camel/overview-lab-1.png" style="width:90%;border-style: none;">
 </p>
 ++++
 
@@ -202,97 +206,6 @@ Customers will choose Rocket.Chat or Globex's chat widget to communicate with ag
 From Rocket.Chat, a channel called `globex-support-%user_name%` will be available. This channel looks and feels like any other Rocket.Chat channel you can interact with. You can send direct messages and get responses. The user can enter his question/concern, which is channelled to the agent, and wait for a response.
 
 On Matrix, where the agents operate, each new customer request will initiate a new conversation in a new dynamically created room. This room will remain open during the life of the conversation, until the customer has been attended and the conversation can be considered closed. At that moment, the agent manually leaves the room in Matrix, and the customer is notified in Rocket.Chat.
-
-{empty} +
-
-=== Onboard on the Rocket.Chat platform [TODO]
-
-You will need to open Slack in your browser to complete the work. We have prepared a Slack workspace dedicated to the workshop to make things easy.
-
-To join the workspace in Slack, simply follow the invite link below:
---
-* link:{slackinviteurl}[*Slack invite link*, window="_blank"]
---
-
-CAUTION: The workspace is open to the public, please be mindful of your actions, don't abuse the space.
-
-{empty} +
-
-Then, follow the steps below to complete preparations:
-
-. Slack will prompt you to login, choose your preferred login option.
-+
-Once onboard, you should see the following:
-+
-++++
-<img src="./images/camel/slack-onboard.jpg" style="width:25%;border-style: none;">
-++++
-+
-Marked in red, you should see you're in the *_CamelGlobex_* _Slack_ workspace.
-+
-[NOTE]
-====
-You may see a number suffix in the name instead:
-
-- *_CamelGlobexN_* (N: number)
-====
-
-. Then, ensure you add the *_GlobexSupport_* app:
-+
-[NOTE]
-====
-You may see a number suffix in the app instead:
-
-- *_GlobexSupportN_* (N: number)
-====
-.. From the left panel, choose:
-+
---
-kbd:[▾] Apps -> kbd:[+] Add apps
---
-+
-++++
-<img src="./images/camel/slack-add-app.jpg" style="width:30%;border-style: none;">
-++++
-+
-.. Then, select from the menu the `GlobexSupport` app.
-+
-++++
-<img src="./images/camel/slack-add-globex.jpg" style="width:30%;border-style: none;">
-++++
-+
-You should see in your left panel the app visible:
-// +
-// --
-// kbd:[▾] Apps +
-// kbd:[Ⓖ] GlobexSupport +
-// kbd:[+] Add apps +
-// --
-+
-++++
-<img src="./images/camel/slack-app-globex-visible.jpg" style="width:30%;border-style: none;">
-++++
-
-. Right click the app: kbd:[Ⓖ] *GlobexSupport* +
-and select the option:
-- View app details
-+
-++++
-<img src="./images/camel/slack-app-view-details.jpg" style="width:40%;border-style: none;">
-++++
-
-. A window pops up. +
-At the very bottom, copy your personal GlobexSupport `Channel ID`.
-+
-++++
-<img src="./images/camel/slack-app-channel-id-copy.jpg" style="width:40%;border-style: none;">
-++++
-
-. Keep the ID somewhere safe (your scratch-pad), as you'll need it to configure _Camel_.
-
-{empty} +
-
-You're all set to continue
 
 {empty} +
 
@@ -341,7 +254,7 @@ Your Matrix integration, implemented with Camel, requires access to _Red Hat Dat
 
 ++++
 <p align="center">
-	<img src="./images/camel/cache-role.jpg" style="width:40%;border-style: none;">
+	<img src="./images/camel/cache-role.png" style="width:40%;border-style: none;">
 </p>
 ++++
 
@@ -734,7 +647,7 @@ To speed up with the lab, this Camel route is already provided. Here we're just 
 
 ++++
 <p align="center">
-	<img src="./images/camel/cache-seq-diagram.jpg" style="width:40%;border-style: none;">
+	<img src="./images/camel/cache-seq-diagram.png" style="width:40%;border-style: none;">
 </p>
 ++++
 
@@ -843,46 +756,6 @@ The `kafka` component requires no extra parameters because it has been pre-confi
 
 {empty} +
 
-
-
-=== Onboard on the Discord platform [TODO]
-
-You will need to open Discord in your browser to complete the work. We have prepared a Discord server dedicated to the workshop to make things easy.
-
-To join the Discord server, simply follow the invite link below:
---
-* link:{discordinviteurl}[*Discord invite link*, window="_blank"]
---
-
-CAUTION: The server is open to the public, please be mindful of your actions, don't abuse the space.
-
-
-{empty} +
-
-Once onboard, you should see the following:
-
-++++
-<img src="./images/camel/discord-onboard.jpg" style="width:30%;border-style: none;">
-++++
-
-- Marked in red (1), you should see you're in the *_CamelGlobex_* _Discord_ server.
-+
-[NOTE]
-====
-You may see a number suffix in the server name instead:
-
-- *_CamelGlobexN_* (N: number)
-====
-
-
-
-- Marked in red (2), you should the channel folder that will contain all customer conversations.
-
-CAUTION: You may already see customer channels under `CLIENTS` created by other students in the room. +
-Please do not send messages in other student's channels to prevent interferences. 
-
-{empty} +
-
 === Run your code in `dev` mode
 
 You have completed the processing flow from customers (in Rocket.Chat) to agents (in Matrix). The returning flow is still pending to implement, but you can already test what you have implemented so far.
@@ -940,6 +813,26 @@ NOTE: You'll also see other pre-deployed pods to assist you in this learning mod
 +
 {empty} +
 
+. Log into the Rocket.Chat application. In a browser window navigate to {rocketchaturl}[*Rocket.Chat workspace*, window="_blank"]. Log in with your username and password (%user_name%/%user_password%).
++
+Notice the *globex-support-%user_name%* channel in the channel list on the left side menu.
++
+image::images/camel/rocketchat-workspace.png[]
++
+Leave the browser window open.
+
+. Log into the Element application. Open a new browser window or tab, and navigate to the {elementurl}[*Element chat application*, window="_blank"]. Click on the *Sign In* button. Sign in with your username and password (%user_name%/%user_password%).
++
+You might see a pop-up asking to enable desktop notifications. Click on *Enable* to enable notifications.
++
+image::images/camel/element-desktop-notifications.png[]
++
+You should see the Element workspace.
++
+image::images/camel/element-workspace.png[]
++
+Leave the browser window open.
+
 . From Rocket.Chat, send a message...
 +
 As per the picture below, [1] select the globex-support-%user_name% channel in your Rocket.Chat window, [2] type in a test message, and [3], click the 'Send' button (or press Enter).
@@ -950,30 +843,23 @@ As per the picture below, [1] select the globex-support-%user_name% channel in y
 
 . On Element...
 +
---
-You should see a new room created with your user name:
+You should see a new room created named `rocketchat-%user_name%` 
 
-- `rocketchat-%user_name%` 
---
-+
---
-. Click on the new room.
+.. Click on the new room.
 
-. You should see a dialog box asking if you want to join the room. Click *Accept*
-+
+.. You should see a dialog box asking if you want to join the room. Click *Accept*
 +
 ++++
 <img src="./images/camel/element-dev-test-accept.png" style="width:80%;border-style: none;">
 ++++ 
 
-. You should see displayed the message sent from Rocket.Chat:
+.. You should see displayed the message sent from Rocket.Chat:
 +
 ++++
 <img src="./images/camel/element-dev-test-message.png" style="width:80%;border-style: none;">
 ++++
 +
 If you see the message in Element as above shown, then you've successfully completed this first exercise.
---
 
 {empty} +
 
@@ -1334,7 +1220,7 @@ You should see the agent's message sent from Matrix appear in the Rocket.Chat ch
 --
 +
 ++++
-<img src="./images/camel/matrix-deploy-test-end-to-end-1.png" style="width:100%;border-style: none;">
+<img src="./images/camel/matrix-deploy-test-end-to-end.png" style="width:100%;border-style: none;">
 ++++
 
 . In Rocket.Chat, as above on the right hand side, you should see a notification informing the session has ended.
@@ -1370,7 +1256,7 @@ Your next task will be to complete and deploy a Camel K integration that connect
 
 ++++
 <p align="center">
-	<img src="./images/camel/overview-lab-2.jpg" style="width:90%;border-style: none;">
+	<img src="./images/camel/overview-lab-2.png" style="width:90%;border-style: none;">
 </p>
 ++++
 
@@ -1402,7 +1288,7 @@ The illustration below describes data exchanges via AMQ:
 
 ++++
 <p align="center">
-	<img src="./images/camel/common-data-model.jpg" style="width:90%;border-style: none;">
+	<img src="./images/camel/common-data-model.png" style="width:90%;border-style: none;">
 </p>
 ++++
 
@@ -1864,7 +1750,7 @@ The last piece in the workshop's architecture is an integration that uses storag
 
 ++++
 <p align="center">
-	<img src="./images/camel/overview-lab-3.jpg" style="width:90%;border-style: none;">
+	<img src="./images/camel/overview-lab-3.png" style="width:90%;border-style: none;">
 </p>
 ++++
 
