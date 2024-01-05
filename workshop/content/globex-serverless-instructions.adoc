@@ -30,7 +30,7 @@ If this is the first time you open the console, you will be directed to the Deve
 +
 image::images/serverless/serverless-openshift-landing.png[]
 ** `globex-serverless-%user_name%` namespace contains the components you will be working on in this lab
-** `globex-gitops-%user_name%` namespace contains the ArgoCD elements
+** `globex-gitops-%user_name%` namespace contains the ArgoCD elements for GitOps. This is described in detail in the *Introduction* module.
 ** `globex-mw-%user_name%` contains Middleware deployments including AMQ Streams (Apache Kafka)
 ** `globex-%user_name%` namespace contains other services the application is dependent on. This is described in detail in the *Introduction* module.
 
@@ -54,14 +54,14 @@ image::images/serverless/serverless-namespace-initial-toplogy.png[]
 
 * Red Hat Streams based on Apache Kafka has been setup for you already. The Kafka broker is installed in the globex-mw-%user_name% namespace. In the same namespace, Kafdrop, a tool to introspect a Kafka broker is also installed.
 * Click %kafdrop_url%[Kafdrop^, window="others"] to navigate to the Kafdrop home page.
-* Notice that there are 4 topics which are relevant to this module. Here is what each of these topics are meant for:
+* Notice that there are 3 topics which are relevant to this module. Here is what each of these topics are meant for:
 +
 [cols="25%,75%",]
 |===
-|*Kafka Topic* | *Function*
-|globex.reviews     | When a user submits a review, that review is produced to this topic with Knative Eventing framework.
-|reviews.moderated  | Reviews wchih are moderated are produced to this topic to be further persisted in a database.
-|reviews.sentiment  | Holds the reviews after analysis with a sentiment score (between -1 & 3) 
+| *Kafka Topic* | *Function*
+| globex.reviews     | When a user submits a review, that review is produced to this topic with Knative Eventing framework.
+| reviews.moderated  | Reviews wchih are moderated are produced to this topic to be further persisted in a database.
+| reviews.sentiment  | Holds the reviews after analysis with a sentiment score.
 |===
 
 === Introducing OpenShift Serverless for event-driven architecture
@@ -134,7 +134,7 @@ spec:
             secretName: persist-reviews
 
 ----
-* Navigate back to the %openshift_cluster_console%/topology/ns/globex-serverless-%user_name%?view=graph[Developer > Topology ^, window="console"] view of the `globex-serverless-%user_name%` namespace and you will notice all the three Knative services
+* Navigate back to the %openshift_cluster_console%/topology/ns/globex-serverless-%user_name%?view=graph[Developer > Topology, window="console", target="console"] view of the `globex-serverless-%user_name%` namespace and you will notice all the three Knative services
 +
 image::images/serverless/3knative-service.png[]
 * A few interesting points to notes with the newly created `persist-reviews` 
@@ -167,14 +167,11 @@ image::images/serverless/reviews-keventing-kafka.png[]
 
 Now, go ahead an create the *Sink and SinkBinding*.
 
-* Click on the image:images/serverless/add-yaml.png[width=3%] icon found on top of the OpenShift Console to access the *Import YAML* wizard.
-+
-.[.underline]#*Click to see a visual*# 
-[%collapsible]
-====
+* Click on the *(+)* icon found on top of the OpenShift Console to access the *Import YAML* wizard.
+
 image::images/serverless/console-add-yaml.png[]
-====
-* Copy the following CRD into the *Import YAML* form, and click *Create* to create a KafkaSink `reviews-sink` which will send messages to `globex.reviews` Kafka Topic.
+
+* Copy the following CRD into the *Import YAML* form, and click *Create* to create the KafkaSink `reviews-sink` which will send messages to `globex.reviews` Kafka Topic.
 
 +
 .[.underline]#*Click to see a visual*# 
@@ -191,7 +188,7 @@ kind: KafkaSink
 metadata:
   name: reviews-sink
   namespace: globex-serverless-%user_name%
-  spec:
+spec:
   bootstrapServers:
     - kafka-kafka-bootstrap.globex-mw-%user_name%.svc.cluster.local:9092
   topic: globex.reviews
@@ -227,7 +224,7 @@ spec:
     namespace: globex-serverless-%user_name%
 ----
 
-* Navigate back to the %openshift_cluster_console%/topology/ns/globex-serverless-%user_name%?view=graph[Topology View^, window="console"], to view the new Sink and SinkBinding you created
+* Navigate back to the %openshift_cluster_console%/topology/ns/globex-serverless-%user_name%?view=graph[Topology View, window="console", target="console"], to view the new Sink and SinkBinding you created
 +
 .[.underline]#*Click to see a visual*# 
 [%collapsible]
@@ -259,7 +256,7 @@ The next step is to setup the Knative components that can invoke the HTTP endpoi
 ====
 
 ==== Create Knative Broker
-* Click on the image:images/serverless/add-yaml.png[width=4%] icon found on top of the OpenShift Console to access the *Import YAML* wizard.
+* Click on the *(+)* icon found on top of the OpenShift Console to access the *Import YAML* wizard.
 * Copy the following YAML (CRD)  and click *Create* to create a  Knative broker. +
 Note: There is just one broker for the entire solution, which will use triggers to route them to the right services thereby building a realtime event mesh.
 
@@ -274,7 +271,7 @@ metadata:
 ----
 
 ==== Create Knative source
-* Click on the image:images/serverless/add-yaml.png[width=4%] icon found on top of the OpenShift Console to access the *Import YAML* wizard.
+* Click on the *(+)* icon found on top of the OpenShift Console to access the *Import YAML* wizard.
 * Copy the following YAML to create a Knative KafkaSource. +
 Note that this KafkaSource read from the specific four (4) topics that is defined in the YAML below, and refers to the `globex-broker` you created in the previous step.
 +
@@ -326,7 +323,7 @@ spec:
 ====
 image::images/serverless/kafkasource-created.png[]
 ====
-* Navigate back to the %openshift_cluster_console%/topology/ns/globex-serverless-%user_name%?view=graph[Topology View^, window="console"], to view the new Source and Broker you created.
+* Navigate back to the %openshift_cluster_console%/topology/ns/globex-serverless-%user_name%?view=graph[Topology View, window="console"], to view the new Source and Broker you created.
 +
 .[.underline]#*Click to see a visual*# 
 [%collapsible]
@@ -341,7 +338,7 @@ image::images/serverless/source-broker-topology.png[]
 You will now create triggers which will invoke the HTTP endpoint of Knative services depending on the CloudEvent headers. +
 Each CloudEvent created will be tagged with specific values in the headers `ce-type` and `ce-source` which is then used by the Triiger to route them to the correct service HTTP endpoint
 
-* Click on the image:images/serverless/add-yaml.png[width=4%] icon found on top of the OpenShift Console to access the *Import YAML* wizard.
+* Click on the *(+)* icon found on top of the OpenShift Console to access the *Import YAML* wizard.
 * Copy and pase the following CRD to create the 3 Triggers matching the 3 Knative services
 
 +
@@ -449,18 +446,23 @@ image::images/serverless/webapp-products-details.png[width=70%]
 * If the review comment is appropriate it will then appear in the same page in a few seconds.
 +
 image::images/serverless/webapp-products-view-review.png[width=70%]
-* You will also notice that the Knative services have all turned fully blue because they have triggered by the reviews submission and so have scaled up. +
-In a few seconds they will go back to a white ring denoting that they have been scaled down to zero since they are not in use anymore.
+* In the OpenShift *Developer> Topology* view, you will also notice that the Knative services have all turned fully blue because they have triggered by the reviews submission and so have scaled up. +
+In a few seconds two of them (expect for persist-reviews) will go back to a white ring denoting that they have been scaled down to zero since they are not in use anymore.
 +
 image::images/serverless/reviews-knative-services.png[]
 
 * Now, go ahead and leave review comments of as many products as you like. If you are feeliing adventurous you can try a few inappropriate comments too to see how they are being moderated ;)
 
-=== Under the hood:  Review moderation
+=== Under the hood: Step through Review moderation flow
 
-* Click %kafdrop_url%[Kafdrop^, window="others"] to navigate to the Kafdrop home page. Enter *reviews* in the Name filter as show below. You can see 4 topics here.
+* Click %kafdrop_url%[Kafdrop^, window="others"] to navigate to the Kafdrop home page. Enter *reviews* in the Name filter as show below. You can see 3 topics here.
++
+.[.underline]#*Click to see a visual*# 
+[%collapsible]
+====
 +
 image::images/serverless/globex-review-topics.png[]
+====
 
 * Click on the `globex-reviews` topic to see an Overview of the topic page
 +
@@ -506,5 +508,19 @@ image::images/serverless/sentiment-reviews-trigger.png[width=80%]
 * The review is then sent to the %kafdrop_url%/topic/reviews.sentiment[Kafdrop:reviews.sentiment topic^, window="others"]. Click on the Partition `0` to view the sentiment score.
 +
 image::images/serverless/sentiment-score.png[]
+** As a next step, this sentiment score can be used to build a dashboard to visualise the sentiment of various categories of products. 
++
+.[.underline]#*Click to see a sample visual*# 
+[%collapsible]
+====
++
+image::images/serverless/globex-dashboard-sample.png[]
+====
 
-As a next step, this sentiment score can be used to build a dashboard to visualise the sentiment of various categories of products. This activity is outside the scope of this workshop, but you can https://redhat-solution-patterns.github.io/solution-pattern-sentiment-analysis[try this out^, window="others"] at a later time.
+== Congratulations
+
+Congratulations! With this you have completed the Event Driven Applications workshop module! 
+
+Please close all but the Workshop Deployer browser tab to avoid proliferation of browser tabs which can make working on other modules difficult. 
+
+Proceed to the https://workshop-deployer.%openshift_subdomain%[Workshop Deployer] to choose your next module.
