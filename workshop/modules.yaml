@@ -19,10 +19,10 @@ modules:
     name: Launch new channels with Contract-First Approach - Instructions
     exit_sign: serverless - Introduction 
   globex-serverless-intro:
-    name: Serverless event-driven - Intro
+    name: Event driven applications with Serverless Knative Eventing - Intro
     exit_sign: Serverless - Instructions
   globex-serverless-instructions:
-    name: Serverless event-driven  - Instructions
+    name: Event driven applications with Serverless Knative Eventing  - Instructions
     exit_sign: Secure Service Network Module - Introduction 
   globex-skupper-intro:
     name: Building a secure service network with Red Hat Service Interconnect - Intro
