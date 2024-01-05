@@ -190,7 +190,8 @@ apiVersion: eventing.knative.dev/v1alpha1
 kind: KafkaSink
 metadata:
   name: reviews-sink
-spec:
+  namespace: globex-serverless-%user_name%
+  spec:
   bootstrapServers:
     - kafka-kafka-bootstrap.globex-mw-%user_name%.svc.cluster.local:9092
   topic: globex.reviews
@@ -211,6 +212,7 @@ apiVersion: sources.knative.dev/v1
 kind: SinkBinding
 metadata:
   name: product-reviews-to-reviews-sink
+  namespace: globex-serverless-%user_name%
 spec:
   sink:
     ref:
