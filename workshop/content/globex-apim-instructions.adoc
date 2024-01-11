@@ -382,7 +382,7 @@ image::images/apim/client-add.png[]
 |====
 | Name | Value
 
-|Client Protocol (dropdown) | `openid-connect`
+|Client type (dropdown) | `openid-connect`
 |Client Id | `client-manager`
 |====
 
@@ -405,7 +405,7 @@ image::images/apim/client-manager-step3.png[]
 .Keycloak: View *client-manager* Settings
 image::images/apim/new-client-save.png[]
 
-* The next step is to configure this `client-manager` so that 3scale can synchronize with Keycloak, so that Keycloak can manage other clients (create, amend and delete) on behalf of 3scale API Management
+* The next step is to configure this `client-manager` so that 3scale can synchronize with Keycloak, and Keycloak can manage other clients (create, amend and delete) on behalf of 3scale API Management
 ** Click on the *Service Account Roles* tab from the top tab navigation, and click *Assign Role* button
 +
 .Setup Service Account Roles for *client-manager* in Service Account Roles tab
