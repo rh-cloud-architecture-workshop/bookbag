@@ -92,7 +92,7 @@ skupper version
 +
 .Output
 ----
-client version                 1.4.1
+client version                 1.5.2
 transport version              not-found
 controller version             not-found
 config-sync version            not-found
@@ -108,6 +108,7 @@ skupper init -n globex-skupper-%user_name% --enable-console --enable-flow-collec
 +
 .Output
 ----
+Waiting for status...
 Skupper is now installed in namespace 'globex-skupper-%user_name%'.  Use 'skupper status' to get more information.
 ----
 
@@ -132,6 +133,7 @@ skupper -n globex-skupper-db-%user_name% init
 +
 .Output
 ----
+Waiting for status...
 Skupper is now installed in namespace 'globex-skupper-db-%user_name%'.  Use 'skupper status' to get more information.
 ----
 
@@ -145,7 +147,7 @@ skupper -n globex-skupper-db-%user_name% status
 +
 .Output
 ----
-Skupper is enabled for namespace "globex-skupper-db-%user_name%" in interior mode. It is not connected to any other sites. It has no exposed services.
+Skupper is enabled for namespace "globex-skupper-db-%user_name%". It is not connected to any other sites. It has no exposed services.
 ----
 
 === Create a link between the two namespaces
@@ -182,7 +184,7 @@ kind: Secret
 metadata:
   annotations:
     skupper.io/generated-by: eecb731d-3457-4a05-b5dc-7982bbf91a6b
-    skupper.io/site-version: 1.4.1
+    skupper.io/site-version: 1.5.2
     skupper.io/url: https://claims-globex-skupper-%user_name%.%openshift_subdomain%:443/9698eead-1a96-11ee-9dad-0a580a83003b
   creationTimestamp: null
   labels:
@@ -218,7 +220,11 @@ skupper -n globex-skupper-db-%user_name% link status
 ----
 Links created from this site:
 
-    Link link1 is connected
+         Link link1 is connected
+
+Current links from other sites that are connected:
+
+         There are no connected links
 
 ----
 
@@ -304,7 +310,7 @@ image::images/globex-catalog.png[]
 * The information on that page is retrieved from the database, demonstrating that the service network is working as expected. Feel free to navigate around the app to cause traffic between the application and the database.
 
 * You can also check the link between the two clusters in the Service Interconnect console at %skupper_console_aws%. 
-In the *Network* section, select the *Components* tab, which  shows the connection between the `globex-store-app` deployment in the isolated namespace and the `globex-db` service which is proxied over the service network.
+In the *Topology* section, select the *Components* tab, which  shows the connection between the `globex-store-app` deployment in the isolated namespace and the `globex-db` service which is proxied over the service network.
 +
 image::images/skupper-console-network-components.png[]
 +
