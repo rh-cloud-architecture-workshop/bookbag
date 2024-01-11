@@ -51,7 +51,7 @@ As mentioned before, we use as hub and spoke model to manage the workshop assets
 
 You can log into your namespace scoped ArgoCD instance and have a look at the assets managed by the instance: 
 
-* Open a browser tab and navigate to https://globex-%user_name%-gitops-server-globex-gitops-%user_name%.%openshift_subdomain%. Expect to see the landing page of ArgoCD.
+* Open a browser tab and navigate to https://globex-gitops-%user_name%-server-globex-gitops-%user_name%.%openshift_subdomain%. Expect to see the landing page of ArgoCD.
 * Click on the *Log in via OpenShift* link, and log in with your OpenShift credentials (%user_name%/%user_password%).
 +
 image::images/argocd-landing-page.png[]
@@ -59,6 +59,9 @@ image::images/argocd-landing-page.png[]
 * You are redirected to the application overview page of ArgoCD, which shows you all the applications that this instance of ArgoCD is managing. In ArgoCD speak, an application represents a collection of Kubernetes/OpenShift resources that are managed as a whole.
 +
 image::images/argocd-overview.png[]
++
+NOTE: The list of applications managed by the ArgoCD instance depends on which modules you have deployed.
+
 * If you click on one of the application cards, you'll see an overview of all the Kubernetes resources managed as part of the application. This is for example an partial view of the *Globex* application:
 +
 image::images/argocd-globex-application.png[]
@@ -78,6 +81,12 @@ In this section of the workshop, you will explore the Globex web application, bo
 Finally, you should be redirected to a view which lists the different OpenShift _projects_ (also known as _namespaces_) you have access to.
 +
 image::images/openshift-console-developer-view-projects.png[]
++
+[NOTE]
+====
+The list of namespaces you have access to will depends on which modules you have deployed.
+====
+
 * The Globex web application is deployed in the *globex-%user_name%* namespace. Click on *Topology* in the menu on the left and then click on the *globex-%user_name%* link to open the topology view of the namespace. The Topology view gives you a graphical representation of the different resources deployed in the namespace.
 +
 image::images/openshift-console-developer-select-topology.png[]
