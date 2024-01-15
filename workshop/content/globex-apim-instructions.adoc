@@ -171,7 +171,7 @@ In case you see an error stating *You don't have access to the requested resourc
 * Login as *({user_name}/{user_password})*. 
 
 
-.Red Hat SSO Login error
+.Keycloak Login error
 
 image::images/apim/sso-login-error.png[]
 
@@ -1007,7 +1007,7 @@ In case you see an error stating *You don't have access to the requested resourc
 * Login as *({user_name}/{user_password})*. 
 
 
-.Red Hat SSO Login error
+.Keycloak Login error
 
 image::images/apim/sso-login-error.png[]
 
