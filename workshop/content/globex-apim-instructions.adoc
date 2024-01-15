@@ -167,7 +167,7 @@ image::images/apim/apim-sso-login.png[]
 In case you see an error stating *You don't have access to the requested resource* or *Network response was not OK* or any other access error, you may notice that you are logged in as a user other than *{user_name}*. You will need to *signOut*, close the browser tab, and login again
 
 * Click on user name found on top right, choose *signOut* option, and close the browser
-* Reopen the {sso_tenant_console}/#/realms/globex-{user_name}/clients[Red Hat SSO Clients List^, window="sso"]. 
+* Reopen the {sso_tenant_console}/#/globex-{user_name}/clients[Red Hat SSO Clients List^, window="sso"]. 
 * Login as *({user_name}/{user_password})*. 
 
 
@@ -544,7 +544,7 @@ image::images/apim/mobile-gateway-product.png[]
 +
 [NOTE]
 ====
-If you don't have this value, click on Red Hat  {sso_tenant_console}/#/realms/globex-{user_name}/clients[Keycloak Clients List^, window="sso"]. Login if needed with *({user_name}/{user_password})*. Click on the Client ID *client-manager*. You can copy the credentials from the *Credentials tab*
+If you don't have this value, click on Red Hat  {sso_tenant_console}/#/globex-{user_name}/clients[Keycloak Clients List^, window="sso"]. Login if needed with *({user_name}/{user_password})*. Click on the Client ID *client-manager*. You can copy the credentials from the *Credentials tab*
 ====
 +
 image::images/apim/client-manager-credentials.png[]
@@ -816,7 +816,7 @@ image::images/apim/apim_globex_mobile_deployment.png[]
 ==== Update Keycloak's Web Origin to match Mobile App
 There is one last step that you need to do before trying out the Mobile App. You need to update the *Web Origin*
 
-* Navigate to click on {sso_tenant_console}/#/realms/globex-{user_name}/clients[Keycloak Clients List^,window="sso"]. Login if needed with *({user_name}/{user_password})*.
+* Navigate to click on {sso_tenant_console}/#/globex-{user_name}/clients[Keycloak Clients List^,window="sso"]. Login if needed with *({user_name}/{user_password})*.
 +
 .Keycloak Clients List for Mobile client
 image::images/apim/rh-sso-mobile-client.png[]
@@ -1003,7 +1003,7 @@ image::images/apim/partner-gateway-product.png[width=80%]
 In case you see an error stating *You don't have access to the requested resource* or *Network response was not OK* or any other access error, you may notice that you are logged in as a user other than *{user_name}*. You will need to *signOut*, close the browser tab, and login again
 
 * Click on user name found on top right, choose *signOut* option, and close the browser
-* Reopen the {sso_tenant_console}/#/realms/globex-{user_name}/clients[Red Hat SSO Clients List^, window="sso"]. 
+* Reopen the {sso_tenant_console}/#/globex-{user_name}/clients[Red Hat SSO Clients List^, window="sso"]. 
 * Login as *({user_name}/{user_password})*. 
 
 
