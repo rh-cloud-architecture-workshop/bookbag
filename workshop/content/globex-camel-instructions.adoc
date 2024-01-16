@@ -1641,7 +1641,7 @@ NOTE: The Globex Web application has been pre-deployed in your user namespace so
 
 .. Open the Chat window
 +
-You can open the Globex Wep portal following link:{globexweburl}[*this direct link*, window="_blank"].
+You can open the Globex Web portal following link:{globexweburl}[*this direct link*, window="_blank"].
 +
 Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 +
@@ -2234,7 +2234,7 @@ And your done !!
 
 Congratulations! With this you have completed the Camel workshop module! 
 
-Please close all but the Workshop Deployer browser tab to avoid proliferation of browser tabs which can make working on other modules difficult. 
+Please close all but the Workshop Deployer browser tab to avoid proliferation of browser tabs which can make working on other modules difficult.
 
 Proceed to the https://workshop-deployer.%openshift_subdomain%[Workshop Deployer] to choose your next module.
 
