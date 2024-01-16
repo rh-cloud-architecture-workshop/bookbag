@@ -17,10 +17,10 @@ modules:
     exit_sign: Contract-First Approach Module Module - Instructions
   globex-apim-instructions:
     name: Launch new channels with Contract-First Approach - Instructions
-    exit_sign: serverless - Introduction 
+    exit_sign: Event driven applications with Serverless Knative Eventing - Introduction 
   globex-serverless-intro:
     name: Event driven applications with Serverless Knative Eventing - Intro
-    exit_sign: Serverless - Instructions
+    exit_sign: Event driven applications with Serverless Knative Eventing - Instructions
   globex-serverless-instructions:
     name: Event driven applications with Serverless Knative Eventing  - Instructions
     exit_sign: Secure Service Network Module - Introduction 

@@ -242,8 +242,8 @@ image::images/apim/api-desginer-clear.png[]
 
 * To get the Mobile OpenAPI draft, navigate to the browser tab with *Dev Spaces* that you have earlier opened. 
 ** If you don't have a browser tab open to Dev Spaces, click on {devspaces_dashboard}/dashboard/#/ide/devspaces-{user_name}/cloud-architecture-workshop[Dev Spaces IDE^, window="devspaces"]. If needed login with your username and password ({user_name}/{user_password}).
-* In Dev Spaces, navigate to the folder `workshop -> module-apim -> mobile -> activedoc`, and open the file `mobile-activedoc-draft.yaml`
-** Or type [Ctrl+P] and type the file name as `mobile-activedoc-draft.yaml`
+* In Dev Spaces, navigate to the folder *workshop/module-apim/mobile/activedoc*, and open the file *mobile-activedoc-draft.yaml*
+** Or type [Ctrl+P] and type the file name as *mobile-activedoc-draft.yaml*
 * Copy the entire contents from this file `(Ctrl+A and Ctrl+C)` 
 +
 .Copy Mobile OpenAPI draft from Dev spaces
@@ -389,7 +389,7 @@ image::images/apim/client-add.png[]
 |====
 | Name | Value
 
-|Client type (dropdown) | `openid-connect`
+|Client type (dropdown) | `OpenID Connect`
 |Client Id | `client-manager`
 |====
 
@@ -472,8 +472,8 @@ In this workshop, since both 3scale and the Mobile Gateway run on OpenShift, 3sc
 
 * Navigate to the *Dev Spaces browser tab* you have launched at the beginning of this module
 ** If this browser tab is not open, click on {devspaces_dashboard}/dashboard/#[Dev Spaces IDE^, window="devspaces"] and login with ({user_name}/{user_password}). 
-* Navigate to the folder `workshop -> module-apim -> mobile -> gateway` and open the `mobile-gateway-backend.yaml` file. (Shortcut: `Ctrl+P > mobile-gateway-backend.yaml`)
-* In the file `mobile-gateway-backend.yaml`, update the `<replace-me>` placeholder with the Service endpoint of the Globex Mobile gateway service appended with the port `:8080`. +
+* Navigate to the folder *workshop/module-apim/mobile/gateway* and open the *mobile-gateway-backend.yaml* file. (Shortcut: Ctrl+P > mobile-gateway-backend.yaml)
+* In the file *mobile-gateway-backend.yaml*, update the `<replace-me>` placeholder with the Service endpoint of the Globex Mobile gateway service appended with the port `:8080`. +
 +
 [source,bash,role=copy,subs="attributes"]
 ----
@@ -529,12 +529,12 @@ oc apply -f /projects/workshop-devspaces/workshop/module-apim/mobile/gateway/mob
 +
 .Output of Mobile Gateway Backend creation
 ----
-backend.capabilities.3scale.net/globex-mobile-gateway-backend configured
+backend.capabilities.3scale.net/globex-mobile-gateway-backend created
 ----
 
 ==== Create 3scale Product for MobileGateway API
 
-* In Dev Spaces in the folder `workshop -> module-apim -> mobile -> gateway`, open the file `mobile-gateway-product.yaml`. [Shortcut: `Ctr+P > mobile-gateway-product.yaml`]
+* In Dev Spaces in the folder *workshop/module-apim/mobile/gateway*, open the file *mobile-gateway-product.yaml*. [Shortcut: Ctr+P > mobile-gateway-product.yaml]
 ** This file creates a 3scale Product, and also attaches the Backend we created in the previous step to the Product.
 * Update the following 2 values as directed below.
 +
@@ -563,7 +563,7 @@ This URL is from Keycloak's *Issuer endpoint* from https://sso.{openshift_subdom
 image::images/apim/sso-issuer-endpoint.png[] 
 
 ====
-* The `mobile-gateway-product.yaml` file should looks like this now +
+* The *mobile-gateway-product.yaml* file should looks like this now +
 +
 .mobile-gateway-product.yaml updated with the correct values
 image::images/apim/mobile-product-gateway-product-issuerendpoint.png[]
@@ -578,12 +578,12 @@ oc apply -f /projects/workshop-devspaces/workshop/module-apim/mobile/gateway/mob
 +
 .Output
 ----
-product.capabilities.3scale.net/globex-partner-gateway-product created
+product.capabilities.3scale.net/globex-mobile-gateway-product created
 ----
 
 ==== Create Active Doc for Mobile Gateway
 
-* In Dev Spaces, navigate to the folder `workshop -> module-apim -> mobile -> activedoc`, open the file `create-mobile-activedoc.yaml`
+* In Dev Spaces, navigate to the folder *workshop/module-apim/mobile/activedoc*, open the file *create-mobile-activedoc.yaml*
 +
 image::images/apim/mobile-activedoc-yaml.png[width=70%]
 * Replace the `<replace-me>` placeholder with the Service Registry OpenAPI endpoint. This is the same OpenAPI spec that you setup on Service Registry.
@@ -612,7 +612,7 @@ activedoc.capabilities.3scale.net/mobile-gateway-activedoc created
 === Setup Mobile users
 The Mobile developers of Globex will need access to the Developer Portal to signup for the APIs exposed to them. Typically they would access the developer portal and signup for an account which may as needed go through an approval process
 
-For the purpose of this workshop let us run a few commands to setup these users as defined in the file `mobile-dev-setup.yaml`.
+For the purpose of this workshop let us run a few commands to setup these users as defined in the file *mobile-dev-setup.yaml*.
 
 * In the *Dev Spaces Terminal* run the following command
 +
@@ -665,8 +665,8 @@ image::images/apim/mobile-product-openid-settings.png[]
 * The ActiveDoc is visible from the 3scale portal as well under Products. Click on the ActiveDoc to preview the OpenAPI specifications.
 +
 .Mobile Gateway Product: ActiveDoc
-image::images/apim/apim_3scale_activedoc.png[]
-* Navigate to `Integration -> Configuration` and click on the *Promote to v.x Staging APICast* and then *Promote to v.x Production APICast* to promote all the config changes
+image::images/apim/apim_3scale_mobile_activedoc.png[]
+* Navigate to *Integration -> Configuration* and click on the *Promote to v.x Staging APICast* and then *Promote to v.x Production APICast* to promote all the config changes
 //TBC find ways to overcome this step//
 ** APIcast is an NGINX based API gateway used to integrate internal and external API services with the 3scale. APIcast can be hosted or self-managed. In this workshop we use the default `self-managed` option.
 +
@@ -681,7 +681,7 @@ You can also view these objects on OpenShift console as follows
 [%collapsible]
 ====
 * You can now see that the Backend, Product, ActiveDoc and Users from the 3scale OpenShift operators on {openshift_cluster_console}/k8s/ns/globex-apim-user1/clusterserviceversions[Installed Operators^, window="console"]
-** Navigate to `Red Hat Integration - 3scale -> All Instances` and click on `Current namespace only`. You will see that the Product and Backend have been created.
+** Navigate to *Red Hat Integration - 3scale -> All Instances* and click on *Current namespace only*. You will see that the Product and Backend have been created.
 +
 .View Product, Backend, ActiveDoc and Users 
 image::images/apim/apim-mobile-back-prod-active-users.png[] 
@@ -762,7 +762,7 @@ image::images/apim/apim-devportal-mobile-create-new-app-2.png[width=70%]
 .Update REDIRECT URL in the Application creates successfully for Mobile User
 image::images/apim/apim-devportal-mobile-app-success.png[width=90%]
 * Copy the *Client ID* from this page which will be used to setup Mobile App
-* In Dev Spaces open the file: *Dev Spaces -> workshop -> module-apim -> mobile -> mobile-env-patch.sh*
+* In Dev Spaces open the file: *workshop/module-apim/mobile/mobile-env-patch.sh*
 ** Substitute `<replace-me>` found against the `API_CLIENT_ID` variable with the *Client ID* in the previous step
 +
 .Update client_id into mobile-env-patch file
@@ -773,7 +773,7 @@ image::images/apim/mobile-clientid-env-patch.png[width=70%]
 .Dev Portal: Documentation Page
 image::images/apim/dev_portal_mobile_doc.png[width=80%]
 ** Copy the URL displayed under "Service Endpoint" in *globex-mobile-gateway-product* box
-** In Dev Spaces navigate back to the open file: *Dev Spaces -> workshop -> module-apim -> module -> mobile-env-patch.sh*
+** In Dev Spaces navigate back to the open file: *workshop/module-apim/module/mobile-env-patch.sh*
 ** Substitute `<replace-me>` found against the `GLOBEX_MOBILE_GATEWAY` variable with the *Service Endpoint* in the previous step
 +
 .Update GLOBEX_MOBILE_GATEWAY into mobile-env-patch file
@@ -791,7 +791,7 @@ image::images/apim/mobile-mobgateway-env-patch.png[width=60%]
 +
 .Update SSO details into mobile-env-patch file
 image::images/apim/mobile-sso-env-patch.png[]
-* Finally the `mobile-env-patch.sh file should look like this. Save the file by `Ctrl+S`
+* Finally the *mobile-env-patch.sh* file should look like this. Save the file by `Ctrl+S`
 +
 .Fully updated mobile-env-patch file
 image::images/apim/mobile-full-env-patch.png[]
@@ -930,7 +930,7 @@ Since we've gone through the Design and Governance sections of the Mobile API, i
 === Publish Partner API to Service Registry
 
 * If you don't have a browser tab open with OpenShift Dev Spaces, click on {devspaces_dashboard}[Dev Spaces IDE^, window="devspaces"], choose your workspace. If needed login with your username and password ({user_name}/{user_password}).
-* In Dev Spaces, navigate to the folder `workshop -> module-apim -> partner -> activedoc`, and open the file `partner-activedoc-draft.json`. 
+* In Dev Spaces, navigate to the folder *workshop/module-apim/partner/activedoc*, and open the file *partner-activedoc-draft.json*. 
 ** Or type [Ctrl+P] and type the file name as `partner-activedoc-draft.json`
 * Scroll to the bottom of the page where you can see the *securitySchemes* section
 +
@@ -964,7 +964,7 @@ curl -X POST -H "Content-type: application/json; artifactType=OPENAPI" -H "X-Reg
 === Create Backend, Products, ActiveDoc and Users for Partner Gateway
 
 ==== Create Backend
-* In Dev Spaces , under the folder `workshop -> module-apim -> partners -> gateway`, open the file `partner-gateway-backend.yaml`
+* In Dev Spaces , under the folder *workshop/module-apim/partners/gateway*, open the file *partner-gateway-backend.yaml*
 * Substitute *"<replace-me>"* with the Service endpoint of the Globex Partner gateway service appended with the port as `:8080`. This URL is given below 
 +
 [source,bash,role=copy,subs="attributes"]
@@ -987,7 +987,7 @@ backend.capabilities.3scale.net/globex-partner-gateway-backend created
 ----
 
 ==== Create Products
-* In Dev Spaces , under the folder `workshop -> module-apim -> partners -> gateway`, open the file `partner-gateway-product.yaml`
+* In Dev Spaces , under the folder *workshop/module-apim/partners/gateway*, open the file *partner-gateway-product.yaml*
 
 +
 .partner-gateway-product.yaml file
@@ -1027,7 +1027,7 @@ image::images/apim/client-manager-credentials.png[]
 sso.{openshift_subdomain}/realms/globex-{user_name}
 ----
 
-* The file `partner-gateway-product.yaml` looks like this now.
+* The file *partner-gateway-product.yaml* looks like this now.
 
 +
 image::images/apim/product-gateway-product-issuerendpoint.png[]
@@ -1044,7 +1044,7 @@ product.capabilities.3scale.net/globex-partner-gateway-product created
 ----
 
 === Create Active Doc for Partner Gateway
-* In Dev Spaces, navigate to the folder `workshop -> module-apim -> partners -> activedoc`, open the file `create-partner-activedoc.yaml`
+* In Dev Spaces, navigate to the folder *workshop/module-apim/partners/activedoc*, open the file *create-partner-activedoc.yaml*
 +
 image::images/apim/mobile-activedoc-yaml.png[width=70%]
 * Replace the `<replace-me>` placeholder with the Service Registry OpenAPI endpoint for Partner API show below
@@ -1093,7 +1093,7 @@ image::images/apim/apim-partner-3scale-login.png[]
 * You will notice that the Partner Product and Backend have been created.
 * Click on *globex-partner-gateway-product* under *APIs -> Products* section. 
 * You are presented with the Product overview page for the Partner API Product you created. 
-* Navigate to `Integration -> Configuration` and click on the *Promote to v.x Staging APICast* and then *Promote to v.x Production APICast* to promote all the config changes
+* Navigate to *Integration -> Configuration* and click on the *Promote to v.x Staging APICast* and then *Promote to v.x Production APICast* to promote all the config changes
 //TBC find ways to overcome this step//
 +
 .Promote Staging and Production APICast
@@ -1153,8 +1153,8 @@ image::images/apim/apim-devportal-partner-app-success.png[width=70%]
 image::images/apim/partner-web-deployment-env.png[]
 
 
-* The *Client ID* and *Client Secret* with values as placeholders are predeployed as a Kubernetes Secret called *secret.yaml*.
-** In the Dev workspace, under the folder `/projects/workshop-devspaces/workshop/module-apim/partners/partner-web`  open the file *secret.yaml*
+* The *Client ID* (api-client-id) and *Client Secret* (api-client-secret) with values as placeholders are predeployed as a Kubernetes Secret called *secret.yaml*.
+** In the Dev workspace, under the folder */projects/workshop-devspaces/workshop/module-apim/partners/partner-web*  open the file *secret.yaml*
 +
 .secret.yaml
 image::images/apim/partner_secret_yaml.png[width=60%]
@@ -1165,12 +1165,15 @@ image::images/apim/partner_secret_yaml.png[width=60%]
 .Client ID and Client Secret from 3scale Developer Portal
 image::images/apim/apim-devportal-partner-clientid.png[width=70%]
 
-* Update *Token URL* with the following value
+* Update *Token URL* (api-token-url) with the following value
 +
 [source,bash,role=copy,subs="attributes"]
 ----
 https://sso.{openshift_subdomain}/realms/globex-{user_name}/protocol/openid-connect/token
 ----
++
+.Updated secret.yaml
+image::images/apim/partner_secret_yaml_updated.png[]
 
 * In the *Dev Spaces Terminal* apply changes made to the *secret.yaml* by running the following command
 +
@@ -1249,7 +1252,7 @@ As part of this Section you setup and tested the Partner Web App.
 
 
 == Congratulations
-With this you have completed the *Contract First API* module! 
+With this you have completed the *Launch new channels with Contract-First Approach* module!
 
 Please close all but the Workshop Deployer browser tab to avoid proliferation of browser tabs which can make working on other modules difficult. 
 

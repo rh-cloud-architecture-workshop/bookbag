@@ -148,7 +148,7 @@ In this section we will connect the Knative Services (refer to previous section)
 .[.underline]#*[Click to know]  What is Knative Sink and SinkBinding ?*#
 [%collapsible]
 ====
-* A https://docs.openshift.com/serverless/1.30/eventing/event-sinks/serverless-kafka-developer-sink.html[Kafka Sink for Apache Kafka^] helps in persisting the incoming Kafka message (CloudEvent) to a configurable Apache Kafka.Topic. Event producers can send CloudEents to a HTTP to the Sinks there by reducing the complexity for app developers. Sinks then sends these CloudEvents to a defined Kafka topic. 
+* A https://docs.openshift.com/serverless/1.30/eventing/event-sinks/serverless-kafka-developer-sink.html[Kafka Sink for Apache Kafka^] helps in persisting the incoming Kafka message (CloudEvent) to a configurable Apache Kafka topic. Event producers (such as apps, devices) can send CloudEvents over HTTP to the Kafka Sinks there by reducing the complexity of new protocols and message formats for app developers. The Kafka Sinks then send the CloudEvents they receive to the configured Apache Kafka topic. 
 * https://docs.openshift.com/serverless/1.30/eventing/event-sources/serverless-custom-event-sources.html[SinkBinding^] supports decoupling the source (service which produces events) from the actual sink. The SinkBinding object injects environment variables (such as sink URL) into the services there by decoupling the source from the sink.
 ====
 
@@ -460,14 +460,14 @@ image::images/serverless/reviews-knative-services.png[]
 .[.underline]#*Click to see a visual*# 
 [%collapsible]
 ====
-+
+
 image::images/serverless/globex-review-topics.png[]
 ====
 
-* Click on the `globex-reviews` topic to see an Overview of the topic page
+* Click on the `globex.reviews` topic to see an Overview of the topic page
 +
 image::images/serverless/globex-reviews-topic-overview.png[]
-* Click on the Partion [0] as shown above to view a listing of the reviews you submitted.
+* Click on the Partition [0] as shown above to view a listing of the reviews you submitted.
 +
 image::images/serverless/globex-reviews-topic-list.png[]
 * Click on (>) shown against a message (as shown in screenshot) to view the complete message
@@ -513,7 +513,6 @@ image::images/serverless/sentiment-score.png[]
 .[.underline]#*Click to see a sample visual*# 
 [%collapsible]
 ====
-+
 image::images/serverless/globex-dashboard-sample.png[]
 ====
 
