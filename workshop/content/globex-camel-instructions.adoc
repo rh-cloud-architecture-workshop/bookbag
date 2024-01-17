@@ -1498,7 +1498,7 @@ For simplicity, this exercise provides a Camel AMQ listener that dynamically sub
 If you feel curious on how this Camel AMQP consumer is implemented, open in your editor the `code/globexlistener.java` 
 ====
 
-Include in the same Java file (copy and paste) the snippet below:
+In the `routesglobex.java` Java file, copy and paste the snippet below:
 
 [source,java,role=copy,subs=]
 ----
@@ -1641,7 +1641,7 @@ NOTE: The Globex Web application has been pre-deployed in your user namespace so
 
 .. Open the Chat window
 +
-You can open the Globex Web portal following link:{globexweburl}[*this direct link*, window="_blank"].
+You can open the Globex Web application following link:{globexweburl}[*this direct link*, window="_blank"].
 +
 Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 +
@@ -1649,7 +1649,7 @@ Or, by finding it in your link:{topologyviewurl}[*_Topology_ view*, window="_bla
 <img src="./images/camel/globex-open-portal.jpg" style="width:40%;border-style: none;">
 ++++
 
-.. When the web portal opens, click `Login` in the upper-right corner of the screen:
+.. When the web application opens, click `Login` in the upper-right corner of the screen:
 +
 ++++
 <img src="./images/camel/globex-login.jpg" style="width:100%;border-style: none;">
