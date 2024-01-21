@@ -18,6 +18,18 @@
 :api_designer_url: %api_designer_url%
 :openshift_api_internal: %openshift_api_internal%
 
+++++
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-51D1EZEH8B"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-51D1EZEH8B');
+</script>
+++++
+
 
 //:openshift_cluster_console: https://console-openshift-console.apps.cluster-jb86t.jb86t.sandbox3028.opentlc.com
 //:user_name: user1

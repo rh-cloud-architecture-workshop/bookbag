@@ -1,3 +1,15 @@
+++++
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X0GBQ47NJJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X0GBQ47NJJ');
+</script>
+++++
+
 :icons: font 
 
 In this lab, you will use two OpenShift namespaces. In one namespace the Globex application is deployed. The other namespace is isolated from the rest of the cluster through a network policy (only egress allowed, no ingress) and that is where the Globex retail database is deployed. In the lab, you will create a service network between these two clusters, so that the Globex application can connect and use the database in the isolated namespace. *Note that the database is not exposed to the outside world. It cannot be reached from other namespaces in the OpenShift cluster*

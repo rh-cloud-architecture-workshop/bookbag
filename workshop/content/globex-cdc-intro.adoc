@@ -1,3 +1,15 @@
+++++
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XWCST2G6FE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XWCST2G6FE');
+</script>
+++++
+
 In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.
 
 == Business context

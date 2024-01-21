@@ -1,5 +1,17 @@
 :icons: font 
 
+++++
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z54F1ZPC4H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Z54F1ZPC4H');
+</script>
+++++
+
 In this module you will participate to complete the implementation of a multi-channel support service for Globex customers that will enable clients to chat in real time with a team of agents.
 
 == Business and Technical Context
