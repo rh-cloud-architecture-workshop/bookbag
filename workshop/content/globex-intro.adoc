@@ -56,7 +56,7 @@ You can log into your namespace scoped ArgoCD instance and have a look at the as
 +
 image::images/argocd-landing-page.png[]
 * If this is the first time you access the ArgoCD console, you have to authorize ArgoCD to access your account. In the _Authorize Access_ window click on *Allow selected permissions*.
-* You are redirected to the application overview page of ArgoCD, which shows you all the applications that this instance of ArgoCD is managing. In ArgoCD speak, an application represents a collection of Kubernetes/OpenShift resources that are managed as a whole.
+* You are redirected to the application overview page of ArgoCD, which shows you all the applications that this instance of ArgoCD is managing. In ArgoCD language, an application represents a collection of Kubernetes/OpenShift resources that are managed as a whole.
 +
 image::images/argocd-overview.png[]
 +
@@ -133,7 +133,7 @@ image::images/globex-home-page.png[]
 * To generate user activity events, click on the image:images/globex-product-like.png[] symbol next to a product. You can repeat this for a couple of products.
 
 * Every _like_ action generates a user activity event that is captured by the _activity tracking_ service and sent to a Kafka topic. +
-The Kafka broker is installed in the *globex-mw-%user_name%* namespace. In the same namespace, Kafdrop, a tool to introspect a Kafka broker is also installed. +
+The Kafka broker is installed in the *globex-mw-%user_name%* namespace. In the same namespace, Kafdrop, a web UI for viewing Kafka topics and browsing consumer groups, is also installed. +
 Open a new browser tab, and navigate to %kafdrop_url%. This redirects you to the Kafdrop home page.
 +
 image::images/kafdrop.png[]
