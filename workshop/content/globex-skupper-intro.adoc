@@ -1,3 +1,15 @@
+++++
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X0GBQ47NJJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X0GBQ47NJJ');
+</script>
+++++
+
 :icons: font 
 
 In this module you discover how to build a service network to connect disparate services across different environments using Red Hat Service Interconnect.
