@@ -645,7 +645,8 @@ developeraccount.capabilities.3scale.net/mobile-developeraccount created
 ==== Verify creation of developer account
 
 * In a browser window, navigate to the browser tab pointing to the Developer perspective of the OpenShift cluster. If you don't have a browser tab open on the console, click on {openshift_cluster_console}[OpenShift Console^, window="console"] to launch the console. If needed login with your username and password ({user_name}/{user_password}).
-* From *Administrator* view, navigate to Operators > Installed Operators, and click on *Developer Account* tab
+* From *Administrator* view, within in the globex-apim-{user_name} namespace, navigate to *Operators > Installed Operators*. Choose *Red Hat Integration - 3scale*. 
+* Click on *Developer Account* tab and choose *Current namespace only* options. 
 * You will see the DeveloperAccount with Status `Condition: Waiting`
 
 image::images/apim/mobile-dev-account.png[]
@@ -671,6 +672,8 @@ developeruser.capabilities.3scale.net/dev.mobile created
 In the OpenShift console, you will notice that the Status of DeveloperAccount is now updated to  `Condition: Ready`
 
 image::images/apim/mobile-dev-account-ready.png[]
+
+Note: In case of an error, please notify the workshop instructor.
 
 === View the newly created Backend, Product, ActiveDoc and Users
 ==== View on 3scale admin console
