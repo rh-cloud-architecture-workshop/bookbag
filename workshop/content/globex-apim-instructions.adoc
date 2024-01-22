@@ -720,7 +720,7 @@ You can also view these objects on OpenShift console as follows
 .[.underline]#*[Click to View] View on 3scale Operator page in OpenShift console*#
 [%collapsible]
 ====
-* You can now see that the Backend, Product, ActiveDoc and Users from the 3scale OpenShift operators on {openshift_cluster_console}/k8s/ns/globex-apim-user1/clusterserviceversions[Installed Operators^, window="console"]
+* You can now see that the Backend, Product, ActiveDoc and Users from the 3scale OpenShift operators on {openshift_cluster_console}/k8s/ns/globex-apim-{user_name}/clusterserviceversions[Installed Operators^, window="console"]
 ** Navigate to *Red Hat Integration - 3scale -> All Instances* and click on *Current namespace only*. You will see that the Product and Backend have been created.
 +
 .View Product, Backend, ActiveDoc and Users 
