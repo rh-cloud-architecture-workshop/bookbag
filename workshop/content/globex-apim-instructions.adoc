@@ -626,7 +626,8 @@ The Mobile developers of Globex will need access to the Developer Portal to sign
 
 For the purpose of this workshop let us run a few commands to setup these users as defined in the file *mobile-dev-setup.yaml*.
 
-* In the *Dev Spaces Terminal* run the following command
+==== Create Developer Account
+* In the *Dev Spaces Terminal* run the following command to create a new developer account.
 +
 [source,bash,role=copy,subs="attributes"]
 ----
@@ -635,14 +636,44 @@ oc apply -f /projects/workshop-devspaces/workshop/module-apim/mobile/users/mobil
 
 * You will see the output as 
 +
-.Output of user creation
+.Output of developer users creation
 ----
 secret/mobileuser.secret created
 developeraccount.capabilities.3scale.net/mobile-developeraccount created
+----
+
+==== Verify creation of developer account
+
+* In a browser window, navigate to the browser tab pointing to the Developer perspective of the OpenShift cluster. If you don't have a browser tab open on the console, click on {openshift_cluster_console}[OpenShift Console^, window="console"] to launch the console. If needed login with your username and password ({user_name}/{user_password}).
+* From *Administrator* view, within in the globex-apim-{user_name} namespace, navigate to *Operators > Installed Operators*. Choose *Red Hat Integration - 3scale*. 
+* Click on *Developer Account* tab and choose *Current namespace only* options. 
+* You will see the DeveloperAccount with Status `Condition: Waiting`
+
+image::images/apim/mobile-dev-account.png[]
+
+==== Create Users
+
+* In the *Dev Spaces Terminal* run the following command to create users for the developer account you just created.
++
+[source,bash,role=copy,subs="attributes"]
+----
+oc apply -f /projects/workshop-devspaces/workshop/module-apim/mobile/users/mobile-users-setup.yaml -n globex-apim-{user_name}
+----
+
+* You will see the output as 
++
+.Output of developer account creation
+----
 developeruser.capabilities.3scale.net/admin.mobile created
 developeruser.capabilities.3scale.net/dev.mobile created
 ----
-//* You can view these users on the 3scale admin portal as well at {3scale_tenant}[3scale admin portal^, window="3scale"]
+
+==== Developer account status
+In the OpenShift console, you will notice that the Status of DeveloperAccount is now updated to  `Condition: Ready`
+
+image::images/apim/mobile-dev-account-ready.png[]
+
+Note: In case of an error, please notify the workshop instructor.
 
 === View the newly created Backend, Product, ActiveDoc and Users
 ==== View on 3scale admin console
@@ -692,7 +723,7 @@ You can also view these objects on OpenShift console as follows
 .[.underline]#*[Click to View] View on 3scale Operator page in OpenShift console*#
 [%collapsible]
 ====
-* You can now see that the Backend, Product, ActiveDoc and Users from the 3scale OpenShift operators on {openshift_cluster_console}/k8s/ns/globex-apim-user1/clusterserviceversions[Installed Operators^, window="console"]
+* You can now see that the Backend, Product, ActiveDoc and Users from the 3scale OpenShift operators on {openshift_cluster_console}/k8s/ns/globex-apim-{user_name}/clusterserviceversions[Installed Operators^, window="console"]
 ** Navigate to *Red Hat Integration - 3scale -> All Instances* and click on *Current namespace only*. You will see that the Product and Backend have been created.
 +
 .View Product, Backend, ActiveDoc and Users 
@@ -957,7 +988,7 @@ https://sso.{openshift_subdomain}/realms/globex-{user_name}/.well-known/openid-c
 +
 .Updated Security Scheme
 image::images/apim/partner-sec-scheme-updated.png[]
-* Execute the following command from the Dev Spaces' Terminal. 
+* Execute the following command from the Dev Spaces's Terminal. 
 ** This command makes a POST to the Service Registry API to create an OpenAPI schema for Partner Gateway API.
 +
 [source,bash,role=copy, subs="attributes"]
