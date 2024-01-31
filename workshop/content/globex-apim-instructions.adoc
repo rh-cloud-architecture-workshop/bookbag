@@ -1261,7 +1261,7 @@ image::images/apim/partner-web-secret.png[]
 
 == Test Partner Web Application 
 
-In the previous section, you signed up for access as a Partner Developer and gained credentials to access the Globex PArtner Gateway API. You also setup the necessary configurations for the Partner Web Application.
+In the previous section, you signed up for access as a Partner Developer and gained credentials to access the Globex Partner Gateway API. You also setup the necessary configurations for the Partner Web Application.
 
 
 * Launch the https://globex-partner-web-globex-apim-{user_name}.{openshift_subdomain}[Globex Partner Web^]
