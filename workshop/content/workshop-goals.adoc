@@ -3,143 +3,27 @@
 ++++
 
 == Introduction
-Welcome to the Cloud Architecture Workshop. The workshop consists of several modules, which are independent of each other. You can choose which modules you want to take, and in which order you go through them.
-
-==== Your user across all modules
-Across all modules, at some point you will have to know your assigned user and password, as well as the URL of the OpenShift console. While all of this is presented to you in the individual modules, here it is, for your convenience:
 
 ++++
-<div class="card">
-  <div class="card-header">
-++++
-** OpenShift Console: *%openshift_cluster_console%*
-** Username: *%user_name%*
-** Password: *%user_password%*
-++++
-  </div>
-</div>
+<br>
+<h4><i>Discover the art of the possible.</i></h4>
 <br>
 ++++
 
-=== Get started
-Before diving into a particular module, we recommend that you go through the workshop introduction module, to explore the technical and functional environment for this workshop.
+The Cloud Architecture Workshop showcases the art of the possible with Red Hat OpenShift and Red Hat Application Services.
+
+This workshop consists of a number different modules, each highlighting a particular use case, development principle or technology. The modules have a common overarching story, revolving around the e-commerce site of a fictitious retail company (Globex). 
+
+Globex has undergone significant modernization and they are keen to build on their application modernization efforts to rapidly build new functionalities. The workshop helps you navigate through each of these functionalities through a number of modules focusing on one particular use case.
+
+The modules are independent from each other and can be taken in any combination or order. Each module consists of an introduction and an instructions section. 
+
+* The *introduction* details the business problem we are trying to solve, possible solutions, a technical overview of the proposed solution and other background information. 
+* The *instructions* provide details step-by-step details to guide you through the workshop.
 
 
+Modules are provisioned on demand by you by using the *Workshop Deployer*.
 
-++++
+You can access the *Workshop Deployer* by  https://workshop-deployer.%openshift_subdomain%[clicking here]
 
-<div class="row">
-   <div class="col-sm-6">
-      <div class="card">
-         <div class="card-body">
-            <h5 class="card-title">Introduction to the Cloud Architecture Workshop.</h5>
-            <p class="card-text">This chapter explains the technical and functional environment for this workshop, with a walkthrough of the existing implementation.<br>
-               <span class="badge badge-pill badge-warning">#recommended</span>
-               <span class="badge badge-pill badge-secondary">#overview</span>
-               <span class="badge badge-pill badge-secondary">#hands-on</span>
-               <span class="badge badge-pill badge-secondary">#explore</span>
-            </p>
-            <a href="/workshop/workshop-intro" class="btn btn-sm btn-info">Introduction &gt;</a>        
-         </div>
-      </div>
-   </div>
-   <div class="col-sm-6">
-      <div class="card">
-         <div class="card-body">
-            <h5 class="card-title">Launch new channels using Contract-First approach</h5>
-            <p class="card-text">In this module you discover how Contract First Approach provides the right framework to acclerate launching new channels in a secure way.<br>
-               <span class="badge badge-pill badge-primary">#API-Management</span> 
-               <span class="badge badge-pill badge-primary">#Keycloak</span> 
-               <span class="badge badge-pill badge-primary">#OIDC</span> 
-               <span class="badge badge-pill badge-primary">#Apicurio</span> 
-               <span class="badge badge-pill badge-primary">#Service-Registry</span> 
-               <span class="badge badge-pill badge-primary">#3Scale</span> 
-               <span class="badge badge-pill badge-primary">#Devspaces</span> 
-               <span class="badge badge-pill badge-secondary">#hands-on</span>
-            </p>
-            <a href="/workshop/globex-apim-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
-            <a href="/workshop/globex-apim-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
-         </div>
-      </div>
-   </div>
-</div>
-<br>
-<div class="row">
-   <div class="col-sm-6">
-      <div class="card">
-         <div class="card-body">
-            <h5 class="card-title">Build new functionality with Change Data Capture</h5>
-            <p class="card-text">
-               In this module you discover how you can leverage Change Data Capture to build out new functionality with minimal impact on existing applications.<br>
-               <span class="badge badge-pill badge-primary">#CDC</span>
-               <span class="badge badge-pill badge-primary">#Kafka</span> 
-               <span class="badge badge-pill badge-primary">#Debezium</span> 
-               <span class="badge badge-pill badge-primary">#Camel-K</span> 
-               <span class="badge badge-pill badge-primary">#Devspaces</span> 
-               <span class="badge badge-pill badge-secondary">#hands-on</span>
-            </p>
-            <a href="/workshop/globex-cdc-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
-            <a href="/workshop/globex-cdc-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
-         </div>
-      </div>
-   </div>
-   <div class="col-sm-6">
-      <div class="card">
-         <div class="card-body">
-            <h5 class="card-title">Build a multi-channel support service for Globex customers</h5>
-            <p class="card-text">
-               In this module you will implement a pluggable multi-channel support service for Globex customers, integrating Globex Web, Slack and Discord.<br>
-               <span class="badge badge-pill badge-primary">#Camel-K</span> 
-               <span class="badge badge-pill badge-primary">#AMQ-Broker</span> 
-               <span class="badge badge-pill badge-primary">#AMQ-Streams</span> 
-               <span class="badge badge-pill badge-primary">#Kafka</span> 
-               <span class="badge badge-pill badge-primary">#Data-Grid</span>  
-               <span class="badge badge-pill badge-primary">#S3</span> 
-               <span class="badge badge-pill badge-primary">#Data-Foundation</span> 
-               <span class="badge badge-pill badge-secondary">#hands-on</span>
-            </p>
-            <a href="/workshop/globex-camel-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
-            <a href="/workshop/globex-camel-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
-         </div>
-      </div>
-   </div>
-</div>
-<br>
-<div class="row">
-   <div class="col-sm-6">
-      <div class="card">
-         <div class="card-body">
-            <h5 class="card-title">Build a service network to connect disparate services</h5>
-            <p class="card-text">
-               In this module you discover how to build a service network to connect disparate services using a secured layer 7 service network.<br>
-               <span class="badge badge-pill badge-primary">#Skupper</span> 
-               <span class="badge badge-pill badge-primary">#Service-Interconnect</span> 
-               <span class="badge badge-pill badge-primary">#Application-Connectivity</span> 
-               <span class="badge badge-pill badge-secondary">#hands-on</span>
-            </p>
-            <a href="/workshop/globex-skupper-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
-            <a href="/workshop/globex-skupper-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
-         </div>
-      </div>
-   </div>
-   <div class="col-sm-6">
-      <div class="card">
-         <div class="card-body">
-            <h5 class="card-title">Event driven applications with Serverless Knative Eventing</h5>
-            <p class="card-text">
-               In this module you learn how to leverage Knative Eventing to build an event driven application, without having to deal with the underlying messaging infrastructure<br>
-               <span class="badge badge-pill badge-primary">#Knative-Eventing</span> 
-               <span class="badge badge-pill badge-primary">#AMQ-Streams</span> 
-               <span class="badge badge-pill badge-primary">#Event-Driven-Applications</span> 
-               <span class="badge badge-pill badge-secondary">#hands-on</span>
-            </p>
-            <a href="/workshop/globex-serverless-intro" class="btn btn-sm btn-info">Introduction &gt;</a>
-            <a href="/workshop/globex-serverless-instructions" class="btn btn-sm btn-info">Instructions &gt;</a>
-         </div>
-      </div>
-   </div>
-</div>
-
-++++
-
-
+Go ahead! Choose your adventure! 

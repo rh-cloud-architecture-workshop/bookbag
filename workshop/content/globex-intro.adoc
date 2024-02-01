@@ -8,6 +8,14 @@
 
   gtag('config', 'G-P3W2D715DJ');
 </script>
+<style>
+  .btn-group, .page-meta, .d-sm-block {
+    display: none !important;
+  }
+  .col-sm-9 {
+    max-width: 100% !important;
+  }      
+</style>
 ++++
 :icons: font
 
@@ -195,6 +203,8 @@ Go the browser tab with the Globex we UI, refresh the home page, and notice how 
 
 * This concludes the walkthrough of the Globex web application for now. The application provides more features, which you will discover while going through some of the modules of this workshop.
 
-Please close all but this *Instructions browser tab* to avoid proliferation of tabs which can make working on other modules difficult. 
+== What's next
 
-Proceed to the link:workshop-goals[*Overview Page*] to choose your next module.
+Please close all but the Workshop Deployer browser tab to avoid proliferation of browser tabs which can make working on other modules difficult. 
+
+Proceed to the https://workshop-deployer.%openshift_subdomain%[Workshop Deployer] to choose your next module.

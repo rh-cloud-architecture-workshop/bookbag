@@ -1,38 +1,38 @@
 ---
 modules:
   workshop-goals:
-    name: "Cloud Architecture Workshop: Overview and Goals"
+    name: "Welcome to the Cloud Architecture Workshop"
     exit_sign: Introduction to the Workshop
   globex-intro:
     name: Introduction to the Workshop
     exit_sign: Change Data Capture Module - Introduction
   globex-cdc-intro:
     name: Build new functionality with Change Data Capture - Intro
-    exit_sign: Change Data Capture Module - Instructions
+    exit_sign: Instructions
   globex-cdc-instructions:
     name: Build new functionality with Change Data Capture - Instructions
     exit_sign: Contract-First Approach Module - Introduction
   globex-apim-intro:
     name: Launch new channels with Contract-First Approach - Intro
-    exit_sign: Contract-First Approach Module Module - Instructions
+    exit_sign: Instructions
   globex-apim-instructions:
     name: Launch new channels with Contract-First Approach - Instructions
     exit_sign: Event driven applications with Serverless Knative Eventing - Introduction 
   globex-serverless-intro:
     name: Event driven applications with Serverless Knative Eventing - Intro
-    exit_sign: Event driven applications with Serverless Knative Eventing - Instructions
+    exit_sign: Instructions
   globex-serverless-instructions:
     name: Event driven applications with Serverless Knative Eventing  - Instructions
     exit_sign: Secure Service Network Module - Introduction 
   globex-skupper-intro:
     name: Building a secure service network with Red Hat Service Interconnect - Intro
-    exit_sign: Secure Service Network Module - Instructions 
+    exit_sign: Instructions 
   globex-skupper-instructions:
     name: Building a secure service network with Red Hat Service Interconnect - Instructions
     exit_sign: Multi-channel Support Service Module - Introduction
   globex-camel-intro:
     name: Building a multi-channel support service for Globex customers - Intro
-    exit_sign: Multi-channel Support Service Module - Instructions
+    exit_sign: Instructions
   globex-camel-instructions:
     name: Building a multi-channel support service for Globex customers - Instructions
     

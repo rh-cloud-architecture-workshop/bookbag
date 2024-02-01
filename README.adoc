@@ -97,18 +97,18 @@ oc process -f build-template.yaml | oc apply -f -
 
 oc start-build bookbag --follow --from-dir=.     
 
-ssh lab-user@bastion.b57kt.sandbox2674.opentlc.com
+ssh <bastion>
 
 oc registry login
 
-docker pull default-route-openshift-image-registry.apps.cluster-vbsf7.vbsf7.sandbox2829.opentlc.com/create-bookbag/bookbag:latest
+docker pull <image-registry>/create-bookbag/bookbag:latest
 
 
 podman login quay.io ## <you will need quay username/password>
 
 
-docker tag default-route-openshift-image-registry.apps.cluster-vbsf7.vbsf7.sandbox2829.opentlc.com/create-bookbag/bookbag:latest quay.io/cloud-architecture-workshop/bookbag:05cafa9
+docker tag <image-registry>/create-bookbag/bookbag:latest quay.io/cloud-architecture-workshop/bookbag:05cafa9
 
-podman push quay.io/cloud-architecture-workshop/bookbag:a06b31a
+podman push quay.io/cloud-architecture-workshop/bookbag:<tag>
 
 podman push quay.io/cloud-architecture-workshop/bookbag:latest
