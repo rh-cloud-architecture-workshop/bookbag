@@ -8,6 +8,15 @@
 
   gtag('config', 'G-Z54F1ZPC4H');
 </script>
+
+<style>
+  .btn-group, .page-meta, .d-sm-block {
+    display: none !important;
+  }
+  .col-sm-9 {
+    max-width: 100% !important;
+  }      
+</style>
 ++++
 
 :icons: font 
@@ -64,7 +73,7 @@ You'll notice the architecture above contains 4 Camel applications.
 
 [TIP]
 ====
-If you have open window tabs from just completing a previous module (CDC/Contract-First/Skupper/Other), please close all but this *Instructions browser tab* to avoid proliferation of tabs which can make working difficult.
+If you have open browser tabs from just completing a previous module, please close all but *the Workshop Deployer and this Instructions browser tab* to avoid proliferation of tabs which can make working difficult.
 ====
 
 To implement the integrations you are going to use OpenShift Dev Spaces. Dev Spaces provides a browser based development environment that includes the lab's project, an editor for coding, and a terminal from where you can test and deploy your work in OpenShift.
@@ -215,7 +224,7 @@ Events can already travel half the way up to the broker (AMQ), but the second st
 
 Customers will choose Rocket.Chat or Globex's chat widget to communicate with agents. They will do so in a private one-to-one manner.
 
-From Rocket.Chat, a channel called `globex-support-%user_name%` will be available. This channel looks and feels like any other Rocket.Chat channel you can interact with. You can send direct messages and get responses. The user can enter his question/concern, which is channelled to the agent, and wait for a response.
+From Rocket.Chat, a channel called `globex-support-%user_name%` will be available. This channel looks and feels like any other Rocket.Chat channel you can interact with. You can send direct messages and get responses. The user can enter their question/concern, which is channelled to the agent, and wait for a response.
 
 On Matrix, where the agents operate, each new customer request will initiate a new conversation in a new dynamically created room. This room will remain open during the life of the conversation, until the customer has been attended and the conversation can be considered closed. At that moment, the agent manually leaves the room in Matrix, and the customer is notified in Rocket.Chat.
 
@@ -377,7 +386,7 @@ The `infinispan` component requires no extra parameters because it has been pre-
 [start=5]
 . Let's implement the `GET` operation.
 +
-Add in your code (copy and paste) the snippet below:
+To the same file *routes-cache.yaml*, add the (copy and paste) the snippet below:
 +
 --
 [source,yaml,role=copy,subs=]
@@ -434,7 +443,7 @@ Un-marshalling the payload into a Java structure allows for an easier handling o
 
 . The last cache operation to define is `REMOVE`. Let's define it with the definition below.
 +
-Copy and paste the snippet below:
+Copy and paste the snippet below to the same file *routes-cache.yaml*:
 +
 --
 [source,yaml,role=copy,subs=]
@@ -478,13 +487,13 @@ You can consider the `${exchangeProperty.key}` as a parameter the calling route 
 +
 {empty} +
 
-You should see now included in your `routes-cache.yaml` definition the 3 above routes. Your work is done here and you can resume with the tasks that follow.
+You should see now included in your `routes-cache.yaml` file, the definition of all the 3 above routes. Your work is done here and you can resume with the tasks that follow.
 
 {empty} +
 
 === Implement the Client to Agent flow
 
-The interaction between customers and agents flows in two directions. The instructions that follow will help you to complete the logic that delivers events from clients to agents. Later, you will work on the reverse (agents to clients) processing direction.
+The interaction between customers and agents flows in two directions. The instructions that follow will help you to complete the logic that delivers events (messages) from clients to agents. Later, you will work on the reverse (agents to clients) processing direction.
 
 As indicated in the module's introduction, the integration with Rocket.Chat (where clients live) is already deployed and running in the environment. Customers posting messages in the _globex-support-%user_name%_ channel in Rocket.Chat will translate into events delivered to the AMQ Broker.
 
@@ -503,7 +512,7 @@ In the content that follows you will learn the following concepts:
 
  - How to integrate with AMQP Brokers.
  - How to invoke other Camel routes.
- - How to organise the code allow a pluggable architecture.
+ - How to organise the code to allow a pluggable architecture.
  - How to define a properties file.
 ====
 ======
@@ -529,7 +538,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 <img src="./images/camel/code-delete-default-yaml.png" style="width:40%;border-style: none;">
 ++++
 
-. Replace (the delete route) with the following snippet:
+. Replace (the deleted route) with the following snippet:
 +
 --
 [source,yaml,role=copy,subs=]
@@ -545,14 +554,14 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
             uri: "direct:support-request"  # <3>
 #
 ----
-The route above:
 
-.Click here for details
+
+.Click here for details of the above route:
 [%collapsible]
 ======
 <1> Subscribes to an AMQ address (using the AMQP protocol)
 <2> The component is defined with a pre-configured (provided) connection factory to secure and point the connection to the shared AMQ Broker.
-<3> And directs all events to the Camel route `support-request`.
+<3> And directs all events to the Camel route `support-request` (to be created in the next section).
 ======
 
 This route does not perform any processing because our goal is to maintain a pluggable architecture. It means that we can define additional Camel routes fetching events from other sources and direct them to the main processing logic.
@@ -587,8 +596,7 @@ In the content that follows you will learn the following concepts:
 ====
 ======
 
-
-In the same YAML file, copy and paste the following snippet:
+In the same YAML file (*routes-from-amq.yaml*) created in the previous step, copy and paste the following snippet:
 
 [source,yaml,role=copy,subs=]
 ----
@@ -617,9 +625,7 @@ In the same YAML file, copy and paste the following snippet:
 #
 ----
 
-The route above:
-
-.Click here for details
+.Click here for details about the above route:
 [%collapsible]
 ======
 <1> Un-marshals the payload into a Java Map (for easier access)
@@ -644,10 +650,10 @@ Cache entries are created, used and deleted during the lifetime of a support ses
 
 {empty} +
 
-In the next sections:
+In the next sections you will
 
-- You will review the `get-cache-entry` logic the route above calls
-- And later, you will implement the route `direct:matrix-send-message` the route above also calls.
+- Review the logic of the route `get-cache-entry` which is referenced by the route created in the above step (in file `routes-from-amq.yaml`)
+- Implement the route `direct:matrix-send-message` that is invoked by the same route you created in the above steps
 
 {empty} +
 
@@ -677,7 +683,7 @@ In the sequence diagram above you'll see that:
 
 ==== Implement the route pushing messages to Matrix
 
-All the pieces are in place, you have the cache interaction resolved, you have the logic to create new support rooms in Matrix. The final step is to send the actual customer message to Matrix so that an agent can respond.
+All the pieces are in place -  You have the cache interaction resolved, and you have the logic to create new support rooms in Matrix. The final step is to send the actual customer message to Matrix so that an agent can respond.
 
 .*What will I learn?*
 [%collapsible]
@@ -695,11 +701,11 @@ In the content that follows you will learn the following concepts:
 
 Apache Camel has many connectors (components in _Camel_ terms) available out-of-the-box, but one for Matrix doesn't exist (yet). This gap however does not stop you in any way from integrating with Matrix, and in fact, you have many options for adopting an approach.
 
-To give you a few ideas, Apache Camel is an open framework, meaning its API allows you to extend its functionality with your own components, data-formats, transformers, etc. You could develop a new Matrix component, and if feeling generous donate it to the Camel community. Another strategy is to create _Kamelets_ which are in effect components with additional intelligence, and typically address specific use cases.
+To give you a few ideas, Apache Camel is an open framework, meaning its API allows you to extend its functionality with your own components, data-formats, transformers, etc. You could develop a new Matrix component, and if you're feeling generous donate it to the Camel community. Another strategy is to create _Kamelets_ which are in effect components with additional intelligence, and typically address specific use cases.
 
 In our lab, our choice is to simply invoke the API calls documented in Matrix to cover our needs. Let's move ahead.
 
-Still in the same YAML file, copy and paste the following snippet:
+Still in the same YAML file (*routes-from-amq.yaml*), copy and paste the following snippet:
 
 [source,yaml,role=copy,subs=]
 ----
@@ -735,9 +741,7 @@ Still in the same YAML file, copy and paste the following snippet:
 
 ----
 
-The route above:
-
-.Click here for details
+.Click here for details of the above route
 [%collapsible]
 ======
 <1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
@@ -772,7 +776,7 @@ The `kafka` component requires no extra parameters because it has been pre-confi
 
 You have completed the processing flow from customers (in Rocket.Chat) to agents (in Matrix). The returning flow is still pending to implement, but you can already test what you have implemented so far.
 
-Camel K features a special running mode called `development` mode (known as -_dev mode_-), which allows the developer to run/test the code in Kubernetes and make live code updates on the fly, as if he was working locally. Camel K deploys a test instance that is removed when you stop it.
+Camel K features a special running mode called `development` mode (known as -_dev mode_-), which allows the developer to run/test the code in Kubernetes and make live code updates on the fly, as if they were working locally. Camel K deploys a test instance that is removed when you stop it.
 
 Let's run your code in `dev` mode to validate the flow works as expected.
 
@@ -784,7 +788,9 @@ Let's run your code in `dev` mode to validate the flow works as expected.
 ----
 +
 NOTE: The `dev.sh` scripts runs a `kamel run` command with the flag `--dev` mode indicating to run in development mode. +
-It also defines all the necessary support resources and parameters to run your integration.
+It also defines all the necessary support resources and parameters to run your integration. +
+You can ignore any warning stating "Unable to verify existence of operator id [camel-k] due to lack of user privileges". 
+
 +
 You should see in your terminal a log output similar to:
 +
@@ -795,7 +801,8 @@ You should see in your terminal a log output similar to:
 [WARNING]
 ====
 If the `dev.sh` command shows errors, you might have missed a step following the instructions or done some other human error. +
-If so, try again using our code by running the command:
+If so, try again using a prewritten code by running the following command. +
+Note: This script executes prewritten code which has the same logic that you have built from scratch in the previous section.
 
 [source,bash,role=copy,subs=]
 ----
@@ -805,15 +812,12 @@ If so, try again using our code by running the command:
 +
 {empty} +
 
-. Observe your Topology view in OpenShift
+. Observe your Topology view in OpenShift. You can open the console by clicking link:{topologyviewurl}[*this _Topology_ view link*, window="_blank"].
 +
 You'll notice that running your code in DEV mode triggers _Camel K_'s operator to deploy a new pod in your user namespace.
 +
 NOTE: The Camel K operator automates the process of creating, building, deploying, and operating integration flows in Kubernetes environments.
-+
---
-* Open the console by clicking link:{topologyviewurl}[*this _Topology_ view link*, window="_blank"].
---
+
 +
 You should find, as per the picture below, marked in red, the _matrix_ pod running your _Camel K_ code in DEV mode.
 +
@@ -833,13 +837,13 @@ image::images/camel/rocketchat-workspace.png[]
 +
 Leave the browser window open.
 
-. Log into the Element application. Open a new browser window or tab, and navigate to the {elementurl}[*Element chat application*, window="_blank"]. Click on the *Sign In* button. Sign in with your username and password (%user_name%/%user_password%).
+. Open a new browser window or tab, and navigate to the {elementurl}[*Matrix's Element chat application*, window="_blank"]. Click on the *Sign In* button. Sign in with your username and password (%user_name%/%user_password%).
 +
 You might see a pop-up asking to enable desktop notifications. Click on *Enable* to enable notifications.
 +
 image::images/camel/element-desktop-notifications.png[]
 +
-You should see the Element workspace.
+You should see the Matrix's Element workspace.
 +
 image::images/camel/element-workspace.png[]
 +
@@ -871,11 +875,12 @@ You should see a new room created named `rocketchat-%user_name%`
 <img src="./images/camel/element-dev-test-message.png" style="width:80%;border-style: none;">
 ++++
 +
-If you see the message in Element as above shown, then you've successfully completed this first exercise.
+If you see the message in Element as above shown, then you've successfully completed this first exercise. +
+Note: You will not be able to view the message sent from Matrix's Element chat in the the Rocket.Chat app because that reverse flow is not setup yet. 
 
 {empty} +
 
-IMPORTANT: When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance. +
+IMPORTANT: When you're done, press `Ctrl`+`C` to stop the _Camel K_ `dev` instance running in the Devspaces's terminal. +
 When you do so, you'll notice the Matrix pod shutdowns and is no longer visible from your link:{topologyviewurl}[*_Topology_ view*, window="_blank"].
 
 {empty} +
@@ -912,7 +917,7 @@ IMPORTANT: Ensure you've stopped your `dev` instance from the test in the previo
 
 Start your implementation:
 
-. From your terminal, execute the `kamel` command below to create a new source file to process Matrix events:
+. From your Devspaces terminal, execute the `kamel` command below to create a new source file to process Matrix events:
 +
 [source,bash,role=copy,subs=]
 ----
@@ -986,9 +991,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 #
 ----
 
-The route above:
-
-.Click here for details
+.Click here for details of the above route
 [%collapsible]
 ======
 <1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
@@ -1060,7 +1063,7 @@ When the agent leaves the room, Matrix fires a _room leave_ event, which our lis
 
 Let's implement the logic required which is very similar to our previously defined route
 
-Include in the same YAML file (copy and paste) the snippet below:
+Include in the same (*routes-from-matrix-main.yaml*) YAML file (copy and paste) the snippet below:
 
 [source,yaml,role=copy,subs=]
 ----
@@ -1134,9 +1137,9 @@ Include in the same YAML file (copy and paste) the snippet below:
               - log: no cache entry, ignoring message
 ----
 
-You will observe the route above is almost identical to the previous one. Let's simply summarize below the differences:
+You will observe the route above is almost identical to the previous one. 
 
-.Click here for details
+.Click here view a summary of the differences:
 [%collapsible]
 ======
 <1> It also fetches from the cache system the customer/agent context.
@@ -1159,9 +1162,7 @@ the call uses `toD` (Dynamic `to`) to evaluate at runtime the target AMQP addres
 <8> The second one is signal event, a notification that allows other applications to react.
 ======
 
-{empty} +
-
-You have completed the return processing flow from agents (in Matrix) to customers (in Rocket.Chat). Next, deploy your integration in OpenShift and send some messages to validate it.
+You have completed the return processing flow of messages from agents (in Matrix's Element) to customers (in Rocket.Chat). Next, deploy your integration in OpenShift and send some messages to validate it.
 
 {empty} +
 
@@ -1178,7 +1179,7 @@ Let's deploy your code .
 ./deploy.sh
 ----
 +
-NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
+NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration. 
 +
 .Output
 ----
@@ -1186,6 +1187,9 @@ matrix (main) $ ./deploy.sh
 No IntegrationPlatform resource in globex-camel-%user_name% namespace
 Integration "matrix" created
 ----
++
+Note: You can ignore any warning message stating "Unable to verify existence of operator id [camel-k] due to lack of user privileges"
+
 {empty} +
 
 . You can inspect the logs by running the following command:
@@ -1198,7 +1202,7 @@ kamel log matrix
 [WARNING]
 ====
 If you encounter errors or unexpected results, you might have missed a step following the instructions or done some other human error. +
-If so, try again using our code by running the command:
+If so, try again using the prebuilt code by running the following command. This code does the exact same logic that you implemented in the above steps.
 
 [source,bash,role=copy,subs=]
 ----
@@ -1207,7 +1211,7 @@ If so, try again using our code by running the command:
 ====
 
 [start=3]
-. From Matrix...
+. From Matrix's Element application:
 .. Click on the newly created channel `rocketchat-%user_name%` to display the messages.
 .. Type a message, for example:
 +
@@ -1222,7 +1226,7 @@ You should see the agent's message sent from Matrix appear in the Rocket.Chat ch
 
 . Exchange a few more messages to simulate a conversation.
 
-. Then, from Matrix, to close the session, follow these steps, as per the illustration below:
+. Then, from Matrix's Element chat window, to close the session, follow these steps, as per the illustration below:
 +
 --
 . Right click on the room `rocketchat-%user_name%`
@@ -1277,9 +1281,9 @@ Your next task will be to complete and deploy a Camel K integration that connect
 One approach to be consistent with our event-driven approach, is to decouple both flow directions as follows:
 
 - Camel will expose an API to accept customer messages to agents
-- Globex will define a callback entrypoint to listen for agent response.
+- Globex web application will define a callback entrypoint to listen for agent response.
 
-Both processing flows should be fully detached, but will coexist in the Camel K definition and deployed together.
+Both processing flows should be fully decoupled, but will coexist in the Camel K definition and deployed together.
 
 {empty} +
 
@@ -1328,11 +1332,11 @@ The flow is relatively simple, all is required is listen for HTTP requests, proc
 
 IMPORTANT: If your terminal is busy showing logs from your previous exercise, or some other task, ensure you press `Ctrl`+`C` to stop it.
 
-IMPORTANT: Close in your editor all open files/tabs to ensure your IDE is clean.
+IMPORTANT: Close in your editor all open files/tabs in Devspaces to ensure your IDE is clean.
 
 Start your implementation:
 
-. Run in your terminal the snippet below to set the working directory for this task:
+. Run in your Devspaces terminal the snippet below to set the working directory for this task:
 +
 [source,bash,role=copy,subs=attributes]
 ----
@@ -1389,9 +1393,7 @@ Select from your project tree:
 Observe how the route above is defined with a Java based DSL using the fluent builder style. Except minor differences, the structure is almost identical to other DSLs (XML/YAML). 
 ====
 
-In the route above:
-
-.Click here for details
+.Click here for details of the above route:
 [%collapsible]
 ======
 <1> The `from` element uses the _Camel_ component `platform-http`, which wires the runtime's HTTP listener to capture all the incoming requests to the given `support/message` path.
@@ -1436,7 +1438,7 @@ The route definition above includes a `jslt` action. The section that follows wi
 
 As previously described, it is now the time to transform the JSON payload from Globex (source), to the platform's unified data model (target). We need to create the JSLT stylesheet that defines the data mapping.
 
-. From your terminal, execute the command below to create a new source file that will contain the JSLT definition:
+. From your terminal, execute the command below to create a new (empty) source file that will contain the JSLT definition:
 +
 [source,java,role=copy,subs=]
 ----
@@ -1463,9 +1465,7 @@ touch request.jslt<br>
 
 NOTE: You'll notice the JSLT feels like natural JSON, except it includes expressions that assign a value to the fields. Expressions use a syntax similar to `jq`. 
 
-The JSLT definition above:
-
-.Click here for details
+.Click here for details of the above JSLT definition 
 [%collapsible]
 ======
 <1> Directly maps the fields `user` and `text` (as is).
@@ -1482,7 +1482,7 @@ Look at JSLT definition and notice how it fully describes a complete JSON to JSO
 Other transformation methods generally involve more complex code, very difficult to follow and maintain.
 ====
 
-You have now the processing flow ready to move events from Globex (customers) to agents. Now you need to complete the reverse flow to bring agent responses to customers texting from Globex.
+You have now the processing flow ready to move events (messages) from Globex (customers) to agents. Now you need to complete the reverse flow to bring agent responses to customers texting from Globex.
 
 {empty} +
 
@@ -1522,9 +1522,7 @@ In the `routesglobex.java` Java file, copy and paste the snippet below:
 //
 ----
 
-In the route above:
-
-.Click here for details
+.Click here for details of the above route
 [%collapsible]
 ======
 <1> The `from` element uses the _Camel_ component `direct` to allow the AMQP listener (provided) to handover events consumed from the AMQ broker.
@@ -1551,7 +1549,7 @@ The route definition above includes a `jslt` action. The section that follows wi
 
 Let's transform the JSON payload from the common data model (source) to Globex's (target). Create as described the JSLT stylesheet that defines the data mapping.
 
-. From your terminal, execute the command below to create a new source file that will contain the JSLT definition:
+. From your Devspaces terminal, execute the command below to create a new (empty) source file that will contain the JSLT definition:
 +
 [source,java,role=copy,subs=]
 ----
@@ -1573,9 +1571,7 @@ touch response.jslt<br>
 }
 ----
 
-The JSLT definition above:
-
-.Click here for details
+.Click here for details of the above JSLT definition
 [%collapsible]
 ======
 <1> Directly maps the fields `agent` and `text` (as is).
@@ -1638,7 +1634,7 @@ kamel log globex-support
 [WARNING]
 ====
 If you encounter errors or unexpected results, you might have missed a step following the instructions or done some other human error. +
-If so, try again using our code by running the command:
+If so, try again using the prebuilt code by running the following command. This code does the exact same logic that you implemented in the above steps.
 
 [source,bash,role=copy,subs=]
 ----
@@ -1870,7 +1866,7 @@ IMPORTANT: Close in your editor all open files/tabs to ensure your IDE is clean.
 
 Start your implementation:
 
-. Run in your terminal the snippet below to set the working directory for this task:
+. Run in your Devspaces terminal the snippet below to set the working directory for this task:
 +
 [source,bash,role=copy,subs=attributes]
 ----
@@ -1974,9 +1970,7 @@ Select from your project tree:
 As you can observe the XML DSL reads similar to the YAML and Java DSLs. XML is more verbose, but not padding strict the way YAML is, and simple in content than Java.
 ====
 
-In the route above:
-
-.Click here for details
+.Click here for details of the above route
 [%collapsible]
 ======
 <1> The `from` element defines the `direct:process` entrypoint where the Camel Kafka consumer will direct the incoming events.
@@ -2025,7 +2019,7 @@ The next section will assist you in implementing the route, invoked in step [12]
 
 This Camel route prepares the payload and invokes the S3 subsystem to store the PDF document in an S3 bucket.
 
-In the same XML file, copy and paste the following snippet:
+In the same XML (*transcript.xml*) file, copy and paste the following snippet:
 
 [source,xml,role=copy]
 ----
@@ -2055,9 +2049,7 @@ In the same XML file, copy and paste the following snippet:
 <!---->
 ----
 
-In the route above:
-
-.Click here for details
+.Click here for details of the above route
 [%collapsible]
 ======
 <1> The `from` element defines the `direct:store-pdf` entrypoint the main processor invokes.
@@ -2085,7 +2077,7 @@ The last of the Camel routes you need to complete implements that task, follow t
 
 This Camel route prepares the payload and invokes the S3 subsystem to store the PDF document in an S3 bucket.
 
-In the same XML file, copy and paste the following snippet:
+In the same XML file (*transcript.xml*), copy and paste the following snippet:
 
 [source,xml,role=copy]
 ----
@@ -2108,9 +2100,7 @@ In the same XML file, copy and paste the following snippet:
 <!---->
 ----
 
-In the route above:
-
-.Click here for details
+.Click here for details of the above route
 [%collapsible]
 ======
 <1> The `from` element defines the `direct:share-transcript` entrypoint the main processor invokes.
@@ -2155,7 +2145,7 @@ You're done with the implementation part.
 
 With the Camel K client `kamel` you can deploy your integrations with one command. Camel K will take care of collecting all your sources, containerizing them and deploying an instance.
 
-Let's deply your code .
+Let's deploy your code .
 
 . From your terminal, execute the following command:
 +
@@ -2164,7 +2154,7 @@ Let's deply your code .
 ./deploy.sh<br>
 ----
 +
-NOTE: The `deploy.sh` scripts executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
+NOTE: The `deploy.sh` script executes a `kamel run` command that defines all the necessary support resources and parameters to run your integration.
 +
 .Output
 ----
@@ -2185,7 +2175,7 @@ kamel log transcript
 [WARNING]
 ====
 If you encounter errors or unexpected results, you might have missed a step following the instructions or done some other human error. +
-If so, try again using our code by running the command:
+If so, try again using the prebuilt code by running the following command. This code does the exact same logic that you implemented in the above steps.
 
 [source,bash,role=copy,subs=]
 ----
@@ -2238,7 +2228,7 @@ transcript      Running globex-camel-user1/kit-chdltr45v3oq6up8l3sg
 
 {empty} +
 
-And your done !!
+And you're done !!
 
 {empty} +
 

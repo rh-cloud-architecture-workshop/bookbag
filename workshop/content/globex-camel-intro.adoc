@@ -10,6 +10,14 @@
 
   gtag('config', 'G-Z54F1ZPC4H');
 </script>
+<style>
+  .btn-group, .d-sm-block {
+    display: none !important;
+  }
+  .col-sm-9 {
+    max-width: 100% !important;
+  }      
+</style>
 ++++
 
 In this module you will participate to complete the implementation of a multi-channel support service for Globex customers that will enable clients to chat in real time with a team of agents.
@@ -30,7 +38,7 @@ You will be involved in the new hub's first implementation iteration (by complet
 
 Rocket.Chat and Matrix are open-source implementations of direct messaging platforms. While not as popular or ubiquitous as Slack or Discord, they can be installed on an OpenShift cluster and do not require registration, making them more suitable for a lab environment.
 
-Customers (left) will choose contacting Globex via its Web portal or via a channel in Rocket.Chat, available on-line (using a browser). At the other end of the line, the team of agents (right) providing support services for Globex will use Matrix as their communication platform.
+Customers (left) can choose to contact Globex via its Web portal or via a channel in Rocket.Chat, available on-line (using a browser). At the other end of the line, the team of agents (right) providing support services for Globex will use Matrix as their communication platform.
 
 {empty} +
 
@@ -45,14 +53,14 @@ As per the picture below, this module is divided in 3 main activities:
 ++++
 
 . The first one integrates Rocket.Chat with Matrix. +
-Because the traffic is bidirectional, you'll need to
+Because the traffic (flow of messages) is bidirectional, you'll need to
 
-- Move messages from customers (in Rocket.Chat) to agents (in Matrix)
-- Move messages from agents (in Matrix) to customers (in Rocket.Chat)
+- Send messages from customers (in Rocket.Chat) to agents (in Matrix)
+- Send messages from agents (in Matrix) to customers (in Rocket.Chat)
 
-. The second activity, that showcases the platform's open architecture, plugs in the Globex portal (chat), thus automatically enabling the Globex/Matrix message flow. 
+. The second activity, that showcases the platform's open architecture, plugs in the Globex portal (Chat functionality), thus automatically enabling the Globex <-> Matrix message flow. 
 
-. The third activity collects the conversation history (transcript), persists it in storage (S3 buckets) and shares access with customers.
+. The third activity collects the conversation history (transcript), persists it in storage (S3 buckets) and shares access with customers as a file download.
 
 {empty} +
 
@@ -123,7 +131,7 @@ Data Grid is an in-memory, distributed, NoSQL datastore solution. Your applicati
 
 NOTE: AMQ Streams (Kafka) will be your core event stream platform where customer/agents sessions (the streams) will be stored (for later replays).
 
-AMQ Streams is an event streaming platform that aggregate events over time (streams). This allows applications to replay the streams for various purposes, for example, data analysis or to discover patterns, among others. 
+AMQ Streams is an event streaming platform that aggregates events over time (streams). This allows applications to replay the streams for various purposes, for example, data analysis or to discover patterns, among others. 
 
 {empty} +
 

@@ -8,6 +8,14 @@
 
   gtag('config', 'G-Y0GQBF9YFH');
 </script>
+<style>
+  .btn-group, .d-sm-block {
+    display: none !important;
+  }
+  .col-sm-9 {
+    max-width: 100% !important;
+  }      
+</style>
 ++++
 
 :user_name: %user_name%

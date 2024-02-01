@@ -10,6 +10,14 @@
 
   gtag('config', 'G-51D1EZEH8B');
 </script>
+<style>
+  .btn-group, .d-sm-block {
+    display: none !important;
+  }
+  .col-sm-9 {
+    max-width: 100% !important;
+  }      
+</style>
 ++++
 
 In this module you'll discover how Contract First Approach provides the right framework to accelerate the launching of new channels in a secure way across internal and external teams to build microservices and APIs based systems.

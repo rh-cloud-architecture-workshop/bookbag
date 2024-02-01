@@ -28,6 +28,14 @@
 
   gtag('config', 'G-51D1EZEH8B');
 </script>
+<style>
+  .btn-group, .page-meta, .d-sm-block {
+    display: none !important;
+  }
+  .col-sm-9 {
+    max-width: 100% !important;
+  }      
+</style>
 ++++
 
 

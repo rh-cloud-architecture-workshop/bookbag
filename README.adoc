@@ -101,7 +101,7 @@ ssh lab-user@bastion.b57kt.sandbox2674.opentlc.com
 
 oc registry login
 
-docker pull default-route-openshift-image-registry.apps.cluster-vbsf7.vbsf7.sandbox2829.opentlc.com/create-bookbag/bookbag:latest
+docker pull default-route-openshift-image-registry.apps.cluster-ks5fc.ks5fc.sandbox1482.opentlc.com/create-bookbag/bookbag:latest
 
 
 podman login quay.io ## <you will need quay username/password>
@@ -111,4 +111,4 @@ docker tag default-route-openshift-image-registry.apps.cluster-vbsf7.vbsf7.sandb
 
 podman push quay.io/cloud-architecture-workshop/bookbag:a06b31a
 
-podman push quay.io/cloud-architecture-workshop/bookbag:latest
+podman push quay.io/cloud-architecture-workshop/bookbag:jc-wip
