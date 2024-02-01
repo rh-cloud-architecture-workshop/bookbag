@@ -155,7 +155,7 @@ oc project globex-apim-{user_name}
 .Red Hat Devspace - Verify that you are using the globex-apim-<username> namespace
 image::images/apim/apim-terminal-setup.png[width=70%]
 
-* Keep this browser tab open because you will referring to draft content, scripts and YAML files for creating objects on OpenShift
+* Keep this browser tab open because you will refer to draft content, scripts and YAML files for creating objects on OpenShift
 
 === Scratchpad
 As you work through this Contract First APIs module, there are a few variables and URLs that are needed throughout this activity. To make things easier and manageable we've setup a scratchpad within Dev Spaces. You can fill this scratchpad up with information needed as you are guided below so that you can progress through this activity faster.
@@ -175,7 +175,7 @@ We will be using OpenID Connect which is an open authentication protocol that wo
 
 image::images/apim/apim-rhbk-login-landing.png[]
 
-* Click on *Realm settings* links highlighted in the above screenshot.
+* Click on *Realm settings* link highlighted in the above screenshot.
 * Click on the *OpenID Endpoint Configuration* link to view the *OpenID Provider Configuration* of Keycloak.
 +
 .Keycloak - Logged In
@@ -228,7 +228,7 @@ https://sso.{openshift_subdomain}/realms/globex-{user_name}/protocol/openid-conn
 
 //API design refers to the process of developing application programming interfaces (APIs) that expose data and application functionality for use by developers and users. Red Hat API Designer, based on https://www.apicur.io/[Apicurio^], is a lightweight tool that helps you to design APIs. 
 
-In this step you will import the draft OpenAPI specs for *Mobile App* and edit them to include *Security Schemes*. Once the API design phase is complete you will then manage that within the Red Hat Service Registry. The API Designer sessions are stateless and you must save your API definition as a JSON file at the end of each session. 
+In this step you will import the draft OpenAPI specs for *Mobile App* and edit them to include *Security Schemes*. Once the API design phase is complete you will then manage that with Red Hat Service Registry. The API Designer sessions are stateless and you must save your API definition as a JSON file at the end of each session. 
 
 
 === Section Goals

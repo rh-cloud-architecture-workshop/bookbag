@@ -357,9 +357,7 @@ TIP: There is no need to save changes, _DevSpaces_ auto-saves file changes autom
 
 You could consider the _Camel_ route above equivalent to a subroutine in any programming language. It executes the action of pushing a new entry in cache.
 
-In the route above:
-
-.[.underline]#*Click here for details#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> The `from` element uses the `direct` _Camel_ component, which is a special component that allows other _Camel_ routes in the code to make internal invocations to this one.
@@ -416,7 +414,7 @@ To the same file *routes-cache.yaml*, add the (copy and paste) the snippet below
 
 In a very similar fashion, the `GET` route definition performs the following actions:
 
-.[.underline]#*Click here for details#
+.[.underline]#*Click here for details*#
 [%collapsible]
 ======
 <1> The `from` element is defined with the `direct` component to allow other _Camel_ routes invoke it.
@@ -468,7 +466,7 @@ Copy and paste the snippet below to the same file *routes-cache.yaml*:
 
 Similarly, the `REMOVE` route definition performs the following actions:
 
-.[.underline]#*Click here for details#
+.[.underline]#*Click here for details*#
 [%collapsible]
 ======
 <1> The `from` element is defined with the `direct` component to allow other _Camel_ routes invoke it.
@@ -556,7 +554,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 ----
 
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> Subscribes to an AMQ address (using the AMQP protocol)
@@ -625,7 +623,7 @@ In the same YAML file (*routes-from-amq.yaml*) created in the previous step, cop
 #
 ----
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> Un-marshals the payload into a Java Map (for easier access)
@@ -741,7 +739,7 @@ Still in the same YAML file (*routes-from-amq.yaml*), copy and paste the followi
 
 ----
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
@@ -991,7 +989,7 @@ NOTE: The new file has a YAML extension. Camel K automatically generates for you
 #
 ----
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> Defines the `from` element with the `direct` component to allow other _Camel_ routes invoke it.
@@ -1139,7 +1137,7 @@ Include in the same (*routes-from-matrix-main.yaml*) YAML file (copy and paste) 
 
 You will observe the route above is almost identical to the previous one. 
 
-.[.underline]#*Click here to view a summary of the differences#
+.[.underline]#*Click here to view a summary of the differences*#
 [%collapsible]
 ======
 <1> It also fetches from the cache system the customer/agent context.
@@ -1393,7 +1391,7 @@ Select from your project tree:
 Observe how the route above is defined with a Java based DSL using the fluent builder style. Except minor differences, the structure is almost identical to other DSLs (XML/YAML). 
 ====
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> The `from` element uses the _Camel_ component `platform-http`, which wires the runtime's HTTP listener to capture all the incoming requests to the given `support/message` path.
@@ -1465,7 +1463,7 @@ touch request.jslt<br>
 
 NOTE: You'll notice the JSLT feels like natural JSON, except it includes expressions that assign a value to the fields. Expressions use a syntax similar to `jq`. 
 
-.[.underline]#*Click here for details of the JSLT definition #
+.[.underline]#*Click here for details of the JSLT definition*#
 [%collapsible]
 ======
 <1> Directly maps the fields `user` and `text` (as is).
@@ -1522,7 +1520,7 @@ In the `routesglobex.java` Java file, copy and paste the snippet below:
 //
 ----
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> The `from` element uses the _Camel_ component `direct` to allow the AMQP listener (provided) to handover events consumed from the AMQ broker.
@@ -1571,7 +1569,7 @@ touch response.jslt<br>
 }
 ----
 
-.[.underline]#*Click here for details of the above JSLT definition#
+.[.underline]#*Click here for details of the above JSLT definition*#
 [%collapsible]
 ======
 <1> Directly maps the fields `agent` and `text` (as is).
@@ -1800,7 +1798,7 @@ The above sequence diagram represents a full interaction between a customer and 
 
 In the diagram:
 
-.[.underline]#*Click here for details#
+.[.underline]#*Click here for details*#
 [%collapsible]
 ======
 . You can see all the chat messages being recorded in Kafka, including the end-of-session signal to mark the end of the conversation. 
@@ -1970,7 +1968,7 @@ Select from your project tree:
 As you can observe the XML DSL reads similar to the YAML and Java DSLs. XML is more verbose, but not padding strict the way YAML is, and simple in content than Java.
 ====
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> The `from` element defines the `direct:process` entrypoint where the Camel Kafka consumer will direct the incoming events.
@@ -2049,7 +2047,7 @@ In the same XML (*transcript.xml*) file, copy and paste the following snippet:
 <!---->
 ----
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> The `from` element defines the `direct:store-pdf` entrypoint the main processor invokes.
@@ -2100,7 +2098,7 @@ In the same XML file (*transcript.xml*), copy and paste the following snippet:
 <!---->
 ----
 
-.[.underline]#*Click here for details of the above route#
+.[.underline]#*Click here for details of the above route*#
 [%collapsible]
 ======
 <1> The `from` element defines the `direct:share-transcript` entrypoint the main processor invokes.
