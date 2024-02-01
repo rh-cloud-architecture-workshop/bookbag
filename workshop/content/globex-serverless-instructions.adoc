@@ -444,6 +444,12 @@ image::images/serverless/serverless-launch-webapp-toplogy.png[width=20%]
 +
 image::images/serverless/webapp-login.png[]
 * You will be navigated to the Keycloak login page
+
+[WARNING]
+====
+If Keycloak login page doesn't show up, you might be already logged as a different user.  Please click on Logout, and relogin to this page again.
+====
+
 * Login using any of the following usernames. The password is `openshift` for all these users.
 **  `asilva` (or) `mmiller` (or) `asanders` (or) `cjones` (or) `pwong`
 +
